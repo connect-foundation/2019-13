@@ -1,25 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import LoginMain from '../Routes/LoginMain';
 import Main from '../Routes/Main';
+import Project from '../Routes/Project';
 
 const LoggedInRoutes = () => (
   <>
     <Route exact path="/" component={LoginMain} />
+    <Route exact path="/project" component={Project} />
   </>
 );
 
 const LoggedOutRoutes = () => (
   <>
     <Route exact path="/" component={Main} />
+    <Route exact path="/project" component={Project} />
   </>
 );
 
 const AppRouter = ({ isLoggedIn = false }) => (
-  <Router>
-    <Switch>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Switch>
-  </Router>
+  <Switch>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Switch>
 );
 
 AppRouter.propTypes = {
