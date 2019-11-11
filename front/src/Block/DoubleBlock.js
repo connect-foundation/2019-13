@@ -1,7 +1,8 @@
 import React from 'react';
+import Theme from '../Styles/Theme';
 const pixel = 6
 
-function DoubleBlock({ width, height, stroke, strokeWidth, color }) {
+function DoubleBlock({ theme, width, height, stroke, strokeWidth, color }) {
   const d = `M ${pixel},0 
   l 0,0 ${pixel * 3},0 
   0,0 ${pixel * 2},${pixel * 2}
@@ -47,9 +48,9 @@ function DoubleBlock({ width, height, stroke, strokeWidth, color }) {
 }
 
 DoubleBlock.defaultProps = {
-  stroke: "black",
+  stroke: Theme.controlBlockBorderColor,
   strokeWidth: 0.5,
-  color: "white",
+  color: Theme.controlBlockColor,
   width: 14,
   height: 2
 }
