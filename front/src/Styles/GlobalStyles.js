@@ -6,7 +6,4 @@ export default createGlobalStyle`
     * {
         box-sizing:border-box;
     }
-    svg {
-        overflow:visible;
-    }
 `;
