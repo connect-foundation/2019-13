@@ -1,6 +1,5 @@
-import { OAuth2Strategy as GoogleStrategy} from "passport-google-oauth";
-import { Strategy as GoogleTokenStrategy} from 'passport-google-token'
-export default (passport) => {
+import { Strategy as GoogleTokenStrategy } from "passport-google-token";
+export default passport => {
   passport.serializeUser((user, done) => {
     done(null, user);
   });
@@ -9,12 +8,14 @@ export default (passport) => {
   });
 
   passport.use(
-    new GoogleTokenStrategy({
+    new GoogleTokenStrategy(
+      {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET
-    },(accessToken,refreshToken, profile,done)=>{
-        // console.log(profile);
+      },
+      (accessToken, refreshToken, profile, done) => {
         done(null, profile);
-    })
+      }
+    )
   );
 };

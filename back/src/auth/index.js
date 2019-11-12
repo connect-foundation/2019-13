@@ -4,8 +4,10 @@ const router = express.Router();
 
 router.post(
   "/google",
-  (req,res,next)=>{console.log(req.body);next();},
-  passport.authenticate("google-token", {session : false}),(req,res,next)=>{
-    res.json({result : true});
-});
+  passport.authenticate("google-token", { session: false }),
+  (req, res, next) => {
+    if (!req.user) return res.json({ result: false });
+    res.json({ result: true });
+  }
+);
 export default router;
