@@ -1,0 +1,8 @@
+type project{
+    id: ID!
+    title: String!
+    description: String!
+    like: Int!
+    private: Boolean!
+    user_id: ID!
+}

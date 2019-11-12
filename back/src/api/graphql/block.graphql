@@ -1,0 +1,9 @@
+type block{
+    id: ID!
+    position_X: Float
+    position_Y: Float
+    order: Int!
+    project_id: ID!
+    parent_id: Int!
+    parent_condition: Boolean
+}
