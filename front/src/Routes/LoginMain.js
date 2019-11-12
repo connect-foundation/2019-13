@@ -1,5 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
 
-const loginMain = () => <>This is loginMain</>;
+
+const Wrapper = styled.div`
+
+`;
+
+const loginMain = () => (
+  <Wrapper>
+    This is loginMain
+
+  </Wrapper>
+);
 
 export default loginMain;
