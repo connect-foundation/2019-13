@@ -1,67 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Theme from '../Styles/Theme';
-const pixel = 6
+import mouseHandler from './Logic/Drag';
+import path from './Path'
 
 function TripleBlock({ width, firstHeight, secondHeight, stroke, strokeWidth, color }) {
-  const d = `M ${pixel},0 
-  l 0,0 ${pixel * 3},0 
-  0,0 ${pixel * 2},${pixel * 2}
-  0,0 ${pixel * 4},0 
-  0,0 ${pixel * 2},-${pixel * 2}
-  0,0 ${pixel * (width - 1 + 4)},0 
-  c ${pixel},0 ${pixel},0 ${pixel},${pixel}
-  l 0,0 0,${pixel * 4}
-  c 0,${pixel} 0,${pixel} -${pixel},${pixel}
-  l 0,0 -${pixel * (width - 1)},0 
-  0,0 -${pixel * 2},${pixel * 2}
-  0,0 -${pixel * 4},0 
-  0,0 -${pixel * 2},-${pixel * 2}
-  0,0 -${pixel * 3},0
-  c -${pixel},0 -${pixel},0 -${pixel},${pixel}
-  l 0,0 0,${pixel * firstHeight}
-  c 0,${pixel} 0,${pixel} ${pixel},${pixel}
-  l 0,0 ${pixel * 3},0
-  0,0 ${pixel * 2},${pixel * 2}
-  0,0 ${pixel * 4},0 
-  0,0 ${pixel * 2},-${pixel * 2}
-  0,0 ${pixel * (width - 1)},0
-  c ${pixel},0 ${pixel},0 ${pixel},${pixel}
-  l 0,0 0,${pixel * 3}
-  c 0,${pixel} 0,${pixel} -${pixel},${pixel}
-  l 0,0 -${pixel * (width - 1)},0 
-  0,0 -${pixel * 2},${pixel * 2}
-  0,0 -${pixel * 4},0 
-  0,0 -${pixel * 2},-${pixel * 2}
-  0,0 -${pixel * 3},0
-  c -${pixel},0 -${pixel},0 -${pixel},${pixel}
-  l 0,0 0,${pixel * secondHeight}
-  c 0,${pixel} 0,${pixel} ${pixel},${pixel}
-  l 0,0 ${pixel * 3},0
-  0,0 ${pixel * 2},${pixel * 2}
-  0,0 ${pixel * 4},0 
-  0,0 ${pixel * 2},-${pixel * 2}
-  0,0 ${pixel * (width - 1)},0
-  c ${pixel},0 ${pixel},0 ${pixel},${pixel}
-  l 0,0 0,${pixel * 3}
-  c 0,${pixel} 0,${pixel} -${pixel},${pixel}
-  l 0,0 -${pixel * (width - 1 + 4)},0 
-  0,0 -${pixel * 2},${pixel * 2}
-  0,0 -${pixel * 4},0 
-  0,0 -${pixel * 2},-${pixel * 2}
-  0,0 -${pixel * 3},0
-  c -${pixel},0 -${pixel},0 -${pixel},-${pixel} 
-  l 0,0 0,-${pixel * 4}
-  0,0 0,-${pixel * (secondHeight + 2)}
-  0,0 0,-${pixel * 5}
-  0,0 0,-${pixel * (firstHeight + 2)}
-  0,0 0,-${pixel * 5}
-  c 0,-${pixel} 0,-${pixel} ${pixel},-${pixel}
-  `
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const drag = mouseHandler(setPosition)
+  const d = path.triple(width, firstHeight, secondHeight)
 
   return (
-    <svg>
+    <g onMouseDown={drag} transform={`translate(${position.x},${position.y})`}>
       <path stroke={stroke} strokeWidth={strokeWidth} fill={color} d={d} />
-    </svg>
+    </g>
   )
 }
 

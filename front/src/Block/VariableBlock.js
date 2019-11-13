@@ -1,18 +1,16 @@
-import React from 'react';
-const pixel = 6
+import React, { useState } from 'react';
+import mouseHandler from './Logic/Drag';
+import path from './Path'
 
 function VariableBlock({ width, stroke, strokeWidth, color }) {
-  const d = `M 0,0 
-  l 0,0 ${pixel * width},0
-  c ${pixel * 4},0 ${pixel * 4},${pixel * 4} 0,${pixel*4}
-  l 0,0 -${pixel*width},0
-  c -${pixel * 4},0 -${pixel * 4},-${pixel * 4} 0,-${pixel*4}
-  `
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const drag = mouseHandler(setPosition)
+  const d = path.variable(width)
 
   return (
-    <svg>
+    <g onMouseDown={drag} transform={`translate(${position.x},${position.y})`}>
       <path stroke={stroke} strokeWidth={strokeWidth} fill={color} d={d} />
-    </svg>
+    </g>
   )
 }
 

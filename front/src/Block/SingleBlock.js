@@ -1,29 +1,16 @@
-import React from 'react';
-const pixel = 6
+import React, { useState } from 'react';
+import mouseHandler from './Logic/Drag';
+import path from './Path'
 
 function SingleBlock({ width, stroke, strokeWidth, color }) {
-  const d = `M ${pixel},0 
-  l 0,0 ${pixel * 3},0 
-  0,0 ${pixel * 2},${pixel * 2}
-  0,0 ${pixel * 4},0 
-  0,0 ${pixel * 2},-${pixel * 2}
-  0,0 ${pixel * (width - 1)},0 
-  c ${pixel},0 ${pixel},0 ${pixel},${pixel}
-  l 0,0 0,${pixel * 4}
-  c 0,${pixel} 0,${pixel} -${pixel},${pixel}
-  l 0,0 -${pixel * (width - 1)},0 
-  0,0 -${pixel * 2},${pixel * 2}
-  0,0 -${pixel * 4},0 
-  0,0 -${pixel * 2},-${pixel * 2}
-  0,0 -${pixel * 3},0
-  c -${pixel},0 -${pixel},0 -${pixel},-${pixel} 
-  l 0,0 0,-${pixel * 4}
-  c 0,-${pixel} 0,-${pixel} ${pixel},-${pixel}`
-
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const drag = mouseHandler(setPosition)
+  const d = path.single(width)
+  
   return (
-    <svg>
+    <g onMouseDown={drag} transform={`translate(${position.x},${position.y})`}>
       <path stroke={stroke} strokeWidth={strokeWidth} fill={color} d={d} />
-    </svg>
+    </g>
   )
 }
 
