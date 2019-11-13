@@ -3,7 +3,7 @@ import Theme from '../Styles/Theme';
 import mouseHandler from './Logic/Drag';
 import path from './Path'
 
-function TripleBlock({ width, firstHeight, secondHeight, stroke, strokeWidth, color }) {
+const TripleBlock = ({ width, firstHeight, secondHeight, stroke, strokeWidth, color }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const drag = mouseHandler(setPosition)
   const d = path.triple(width, firstHeight, secondHeight)

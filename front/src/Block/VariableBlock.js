@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import mouseHandler from './Logic/Drag';
 import path from './Path'
 
-function VariableBlock({ width, stroke, strokeWidth, color }) {
+const VariableBlock = ({ width, stroke, strokeWidth, color }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const drag = mouseHandler(setPosition)
   const d = path.variable(width)
