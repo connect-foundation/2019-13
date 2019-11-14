@@ -19,6 +19,7 @@ export default passport => {
         //인증되었을 경우
         const {id,email,name,picture} = profile._json;
         try{
+
           const user = await prisma.upsertUser({
             where : {
               id : `G-${id}`
