@@ -4,3 +4,7 @@ type user{
     picture: String!
     email: String!
 }
+
+type Query{
+    hello: String!
+}
