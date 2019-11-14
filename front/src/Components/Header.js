@@ -51,7 +51,7 @@ export default () => {
                   src={localStorage.getItem('userImage')}
                   alt="user_avatar"
                 />
-                <FontAwesomeIcon icon={faCaretDown} />
+                <FontAwesomeIcon icon={faCaretDown} style={{marginBottom:"10%"}}/>
                 {dropMenu && <DropDown type="Header" />}
               </div>
             </ClickAwayListener>
@@ -101,6 +101,8 @@ const HeaderColumn = styled.div`
     text-align: right;
     position: relative;
     vertical-align: text-bottom;
+    border : 0;
+    outline : 0;
   }
   .user_avatar > svg {
     margin-left: 10px;
