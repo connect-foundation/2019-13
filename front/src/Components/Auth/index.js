@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { GoogleLogin } from 'react-google-login';
-// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';yar
 import sendRequest from '../../utils/SendRequest';
-
+import { LoggedInContext, ModalContext } from '../../Context';
 
 export default () => {
+  const { setLoggedIn } = useContext(LoggedInContext);
+  const { setOpen } = useContext(ModalContext);
   const responseGoogle = async (response) => {
     const tokenBlob = new Blob(
       [JSON.stringify({ access_token: response.Zi.access_token }, null, 2)],
@@ -15,8 +16,13 @@ export default () => {
       method: 'post',
       body: tokenBlob,
     });
-    if (data) return true;
-    return false;
+    setLoggedIn(data.result);
+    setOpen(!data.result);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userImage', response.profileObj.imageUrl);
+    if (!data.result) {
+      alert('로그인이 되지 않았습니다. 다시 로그인해주세요');
+    }
   };
   return (
     <>

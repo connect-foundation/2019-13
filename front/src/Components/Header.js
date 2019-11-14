@@ -1,60 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { ClickAwayListener } from '@material-ui/core';
 import Modal from './Modal';
+import { ModalContext, LoggedInContext } from '../Context';
+import DropDown from './DropDown';
 
-const dummyUser = {
-  username: '더덕',
-  profile_img:
-    'https://i.pinimg.com/originals/97/ac/84/97ac849c388fc421278ce5b43b8e572b.jpg',
-};
-
-// eslint-disable-next-line react/prop-types
-export default ({ isLoggedIn = false }) => {
+export default () => {
+  const { isLoggedIn } = useContext(LoggedInContext);
+  const [dropMenu, setDropMenu] = useState(false);
   const [open, setOpen] = useState(false);
   const ModalHandler = () => {
     setOpen(!open);
   };
-
+  const dropMenuHandler = () => {
+    setDropMenu(!dropMenu);
+  };
   return (
-    <Header>
-      <HeaderColumn>
-        <Link to="/">
-          <img src="/logo.png" alt="logo" className="Header-icon logo" />
-        </Link>
-        <div className="header-link">
-          <Link to="/project">
-            <span> 프로젝트 만들기</span>
+    <ModalContext.Provider value={{ open, setOpen }}>
+      <Header>
+        <HeaderColumn>
+          <Link to="/">
+            <img src="/logo.png" alt="logo" className="Header-icon logo" />
           </Link>
-          {isLoggedIn ? (
+          <div className="header-link">
             <Link to="/project">
-              <span> 내 작품</span>
+              <span> 프로젝트 만들기</span>
             </Link>
-          ) : (
-            undefined
-          )}
-        </div>
-      </HeaderColumn>
-      <HeaderColumn>
-        {isLoggedIn ? (
-          <div className="user_avatar">
-            <img
-              className="user_avatar-img"
-              src={dummyUser.profile_img}
-              alt="user_avatar"
-            />
-            <FontAwesomeIcon icon={faCaretDown} />
+            {isLoggedIn ? (
+              <Link to="/project">
+                <span> 내 작품</span>
+              </Link>
+            ) : (
+              undefined
+            )}
           </div>
-        ) : (
-          <button type="button" onClick={ModalHandler}>
-            로그인
-          </button>
-        )}
-        {open && <Modal open={open} setOpen={setOpen} />}
-      </HeaderColumn>
-    </Header>
+        </HeaderColumn>
+        <HeaderColumn>
+          {isLoggedIn ? (
+            <ClickAwayListener
+              onClickAway={() => {
+                setDropMenu(false);
+              }}
+            >
+              <div role="button" tabIndex="0" className="user_avatar" onClick={dropMenuHandler} onKeyPress={() => {}}>
+                <img
+                  className="user_avatar-img"
+                  src={localStorage.getItem('userImage')}
+                  alt="user_avatar"
+                />
+                <FontAwesomeIcon icon={faCaretDown} />
+                {dropMenu && <DropDown type="Header" />}
+              </div>
+            </ClickAwayListener>
+          ) : (
+            <button type="button" onClick={ModalHandler}>
+              로그인
+            </button>
+          )}
+          {open && <Modal open={open} setOpen={setOpen} />}
+        </HeaderColumn>
+      </Header>
+    </ModalContext.Provider>
   );
 };
 
@@ -87,8 +96,11 @@ const HeaderColumn = styled.div`
     margin-right: 18px;
   }
   .user_avatar {
-    display: flex;
-    align-items: center;
+    flex-direction : column;
+    min-width: 120px;
+    text-align: right;
+    position: relative;
+    vertical-align: text-bottom;
   }
   .user_avatar > svg {
     margin-left: 10px;

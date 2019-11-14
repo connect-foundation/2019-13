@@ -5,6 +5,7 @@ import GlobalStyles from '../Styles/GlobalStyles';
 import Theme from '../Styles/Theme';
 import Routes from './Routes';
 import Header from './Header';
+import { LoggedInContext } from '../Context';
 
 const Wrapper = styled.div`
     margin-top: 72px;
@@ -12,10 +13,10 @@ const Wrapper = styled.div`
 
 
 export default () => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(!!localStorage.getItem('token') && localStorage.getItem('token') !== 'undefined');
   return (
     <ThemeProvider theme={Theme}>
-      <>
+      <LoggedInContext.Provider value={{ isLoggedIn, setLoggedIn }}>
         <GlobalStyles />
         <Router>
           <Header isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
@@ -23,7 +24,7 @@ export default () => {
             <Routes isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
           </Wrapper>
         </Router>
-      </>
+      </LoggedInContext.Provider>
     </ThemeProvider>
   );
 };
