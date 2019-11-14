@@ -20,6 +20,13 @@ server.express.use(express.json());
 server.express.use(cors(corsOptions))
 server.express.use(logger('dev'));
 server.express.use(passport.initialize());
+server.express.use((req,res,next)=>{
+    if(!req.headers.authorization) return; 
+    passport.authenticate('jwt',{session:false},(err,user,info)=>{
+      console.log(user);
+      next();
+    })(req,res,next);
+});
 passportConfig(passport);
 server.express.use('/auth',authRouter);
 
