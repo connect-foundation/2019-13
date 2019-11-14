@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import Modal from './Modal';
+import { ModalContext, LoggedInContext } from '../Context';
+import DropDown from './DropDown';
 
 const dummyUser = {
   username: '더덕',
@@ -12,13 +14,16 @@ const dummyUser = {
 };
 
 // eslint-disable-next-line react/prop-types
-export default ({ isLoggedIn = false }) => {
+export default () => {
+  const { isLoggedIn } = useContext(LoggedInContext);
+  const [dropMenu, setDropMenu] = useState(false);
   const [open, setOpen] = useState(false);
   const ModalHandler = () => {
     setOpen(!open);
   };
 
   return (
+    <ModalContext.Provider value={{ open, setOpen }}>
     <Header>
       <HeaderColumn>
         <Link to="/">
@@ -52,9 +57,11 @@ export default ({ isLoggedIn = false }) => {
             로그인
           </button>
         )}
+
         {open && <Modal open={open} setOpen={setOpen} />}
       </HeaderColumn>
     </Header>
+    </ModalContext.Provider>
   );
 };
 
