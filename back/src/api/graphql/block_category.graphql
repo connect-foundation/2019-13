@@ -1,5 +1,0 @@
-type block_category{
-    id: ID!
-    text: String
-    color: String
-}

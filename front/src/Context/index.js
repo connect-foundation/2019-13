@@ -1,5 +1,0 @@
-import { createContext } from 'react';
-
-// eslint-disable-next-line import/prefer-default-export
-export const LoggedInContext = createContext();
-export const ModalContext = createContext();

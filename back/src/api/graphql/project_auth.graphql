@@ -1,5 +1,0 @@
-type project_auth{
-    id: ID!
-    project_id: ID!
-    user_id: ID!
-}
