@@ -15,12 +15,11 @@ export default () => {
       url: process.env.REACT_APP_AUTH_GOOGLE,
       method: 'post',
       body: tokenBlob,
-    }); 
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userImage', response.profileObj.imageUrl);
+    });
     setLoggedIn(data.result);
     setOpen(!data.result);
-   
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('userImage', response.profileObj.imageUrl);
     if (!data.result) {
       alert('로그인이 되지 않았습니다. 다시 로그인해주세요');
     }
