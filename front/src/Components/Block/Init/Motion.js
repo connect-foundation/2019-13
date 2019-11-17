@@ -1,4 +1,4 @@
-import color from './Color'
+import color from '../../../Styles/Theme';
 export default [{
   type: "motion_move_forward",
   args: [{
@@ -9,8 +9,8 @@ export default [{
     value: "만큼 움직이기"
   }],
   style: "single",
-  color: color.motion_color,
-  stroke_color: color.motion_stroke_color
+  color: color.motionColor,
+  stroke_color: color.motionStrokeColor
 }, {
   type: "motion_change_x",
   args: [{
@@ -24,8 +24,8 @@ export default [{
     value: "만큼 바꾸기"
   }],
   style: "single",
-  color: color.motion_color,
-  stroke_color: color.motion_stroke_color
+  color: color.motionColor,
+  stroke_color: color.motionStrokeColor
 }, {
   type: "motion_change_y",
   args: [{
@@ -39,8 +39,8 @@ export default [{
     value: "만큼 바꾸기"
   }],
   style: "single",
-  color: color.motion_color,
-  stroke_color: color.motion_stroke_color
+  color: color.motionColor,
+  stroke_color: color.motionStrokeColor
 },
 
 ]
