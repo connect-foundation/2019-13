@@ -16,10 +16,10 @@ export default () => {
       method: 'post',
       body: tokenBlob,
     });
-    setLoggedIn(data.result);
-    setOpen(!data.result);
     localStorage.setItem('token', data.token);
     localStorage.setItem('userImage', response.profileObj.imageUrl);
+    setLoggedIn(data.result);
+    setOpen(!data.result);
     if (!data.result) {
       alert('로그인이 되지 않았습니다. 다시 로그인해주세요');
     }
