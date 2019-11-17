@@ -3,64 +3,60 @@ import Path from './Path';
 
 const create = React.createElement
 const Block = function () {
+  this.id = "";
   this.type = "";
   this.parentBlock = null;
   this.childBlocks = [];
-  this.xy = "(0,0)";
+  this.x = 0;
+  this.y = 0;
   this.args = [];
   this.color = "";
   this.strokeColor = "";
   this.path = null;
 }
 
-Block.prototype.jsonInit = function (json) {
+Block.prototype.makeFromJSON = function (json) {
   this.type = json['type'];
   this.color = json['color'];
   this.strokeColor = json['stroke_color']
 
-  let i = 0;
-  while (json['args' + i] !== undefined) {
-    this.jsonInitArgs(json['args' + i][0])
-    i++;
-  }
+  json['args'].forEach((arg)=>{
+    this.makeArgsFromJSON(arg)
+  })
 
-  this.jsonInitStyle(json['style'])
+  this.makeStyleFromJSON(json['style'])
 }
 
-Block.prototype.jsonInitArgs = function (json) {
+Block.prototype.makeArgsFromJSON = function (json) {
   if (json['type'] === "text")
     this.args.push(create(json['type'],null,json['value']))
   else if (json['type'] === "input")
-    this.args.push(create("foreignObject", null, create(json['type'],{value:json['value']},null)))
+    this.args.push(create("foreignObject", null, create(json['type'],{},null)))
 }
 
-Block.prototype.jsonInitStyle = function (style) {
+Block.prototype.makeStyleFromJSON = function (style) {
   switch (style) {
     case "single":
       this.path = create("path", { d: Path.single(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
       break;
     case "double":
-      this.path = create("path", { d: Path.single(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
+      this.path = create("path", { d: Path.double(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
       break;
     case "triple":
-      this.path = create("path", { d: Path.single(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
+      this.path = create("path", { d: Path.triple(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
       break;
     case "variable":
-      this.path = create("path", { d: Path.single(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
+      this.path = create("path", { d: Path.variable(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
       break;
     case "event":
-      this.path = create("path", { d: Path.single(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
+      this.path = create("path", { d: Path.event(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
       break;
     case "condition":
-      this.path = create("path", { d: Path.single(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
+      this.path = create("path", { d: Path.condition(), fill: this.color, stroke: this.strokeColor, strokeWidth: 0.5 }, null)
       break;
     default:
       throw new Error("It's not a defined style!!")
   }
-}
-
-Block.prototype.makeXY = function (x, y) {
-  return `(${x},${y})`
 }
 
 export default Block;
