@@ -1,5 +1,4 @@
 import color from './Color'
-// args 내부 구조 변경
 export default [{
   type: "motion_move_forward",
   args: [{
