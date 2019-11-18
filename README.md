@@ -1,10 +1,10 @@
 <h1 align="center">The Duck</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
-  <img alt="Node.js" src=" https://img.shields.io/badge/Node.js-gray?logo=Node.js&logoColor=green" />
-  <img alt="GraphQ:" src=" https://img.shields.io/badge/GraphQL-gray?logo=GraphQL&logoColor=E10098" />
-    <img alt="Docker" src=" https://img.shields.io/badge/Docker-gray?logo=Docker&logoColor=1488C6" />
-      <img alt="React" src=" https://img.shields.io/badge/React.js-gray?logo=React&logoColor=61DAFB" />
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-gray?logo=Node.js&logoColor=green" />
+  <img alt="GraphQ:" src="https://img.shields.io/badge/GraphQL-gray?logo=GraphQL&logoColor=E10098" />
+    <img alt="Docker" src="https://img.shields.io/badge/Docker-gray?logo=Docker&logoColor=1488C6" />
+      <img alt="React" src="https://img.shields.io/badge/React.js-gray?logo=React&logoColor=61DAFB" />
     <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">
     <img alt="License: Apache Lisence 2.0" src="https://img.shields.io/badge/License-Apache Lisence 2.0-yellow.svg" />
   </a>
