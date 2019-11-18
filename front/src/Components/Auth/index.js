@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React, { useContext } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import sendRequest from '../../utils/SendRequest';
@@ -16,13 +17,14 @@ export default () => {
       method: 'post',
       body: tokenBlob,
     });
+    if (!data.result) {
+      alert('로그인이 되지 않았습니다. 다시 로그인해주세요');
+      return;
+    }
     setLoggedIn(data.result);
     setOpen(!data.result);
     localStorage.setItem('token', data.token);
     localStorage.setItem('userImage', response.profileObj.imageUrl);
-    if (!data.result) {
-      alert('로그인이 되지 않았습니다. 다시 로그인해주세요');
-    }
   };
   return (
     <>
