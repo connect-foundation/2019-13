@@ -56,7 +56,9 @@ export default (passport) => {
       async (jwtPayload, done) => {
         try {
           const user = await prisma.$exists.user({
-            where: jwtPayload.id,
+            where: {
+              id: jwtPayload.id,
+            },
           });
           if (user) return done({ ...user });
           return done(null, false);
