@@ -1,7 +1,9 @@
+/* eslint-disable no-alert */
 import React, { useContext } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import sendRequest from '../../utils/SendRequest';
 import { LoggedInContext, ModalContext } from '../../Context';
+import { setLocalStorageItem } from '../../utils/storage';
 
 export default () => {
   const { setLoggedIn } = useContext(LoggedInContext);
@@ -16,13 +18,13 @@ export default () => {
       method: 'post',
       body: tokenBlob,
     });
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userImage', response.profileObj.imageUrl);
-    setLoggedIn(data.result);
-    setOpen(!data.result);
     if (!data.result) {
       alert('로그인이 되지 않았습니다. 다시 로그인해주세요');
+      return;
     }
+    setLocalStorageItem([{ key: 'token', value: data.token }, { key: 'userImage', value: response.profileObj.imageUrl }]);
+    setLoggedIn(data.result);
+    setOpen(!data.result);
   };
   return (
     <>
