@@ -2,7 +2,7 @@ import Block from './block';
 
 const Workspace = class {
   constructor() {
-    this.WorkspaceDB = Object.create(null);
+    this.blockDB = Object.create(null);
   }
 
   addBlock(usedId) {
@@ -10,7 +10,7 @@ const Workspace = class {
   }
 
   getBlockById(blockId) {
-    return this.WorkspaceDB[blockId];
+    return this.blockDB[blockId];
   }
 
   getAll() {
