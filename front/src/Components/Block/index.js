@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import drag from './Logic/Drag';
 import motion from './Init/Motion';
-import Workspace from './workspace';
+import { WorkspaceContext } from '../../Context';
+import Group from '../Group';
 
 export default () => {
   const [isInit, setIsInit] = useState(false);
-  const [workspace] = useState(new Workspace());
-  const blocks = [];
+  const { workspace } = useContext(WorkspaceContext);
 
   if (!isInit) {
     setIsInit(true);
@@ -17,24 +16,11 @@ export default () => {
     });
   }
 
-  Object.values(workspace.blockDB).forEach((block) => {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const g = React.createElement(
-      'g',
-      {
-        onMouseDown: drag(setPosition),
-        transform: `translate(${position.x},${position.y})`,
-        key: block.id,
-      },
-      block.path,
-      ...block.args,
-    );
-    blocks.push(g);
-  });
-
   return (
     <Svg>
-      {blocks.map(block => block)}
+      {Object.values(workspace.blockDB).map(block => (
+        <Group block={block} />
+      ))}
     </Svg>
   );
 };
