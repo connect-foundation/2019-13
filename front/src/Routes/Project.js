@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import Blockspace from '../Components/Block/index';
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -13,18 +14,21 @@ const project = () => (
   <Wrapper>
     <ProjectHeader isStared={dummyProject.star.toString()}>
       <div className="project-info">
-        <span className="project-title">{dummyProject.projectName}</span>
+        <span className="project-title">
+          {dummyProject.projectName}
+        </span>
         <button type="button">
           <FontAwesomeIcon icon={faStar} className="star-icon" />
         </button>
 
         <button type="button">
-          {dummyProject.isPublic ? '전체 공개' : '비공개'}
+          {dummyProject.isPublic ? "전체 공개" : "비공개"}
         </button>
         <button type="button"> 초대 </button>
       </div>
     </ProjectHeader>
     <Contents>
+      <Blockspace />
       <div className="Contents__Column block-types">
         <TypesButton className="block-types__button" btype="motion">
           <div />
