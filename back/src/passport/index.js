@@ -1,62 +1,71 @@
-import { Strategy as GoogleTokenStrategy } from "passport-google-token";
-import {prisma} from '../../prisma-client';
-import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
-export default passport => {
+/* eslint-disable no-underscore-dangle */
+import { Strategy as GoogleTokenStrategy } from 'passport-google-token';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { prisma } from '../../prisma-client';
+
+export default (passport) => {
   passport.serializeUser((user, done) => {
     done(null, user);
   });
   passport.deserializeUser((user, done) => {
     done(null, user);
   });
-  
+
   passport.use(
     new GoogleTokenStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       },
       async (accessToken, refreshToken, profile, done) => {
-        //인증되었을 경우
-        const {id,email,name,picture} = profile._json;
-        try{
+        // 인증되었을 경우
+        const {
+          id, email, name, picture,
+        } = profile._json;
+        try {
           const user = await prisma.upsertUser({
-            where : {
-              id : `G-${id}`
+            where: {
+              id: `G-${id}`,
             },
-            create:{
-              id : `G-${id}`,
+            create: {
+              id: `G-${id}`,
               email,
               name,
-              picture
+              picture,
             },
-            update:{
+            update: {
               email,
               name,
-              picture
-            }
-          })
-       
+              picture,
+            },
+          });
+
           done(null, user);
-        }catch(e){
+        } catch (e) {
           done(e);
         }
-       
-      }
-    )
+      },
+    ),
   );
-  passport.use(new JwtStrategy({
-    jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey : process.env.JWT_SECRET
-  },async (jwt_payload, done)=>{
-    try{
-      const user = await prisma.$exists.user({
-        where : jwt_payload.id
-      });
-      if(user) return done({...user});
-      else return done(null, false);
-    }catch(e){
-      return(e);
-    }
-
-  }))
+  passport.use(
+    new JwtStrategy(
+      {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: process.env.JWT_SECRET,
+      },
+      async (jwtPayload, done) => {
+        try {
+          const user = await prisma.$exists.user({
+            where: {
+              id: jwtPayload.id,
+            },
+          });
+          if (user) return done(user);
+          return done(null, false);
+        } catch (e) {
+          return done(e);
+        }
+      },
+    ),
+  );
 };
