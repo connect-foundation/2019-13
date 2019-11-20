@@ -4,8 +4,10 @@ export default ({ dispatch, motionIndex, setModel, setPosition }) => {
   const mousedown = (eventDown) => {
     setModel(false);
     const blockParams = motion[motionIndex];
-    blockParams.x = eventDown.target.getBoundingClientRect().x;
-    blockParams.y = eventDown.target.getBoundingClientRect().y - 72 - 50;
+    blockParams.x = eventDown.target.getBoundingClientRect().x
+      - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
+    blockParams.y = eventDown.target.getBoundingClientRect().y
+      - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
     blockParams.motionIndex = motionIndex;
     dispatch({ blockParams });
 
@@ -23,7 +25,6 @@ export default ({ dispatch, motionIndex, setModel, setPosition }) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
     };
-
 
     document.addEventListener('mousemove', mousemove);
     document.addEventListener('mouseup', mouseup);
