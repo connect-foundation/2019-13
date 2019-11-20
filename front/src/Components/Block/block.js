@@ -26,6 +26,33 @@ const Block = function (workspace, usedId) {
   this.render = null;
 };
 
+Block.prototype.setNode = function (node) {
+  this.node = node;
+  this.getLengthOfArgs();
+};
+
+Block.prototype.getLengthOfArgs = function () {
+  if (this.node) {
+    let positionX = 6;
+    this.node.childNodes.forEach((node) => {
+      if (node.tagName !== 'path') {
+        this.setArgsPosition(node, positionX);
+        positionX += node.getBoundingClientRect().width;
+      }
+    });
+    this.makeStyleFromJSON((this.node.lastChild.getBoundingClientRect().right - this.node.getBoundingClientRect().left) / 6 - 6 + 1);
+    this.render(Math.random());
+  }
+};
+
+Block.prototype.setArgsPosition = function (node, positionX) {
+  if (node.tagName !== 'foreignObject') {
+    node.setAttribute('transform', `translate(${positionX},23)`);
+  } else {
+    node.setAttribute('transform', `translate(${positionX + 3},8)`);
+  }
+};
+
 Block.prototype.changeInputWidth = function (event) {
   const { target } = event;
   const { length } = target.value;
@@ -38,6 +65,7 @@ Block.prototype.changeInputWidth = function (event) {
     target.parentNode.style.width = '30px';
     target.style.width = '30px';
   }
+  this.getLengthOfArgs();
 };
 
 Block.prototype.makeFromJSON = function (json) {
