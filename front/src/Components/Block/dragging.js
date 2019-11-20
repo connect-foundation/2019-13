@@ -36,8 +36,10 @@ Dragging.prototype.updateDrag = function (movedX, movedY) {
 };
 
 Dragging.prototype.dragEnd = function (x, y) {
+  const block = this.draggedBlock;
   this.isDragging = false;
   this.draggedBlock = null;
+  return block;
 };
 
 export default Dragging;
