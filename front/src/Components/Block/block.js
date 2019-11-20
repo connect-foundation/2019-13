@@ -10,8 +10,10 @@ const Block = function (workspace, usedId) {
   this.type = '';
   this.style = '';
   this.workspace = workspace;
-  this.parentBlock = null;
-  this.childBlocks = [];
+  this.firstchildConnection = null;
+  this.secondchildConnection = null;
+  this.firstchildElement = null;
+  this.secondchildElement = null;
   this.x = 0;
   this.y = 0;
   this.args = [];
@@ -24,6 +26,8 @@ const Block = function (workspace, usedId) {
   this.path = null;
   this.node = null;
   this.render = null;
+  this.motionIndex = -1;
+  this.isDragged = false;
 };
 
 Block.prototype.setNode = function (node) {
@@ -72,6 +76,9 @@ Block.prototype.makeFromJSON = function (json) {
   this.type = json.type;
   this.color = json.color;
   this.strokeColor = json.stroke_color;
+  this.x = json.x ? json.x : 0;
+  this.y = json.y ? json.y : 0;
+  this.motionIndex = json.motionIndex === 0 || Number(json.motionIndex) ? json.motionIndex : -1;
 
   if (!this.id) {
     this.id = Uid();
@@ -84,11 +91,12 @@ Block.prototype.makeFromJSON = function (json) {
   if (json.previousConnection && !this.previousConnection) {
     this.previousConnection = new Connection(
       Constants.PREVIOUS_CONNECTION,
-      this,
+      this, 'previousPosition',
     );
   }
+
   if (json.nextConnection && !this.nextConnection) {
-    this.nextConnection = new Connection(Constants.NEXT_CONNECTION, this);
+    this.nextConnection = new Connection(Constants.NEXT_CONNECTION, this, 'nextPosition');
   }
 
   this.style = json.style;
@@ -192,6 +200,61 @@ Block.prototype.makeStyleFromJSON = function (width, height, secondHeight) {
     default:
       throw new Error("It's not a defined style!!");
   }
+};
+
+Block.prototype.dragStart = function (x, y) {
+  this.setDrag(true);
+  this.workspace.dragStart(this, x, y);
+};
+
+Block.prototype.dragUpdate = function (x, y) {
+  this.workspace.dragUpdate(x, y);
+};
+
+Block.prototype.dragEnd = function (x, y) {
+  this.x = x;
+  this.y = y;
+  this.setDrag(false);
+  this.workspace.dragEnd();
+};
+
+Block.prototype.getNextConnection = function (isDragged) {
+  if (this.nextElement && isDragged) {
+    return this.nextElement.getNextConnection();
+  }
+
+  return this.nextConnection;
+};
+
+Block.prototype.setDrag = function (isDragged) {
+  this.isDragged = isDragged;
+
+  if (this.nextElement) {
+    this.nextElement.setDrag(isDragged);
+  }
+
+  if (this.firstchildElement) {
+    this.firstchildConnection.setDrag(isDragged);
+  }
+
+  if (this.secondchildElement) {
+    this.secondchildElement.setDrag(isDragged);
+  }
+};
+
+Block.prototype.getAvailableConnection = function (isDragged = false) {
+  const availableConnection = [];
+
+  if (this.previousConnection) {
+    availableConnection.push(this.previousConnection);
+  }
+
+  if (this.nextConnection) {
+    const nextConn = this.getNextConnection(isDragged);
+    if (nextConn) availableConnection.push(nextConn);
+  }
+
+  return availableConnection;
 };
 
 export default Block;
