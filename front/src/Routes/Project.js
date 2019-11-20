@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState, createContext, useReducer } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import Blockspace from '../Components/Block/index';
+// import BlockModel from '../Components/BlockFlyout';
+import Workspace from '../Components/Block/workspace';
+import { WorkspaceContext } from '../Context/index';
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -10,87 +13,101 @@ const dummyProject = {
   isPublic: true,
 };
 
-const project = () => (
-  <Wrapper>
-    <ProjectHeader isStared={dummyProject.star.toString()}>
-      <div className="project-info">
-        <span className="project-title">
-          {dummyProject.projectName}
-        </span>
-        <button type="button">
-          <FontAwesomeIcon icon={faStar} className="star-icon" />
-        </button>
+const workspaceReducer = (workspace, { json }) => {
+  workspace.addBlock().makeFromJSON(json);
+  console.log(Object.keys(workspace.blockDB).length);
+  return { ...workspace };
+};
+const Project = () => {
+  const [workspace, workspaceDispatch] = useReducer(
+    workspaceReducer,
+    new Workspace(),
+  );
+  return (
+    <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
+      <Wrapper>
+        <ProjectHeader isStared={dummyProject.star.toString()}>
+          <div className="project-info">
+            <span className="project-title">{dummyProject.projectName}</span>
+            <button type="button">
+              <FontAwesomeIcon icon={faStar} className="star-icon" />
+            </button>
 
-        <button type="button">
-          {dummyProject.isPublic ? "전체 공개" : "비공개"}
-        </button>
-        <button type="button"> 초대 </button>
-      </div>
-    </ProjectHeader>
-    <Contents>
-      <Blockspace />
-      <div className="Contents__Column block-types">
-        <TypesButton className="block-types__button" btype="motion">
-          <div />
-          <span> 동작 </span>
-        </TypesButton>
-        <TypesButton className="block-types__button" btype="events">
-          <div />
-          <span> 이벤트 </span>
-        </TypesButton>
-        <TypesButton className="block-types__button" btype="control">
-          <div />
-          <span> 제어 </span>
-        </TypesButton>
-        <TypesButton className="block-types__button" btype="sensing">
-          <div />
-          <span> 감지 </span>
-        </TypesButton>
-        <TypesButton className="block-types__button" btype="operators">
-          <div />
-          <span> 연산 </span>
-        </TypesButton>
-        <TypesButton className="block-types__button" btype="variables">
-          <div />
-          <span> 변수 </span>
-        </TypesButton>
-        <TypesButton className="block-types__button" btype="myblocks">
-          <div />
-          <span> 나만의 블록 </span>
-        </TypesButton>
-      </div>
-      <div className="Contents__Column block-lists">블록 리스트</div>
-      <div className="Contents__Column block-space">
-        <div>블록 코딩</div>
-      </div>
-      <div className="Contents__Column draw-section">
-        <div className="draw-section__row controller">
-          <FontAwesomeIcon icon={faPlay} className="play-button" />
-          <FontAwesomeIcon icon={faStop} className="stop-button" />
-        </div>
-        <div className="draw-section__row">
-          <div className="canvas">캔버스</div>
-        </div>
-        <div className="draw-section__row">
-          <div className="setting">
-            <div className="setting__row">
-              <div> X </div>
-              <input />
-              <div> Y</div>
-              <input />
+            <button type="button">
+              {dummyProject.isPublic ? '전체 공개' : '비공개'}
+            </button>
+            <button type="button"> 초대 </button>
+          </div>
+        </ProjectHeader>
+        <Contents>
+          <Blockspace />
+          <div className="Contents__Column block-types">
+            <TypesButton className="block-types__button" btype="motion">
+              <div />
+              <span> 동작 </span>
+            </TypesButton>
+            <TypesButton className="block-types__button" btype="events">
+              <div />
+              <span> 이벤트 </span>
+            </TypesButton>
+            <TypesButton className="block-types__button" btype="control">
+              <div />
+              <span> 제어 </span>
+            </TypesButton>
+            <TypesButton className="block-types__button" btype="sensing">
+              <div />
+              <span> 감지 </span>
+            </TypesButton>
+            <TypesButton className="block-types__button" btype="operators">
+              <div />
+              <span> 연산 </span>
+            </TypesButton>
+            <TypesButton className="block-types__button" btype="variables">
+              <div />
+              <span> 변수 </span>
+            </TypesButton>
+            <TypesButton className="block-types__button" btype="myblocks">
+              <div />
+              <span> 나만의 블록 </span>
+            </TypesButton>
+          </div>
+          <div className="Contents__Column block-lists">
+            {/* <BlockModel /> */}
+          </div>
+
+          <div className="Contents__Column block-space">
+            <div>블록 코딩</div>
+          </div>
+          <div className="Contents__Column draw-section">
+            <div className="draw-section__row controller">
+              <FontAwesomeIcon icon={faPlay} className="play-button" />
+              <FontAwesomeIcon icon={faStop} className="stop-button" />
             </div>
-            <div className="setting__row">
-              <div> 크기 </div>
-              <input />
-              <div> 방향 </div>
-              <input />
+            <div className="draw-section__row">
+              <div className="canvas">캔버스</div>
+            </div>
+            <div className="draw-section__row">
+              <div className="setting">
+                <div className="setting__row">
+                  <div> X </div>
+                  <input />
+                  <div> Y</div>
+                  <input />
+                </div>
+                <div className="setting__row">
+                  <div> 크기 </div>
+                  <input />
+                  <div> 방향 </div>
+                  <input />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </Contents>
-  </Wrapper>
-);
+        </Contents>
+      </Wrapper>
+    </WorkspaceContext.Provider>
+  );
+};
 
 const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
@@ -116,7 +133,7 @@ const ProjectHeader = styled.div`
       padding: 0px 8px;
     }
     .star-icon {
-      color: ${props => (props.isStared === "true" ? props.theme.eventsColor : "grey")};
+      color: ${props => (props.isStared === 'true' ? props.theme.eventsColor : 'grey')};
     }
   }
   .project-title {
@@ -222,4 +239,4 @@ const TypesButton = styled.div`
   }
 `;
 
-export default project;
+export default Project;

@@ -72,10 +72,10 @@ ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
   return { connection: closetConnection, radius: bestRadius };
 };
 
+
 ConnectionDB.prototype.findStartIdxForConnection = function (Y) {
   let positionMin = 0;
   let positionMax = this.connections.length;
-
   if (!this.connections.length) {
     return 0;
   }
