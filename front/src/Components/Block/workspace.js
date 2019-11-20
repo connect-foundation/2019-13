@@ -3,8 +3,8 @@ import Dragging from './dragging';
 import ConnectionDB from './connection_db';
 
 const Workspace = class {
-  constructor() {
-    this.blockDB = Object.create(null);
+  constructor(blockDB) {
+    this.blockDB = blockDB || Object.create(null);
     this.connectionDB = new ConnectionDB(this);
     this.dragging = new Dragging(this.connectionDB);
   }

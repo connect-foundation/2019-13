@@ -6,6 +6,7 @@ import Blockspace from '../Components/Block/index';
 // import BlockModel from '../Components/BlockFlyout';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext } from '../Context/index';
+import { workspaceReducer } from '../reducer';
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -13,11 +14,6 @@ const dummyProject = {
   isPublic: true,
 };
 
-const workspaceReducer = (workspace, { json }) => {
-  workspace.addBlock().makeFromJSON(json);
-  console.log(Object.keys(workspace.blockDB).length);
-  return { ...workspace };
-};
 const Project = () => {
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
