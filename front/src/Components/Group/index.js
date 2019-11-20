@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
+
 import PropType from 'prop-types';
 import copy from '../Block/Logic/Copy';
 import drag from '../Block/Logic/Drag';
@@ -8,9 +9,16 @@ const Group = ({ block }) => {
   const [isModel, setModel] = useState(true);
   const [position, setPosition] = useState({ x: block.x, y: block.y });
   const { workspaceDispatch } = useContext(WorkspaceContext);
+  const [, setRender] = useState();
+  const gRef = useRef();
+  useEffect(() => {
+    block.render = setRender;
+    block.setNode(gRef.current);
+  }, []);
   return (
     <g
-      style={{ zIndex: 10 }}
+      key={block.id}
+      ref={gRef}
       onMouseDown={
         isModel
           ? copy({
