@@ -10,7 +10,6 @@ const blockModelList = new BlockModelList();
 export default () => {
   const [isInit, setIsInit] = useState(false);
   const { workspace } = useContext(WorkspaceContext);
-
   if (!isInit) {
     setIsInit(true);
     motion.forEach((json, idx) => {
