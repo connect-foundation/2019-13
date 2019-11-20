@@ -1,30 +1,43 @@
-const Dragging = function() {
+import ConnectionDB from './connection_db';
+
+const Dragging = function () {
   this.isDragging = false;
-  this.dragginBlock = undefined;
-  this.orginalX = 0;
-  this.orginalY = 0;
-  this.currentX = 0;
-  this.currentY = 0;
+  this.draggedBlock = null;
+  this.availableConnection = null;
+  this.x = 0;
+  this.y = 0;
+  this.closetConnection = null;
+  this.connectionDB = new ConnectionDB();
 };
 
-Dragging.prototype.dragStart = function(sourceBlock, x, y) {
+Dragging.prototype.dragStart = function (sourceBlock, x, y) {
   this.isDragging = true;
-  this.orginalX = x;
-  this.orginalY = y;
-  this.dragginBlock = sourceBlock;
+  this.draggedBlock = sourceBlock;
+  this.availableConnection = sourceBlock.getAvailableConnection(true);
+  this.connectionDB.reset();
+  this.connectionDB.setConnections(this.draggedBlock);
 };
 
-Dragging.prototype.updateDrag = function(x, y) {
-  this.currentX = x;
-  this.currentY = y;
+Dragging.prototype.updateDrag = function (movedX, movedY) {
+  const maxRadious = 50;
+  let bestRadious = maxRadious;
+  this.x = movedX;
+  this.y = movedY;
+  this.availableConnection.forEach((conn) => {
+    const result = this.connectionDB.findClosetConnection(conn, bestRadious);
+    if (result.connection && result.radius < bestRadious) {
+      bestRadious = result.radius;
+      this.closetConnection = result.connection;
+    }
+  });
+  if (bestRadious === maxRadious) {
+    this.closetConnection = null;
+  }
 };
 
-Dragging.prototype.getCurrentBlockX = function() {
-  return this.currentX - this.orginalX + this.dragginBlock.X;
-};
-
-Dragging.prototype.getCurrentBlockY = function() {
-  return this.currentY - this.orginalY + this.dragginBlock.Y;
+Dragging.prototype.dragEnd = function (x, y) {
+  this.isDragging = false;
+  this.draggedBlock = null;
 };
 
 export default Dragging;
