@@ -21,6 +21,20 @@ const Block = function (workspace, usedId) {
   this.previousElement = null;
   this.nextElement = null;
   this.path = null;
+  this.node = null;
+  this.isChanged = true;
+};
+
+Block.prototype.changeInputWidth = function (event) {
+  const { target } = event;
+  const { length } = target.value;
+  if (length > 3) {
+    target.parentNode.style.width = `${length * 8 + 4}px`;
+    target.style.width = `${length * 8 + 4}px`;
+  } else {
+    target.parentNode.style.width = '30px';
+    target.style.width = '30px';
+  }
 };
 
 Block.prototype.makeFromJSON = function (json) {
@@ -55,9 +69,9 @@ Block.prototype.makeFromJSON = function (json) {
 
 Block.prototype.makeArgsFromJSON = function (json) {
   if (json.type === 'text') {
-    this.args.push(create(json.type, null, json.value));
+    this.args.push(create(json.type, { key: json.value }, json.value));
   } else if (json.type === 'input') {
-    this.args.push(create('foreignObject', null, create(json.type, {}, null)));
+    this.args.push(create('foreignObject', { key: 'foreign' }, create(json.type, { key: json.value, onChange: this.changeInputWidth }, null)));
   }
 };
 
@@ -71,6 +85,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
+          key: 'single',
         },
         null,
       );
@@ -83,6 +98,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
+          key: 'double',
         },
         null,
       );
@@ -95,6 +111,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
+          key: 'triple',
         },
         null,
       );
@@ -107,6 +124,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
+          key: 'variable',
         },
         null,
       );
@@ -119,6 +137,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
+          key: 'event',
         },
         null,
       );
@@ -131,6 +150,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
+          key: 'condition',
         },
         null,
       );

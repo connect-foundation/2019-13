@@ -3,17 +3,17 @@ const pixel = 6;
 const path = {
   single: (width = 14) => `M ${pixel},0 
     l 0,0 ${pixel * 3},0 
-    0,0 ${pixel * 2},${pixel * 2}
+    0,0 ${pixel * 2},${pixel * 1}
     0,0 ${pixel * 4},0 
-    0,0 ${pixel * 2},-${pixel * 2}
+    0,0 ${pixel * 2},-${pixel * 1}
     0,0 ${pixel * (width - 1)},0 
     c ${pixel},0 ${pixel},0 ${pixel},${pixel}
     l 0,0 0,${pixel * 4}
     c 0,${pixel} 0,${pixel} -${pixel},${pixel}
     l 0,0 -${pixel * (width - 1)},0 
-    0,0 -${pixel * 2},${pixel * 2}
+    0,0 -${pixel * 2},${pixel * 1}
     0,0 -${pixel * 4},0 
-    0,0 -${pixel * 2},-${pixel * 2}
+    0,0 -${pixel * 2},-${pixel * 1}
     0,0 -${pixel * 3},0
     c -${pixel},0 -${pixel},0 -${pixel},-${pixel} 
     l 0,0 0,-${pixel * 4}
@@ -21,33 +21,33 @@ const path = {
 
   double: (width = 14, height = 2) => `M ${pixel},0 
     l 0,0 ${pixel * 3},0 
-    0,0 ${pixel * 2},${pixel * 2}
+    0,0 ${pixel * 2},${pixel * 1}
     0,0 ${pixel * 4},0 
-    0,0 ${pixel * 2},-${pixel * 2}
+    0,0 ${pixel * 2},-${pixel * 1}
     0,0 ${pixel * (width - 1 + 4)},0 
     c ${pixel},0 ${pixel},0 ${pixel},${pixel}
     l 0,0 0,${pixel * 4}
     c 0,${pixel} 0,${pixel} -${pixel},${pixel}
     l 0,0 -${pixel * (width - 1)},0 
-    0,0 -${pixel * 2},${pixel * 2}
+    0,0 -${pixel * 2},${pixel * 1}
     0,0 -${pixel * 4},0 
-    0,0 -${pixel * 2},-${pixel * 2}
+    0,0 -${pixel * 2},-${pixel * 1}
     0,0 -${pixel * 3},0
     c -${pixel},0 -${pixel},0 -${pixel},${pixel}
     l 0,0 0,${pixel * height}
     c 0,${pixel} 0,${pixel} ${pixel},${pixel}
     l 0,0 ${pixel * 3},0
-    0,0 ${pixel * 2},${pixel * 2}
+    0,0 ${pixel * 2},${pixel * 1}
     0,0 ${pixel * 4},0 
-    0,0 ${pixel * 2},-${pixel * 2}
+    0,0 ${pixel * 2},-${pixel * 1}
     0,0 ${pixel * (width - 1)},0
     c ${pixel},0 ${pixel},0 ${pixel},${pixel}
     l 0,0 0,${pixel * 3}
     c 0,${pixel} 0,${pixel} -${pixel},${pixel}
     l 0,0 -${pixel * (width - 1 + 4)},0 
-    0,0 -${pixel * 2},${pixel * 2}
+    0,0 -${pixel * 2},${pixel * 1}
     0,0 -${pixel * 4},0 
-    0,0 -${pixel * 2},-${pixel * 2}
+    0,0 -${pixel * 2},-${pixel * 1}
     0,0 -${pixel * 3},0
     c -${pixel},0 -${pixel},0 -${pixel},-${pixel}
     l 0,0 0,-${pixel * 4}
@@ -57,49 +57,49 @@ const path = {
 
   triple: (width = 14, firstHeight = 2, secondHeight = 2) => `M ${pixel},0 
     l 0,0 ${pixel * 3},0 
-    0,0 ${pixel * 2},${pixel * 2}
+    0,0 ${pixel * 2},${pixel * 1}
     0,0 ${pixel * 4},0 
-    0,0 ${pixel * 2},-${pixel * 2}
+    0,0 ${pixel * 2},-${pixel * 1}
     0,0 ${pixel * (width - 1 + 4)},0 
     c ${pixel},0 ${pixel},0 ${pixel},${pixel}
     l 0,0 0,${pixel * 4}
     c 0,${pixel} 0,${pixel} -${pixel},${pixel}
     l 0,0 -${pixel * (width - 1)},0 
-    0,0 -${pixel * 2},${pixel * 2}
+    0,0 -${pixel * 2},${pixel * 1}
     0,0 -${pixel * 4},0 
-    0,0 -${pixel * 2},-${pixel * 2}
+    0,0 -${pixel * 2},-${pixel * 1}
     0,0 -${pixel * 3},0
     c -${pixel},0 -${pixel},0 -${pixel},${pixel}
     l 0,0 0,${pixel * firstHeight}
     c 0,${pixel} 0,${pixel} ${pixel},${pixel}
     l 0,0 ${pixel * 3},0
-    0,0 ${pixel * 2},${pixel * 2}
+    0,0 ${pixel * 2},${pixel * 1}
     0,0 ${pixel * 4},0 
-    0,0 ${pixel * 2},-${pixel * 2}
+    0,0 ${pixel * 2},-${pixel * 1}
     0,0 ${pixel * (width - 1)},0
     c ${pixel},0 ${pixel},0 ${pixel},${pixel}
     l 0,0 0,${pixel * 3}
     c 0,${pixel} 0,${pixel} -${pixel},${pixel}
     l 0,0 -${pixel * (width - 1)},0 
-    0,0 -${pixel * 2},${pixel * 2}
+    0,0 -${pixel * 2},${pixel * 1}
     0,0 -${pixel * 4},0 
-    0,0 -${pixel * 2},-${pixel * 2}
+    0,0 -${pixel * 2},-${pixel * 1}
     0,0 -${pixel * 3},0
     c -${pixel},0 -${pixel},0 -${pixel},${pixel}
     l 0,0 0,${pixel * secondHeight}
     c 0,${pixel} 0,${pixel} ${pixel},${pixel}
     l 0,0 ${pixel * 3},0
-    0,0 ${pixel * 2},${pixel * 2}
+    0,0 ${pixel * 2},${pixel * 1}
     0,0 ${pixel * 4},0 
-    0,0 ${pixel * 2},-${pixel * 2}
+    0,0 ${pixel * 2},-${pixel * 1}
     0,0 ${pixel * (width - 1)},0
     c ${pixel},0 ${pixel},0 ${pixel},${pixel}
     l 0,0 0,${pixel * 3}
     c 0,${pixel} 0,${pixel} -${pixel},${pixel}
     l 0,0 -${pixel * (width - 1 + 4)},0 
-    0,0 -${pixel * 2},${pixel * 2}
+    0,0 -${pixel * 2},${pixel * 1}
     0,0 -${pixel * 4},0 
-    0,0 -${pixel * 2},-${pixel * 2}
+    0,0 -${pixel * 2},-${pixel * 1}
     0,0 -${pixel * 3},0
     c -${pixel},0 -${pixel},0 -${pixel},-${pixel} 
     l 0,0 0,-${pixel * 4}
