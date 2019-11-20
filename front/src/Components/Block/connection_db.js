@@ -13,20 +13,35 @@ const ConnectionDB = function () {
   this.connections = [];
 };
 
+ConnectionDB.prototype.reset = function () {
+  this.connections = [];
+};
+
+ConnectionDB.prototype.setConnections = function (block) {
+  Object.values(block.workspace.blockDB).forEach((b) => {
+    if (!b.isDragged) {
+      this.connections.push(...b.getAvailableConnection());
+    }
+  });
+  this.sortAxisY();
+};
+
 ConnectionDB.prototype.addConnection = function (connection) {
   this.connections.push(connection);
 };
 
 ConnectionDB.prototype.isInYRange = function (connectIdx, y, maxRadius) {
-  return Math.abs(this.connections[connectIdx].test_y - y) <= maxRadius;
+  return Math.abs(this.connections[connectIdx].Y_() - y) < maxRadius;
 };
 
 ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
-  const startIdx = this.findStartIdxForConnection(connect.X_(), connect.Y_());
+  const startIdx = this.findStartIdxForConnection(connect.Y_());
   let closetConnection = null;
   let bestRadius = maxRadius;
   let temp;
   let findBackword = startIdx - 1;
+  let findForward = startIdx;
+
   if (startIdx >= this.connections.length) {
     return -1;
   }
@@ -39,9 +54,9 @@ ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
       closetConnection = temp;
       bestRadius = temp.distanceFrom(connect);
     }
-    findBackword--;
+    findBackword -= 1;
   }
-  let findForward = startIdx;
+
   while (
     findForward < this.connections.length
     && this.isInYRange(findForward, connect.Y_(), bestRadius)
@@ -51,35 +66,39 @@ ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
       closetConnection = temp;
       bestRadius = temp.distanceFrom(connect);
     }
-    findForward++;
+    findForward += 1;
   }
+
   return { connection: closetConnection, radius: bestRadius };
 };
 
-ConnectionDB.prototype.findStartIdxForConnection = function (test_x, test_y) {
+
+ConnectionDB.prototype.findStartIdxForConnection = function (Y) {
+  let positionMin = 0;
+  let positionMax = this.connections.length;
   if (!this.connections.length) {
     return 0;
   }
-  let positionMin = 0;
-  let positionMax = this.connections.length;
+
   while (positionMin < positionMax) {
     const postionMid = Math.floor((positionMin + positionMax) / 2);
-    if (this.connections[postionMid].test_y < test_y) {
+    if (this.connections[postionMid].Y_() < Y) {
       positionMin = postionMid + 1;
-    } else if (this.connections[postionMid].test_y > test_y) {
+    } else if (this.connections[postionMid].Y_() > Y) {
       positionMax = postionMid;
     } else {
       positionMin = postionMid;
       break;
     }
   }
+  if (positionMin >= this.connections.length) {
+    positionMin = this.connections.length - 1;
+  }
   return positionMin;
 };
 
 ConnectionDB.prototype.sortAxisY = function () {
-  this.connections.sort((a, b) => {
-    return a.Y_() - b.Y_();
-  });
+  this.connections.sort((a, b) => a.Y_() - b.Y_());
 };
 
 export default ConnectionDB;

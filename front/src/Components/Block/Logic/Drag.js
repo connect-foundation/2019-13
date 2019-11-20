@@ -1,34 +1,41 @@
-const mouseHandler = (set) => {
+const mouseHandler = (set, block) => {
   const mousedown = (eventDown) => {
-    if (eventDown.target.tagName !== 'path') { return; }
+    if (eventDown.target.tagName !== 'path') {
+      return;
+    }
     eventDown.preventDefault();
 
-    const currentPoint = { x: 0, y: 0 };
-    currentPoint.x = eventDown.target.getBoundingClientRect().x
-     - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
-    currentPoint.y = eventDown.target.getBoundingClientRect().y
-     - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
+    const startPosition = { x: 0, y: 0 };
+    startPosition.x = eventDown.target.getBoundingClientRect().x
+    - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
+    startPosition.y = eventDown.target.getBoundingClientRect().y
+    - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
 
     set({
-      x: currentPoint.x,
-      y: currentPoint.y,
+      x: startPosition.x,
+      y: startPosition.y,
     });
 
-    const startPoint = { x: 0, y: 0 };
-    startPoint.x = eventDown.clientX - currentPoint.x;
-    startPoint.y = eventDown.clientY - currentPoint.y;
+    const clickedPosition = { x: 0, y: 0 };
+    clickedPosition.x = eventDown.clientX - startPosition.x;
+    clickedPosition.y = eventDown.clientY - startPosition.y;
+
+    block.dragStart(clickedPosition.x, clickedPosition.y);
+
+    const currentPosition = { x: 0, y: 0 };
 
     const mousemove = (eventMove) => {
       eventMove.preventDefault();
-      set({
-        x: eventMove.clientX - startPoint.x,
-        y: eventMove.clientY - startPoint.y,
-      });
+      currentPosition.x = eventMove.clientX - clickedPosition.x;
+      currentPosition.y = eventMove.clientY - clickedPosition.y;
+      set({ x: currentPosition.x, y: currentPosition.y });
+      block.dragUpdate(currentPosition.x, currentPosition.y);
     };
 
     const mouseup = () => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
+      block.dragEnd(currentPosition.x, currentPosition.y);
     };
 
     document.addEventListener('mousemove', mousemove);
