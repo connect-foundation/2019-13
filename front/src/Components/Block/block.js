@@ -21,12 +21,16 @@ const Block = function (workspace, usedId) {
   this.previousElement = null;
   this.nextElement = null;
   this.path = null;
+  this.motionIndex = -1;
 };
 
 Block.prototype.makeFromJSON = function (json) {
   this.type = json.type;
   this.color = json.color;
   this.strokeColor = json.stroke_color;
+  this.x = json.x ? json.x : 0;
+  this.y = json.y ? json.y : 0;
+  this.motionIndex = json.motionIndex === 0 || Number(json.motionIndex) ? json.motionIndex : -1;
 
   if (!this.id) {
     this.id = Uid();
