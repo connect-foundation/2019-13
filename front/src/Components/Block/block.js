@@ -8,6 +8,7 @@ const create = React.createElement;
 const Block = function (workspace, usedId) {
   this.id = usedId;
   this.type = '';
+  this.style = '';
   this.workspace = workspace;
   this.parentBlock = null;
   this.childBlocks = [];
@@ -22,15 +23,17 @@ const Block = function (workspace, usedId) {
   this.nextElement = null;
   this.path = null;
   this.node = null;
-  this.isChanged = true;
+  this.render = null;
 };
 
 Block.prototype.changeInputWidth = function (event) {
   const { target } = event;
   const { length } = target.value;
-  if (length > 3) {
-    target.parentNode.style.width = `${length * 8 + 4}px`;
-    target.style.width = `${length * 8 + 4}px`;
+  if (length > 5) {
+    const { lastChild } = target.parentNode;
+    lastChild.innerHTML = target.value;
+    target.parentNode.style.width = `${lastChild.clientWidth}px`;
+    target.style.width = `${lastChild.clientWidth}px`;
   } else {
     target.parentNode.style.width = '30px';
     target.style.width = '30px';
@@ -60,7 +63,8 @@ Block.prototype.makeFromJSON = function (json) {
     this.nextConnection = new Connection(Constants.NEXT_CONNECTION, this);
   }
 
-  this.makeStyleFromJSON(json.style);
+  this.style = json.style;
+  this.makeStyleFromJSON();
 
   if (!this.workspace.getBlockById(this.id)) {
     this.workspace.blockDB[this.id] = this;
@@ -71,17 +75,19 @@ Block.prototype.makeArgsFromJSON = function (json) {
   if (json.type === 'text') {
     this.args.push(create(json.type, { key: json.value }, json.value));
   } else if (json.type === 'input') {
-    this.args.push(create('foreignObject', { key: 'foreign' }, create(json.type, { key: json.value, onChange: this.changeInputWidth }, null)));
+    this.args.push(create('foreignObject', { key: 'foreign' },
+      create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
+      create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)));
   }
 };
 
-Block.prototype.makeStyleFromJSON = function (style) {
-  switch (style) {
+Block.prototype.makeStyleFromJSON = function (width, height, secondHeight) {
+  switch (this.style) {
     case 'single':
       this.path = create(
         'path',
         {
-          d: Path.single(),
+          d: Path.single(width),
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
@@ -94,7 +100,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
       this.path = create(
         'path',
         {
-          d: Path.double(),
+          d: Path.double(width, height),
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
@@ -107,7 +113,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
       this.path = create(
         'path',
         {
-          d: Path.triple(),
+          d: Path.triple(width, height, secondHeight),
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
@@ -120,7 +126,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
       this.path = create(
         'path',
         {
-          d: Path.variable(),
+          d: Path.variable(width),
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
@@ -133,7 +139,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
       this.path = create(
         'path',
         {
-          d: Path.event(),
+          d: Path.event(width),
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
@@ -146,7 +152,7 @@ Block.prototype.makeStyleFromJSON = function (style) {
       this.path = create(
         'path',
         {
-          d: Path.condition(),
+          d: Path.condition(width),
           fill: this.color,
           stroke: this.strokeColor,
           strokeWidth: 0.5,
