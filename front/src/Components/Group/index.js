@@ -27,7 +27,7 @@ const Group = ({ block }) => {
             setModel,
             setPosition,
           })
-          : drag(setPosition)
+          : drag(setPosition, block)
       }
       transform={`translate(${position.x},${position.y})`}
     >
