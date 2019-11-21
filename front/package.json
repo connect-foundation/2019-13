@@ -15,6 +15,7 @@
     "react": "^16.11.0",
     "react-apollo-hooks": "^0.5.0",
     "react-dom": "^16.11.0",
+    "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.0.7",
     "react-helmet": "^5.2.1",
     "react-router-dom": "^5.1.2",
