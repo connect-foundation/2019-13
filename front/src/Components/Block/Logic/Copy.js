@@ -2,6 +2,10 @@ import motion from '../Init/Motion';
 
 export default ({ dispatch, motionIndex, setModel, setPosition }) => {
   const mousedown = (eventDown) => {
+    if (eventDown.target.tagName !== 'path') {
+      return;
+    }
+    eventDown.preventDefault();
     setModel(false);
     const blockParams = motion[motionIndex];
     blockParams.x = eventDown.target.getBoundingClientRect().x
