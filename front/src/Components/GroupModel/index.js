@@ -1,12 +1,11 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 
 import PropType from 'prop-types';
-import drag from '../Block/Logic/Drag';
+import copy from '../Block/Logic/Copy';
 import { WorkspaceContext } from '../../Context';
 
-const Group = ({ block }) => {
-  const [isMoved, setMoved] = useState(false);
-  const [position, setPosition] = useState({ x: block.x, y: block.y });
+const GroupModel = ({ block }) => {
+  const [position] = useState({ x: block.x, y: block.y });
   const { workspaceDispatch } = useContext(WorkspaceContext);
   const [, setRender] = useState();
   const gRef = useRef();
@@ -16,17 +15,9 @@ const Group = ({ block }) => {
   }, []);
   return (
     <g
-      key={block.id}
       ref={gRef}
-      onMouseLeave={isMoved ? () => {} : () => {
-        workspaceDispatch({
-          type: 'DELETE_BLOCK',
-          id: block.id,
-        });
-      }}
-      onMouseDown={
-          drag({ set: setPosition, block, setMoved })
-      }
+      key={block.id}
+      onMouseEnter={copy({ workspaceDispatch, motionIndex: block.motionIndex })}
       transform={`translate(${position.x},${position.y})`}
     >
       {block.path}
@@ -35,8 +26,8 @@ const Group = ({ block }) => {
   );
 };
 
-Group.propTypes = {
+GroupModel.propTypes = {
   block: PropType.object.isRequired,
 };
 
-export default Group;
+export default GroupModel;

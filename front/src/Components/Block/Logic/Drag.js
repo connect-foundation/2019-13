@@ -1,5 +1,6 @@
-const mouseHandler = (set, block) => {
+const mouseHandler = ({ set, block, setMoved }) => {
   const mousedown = (eventDown) => {
+    setMoved(true);
     if (eventDown.target.tagName !== 'path') {
       return;
     }

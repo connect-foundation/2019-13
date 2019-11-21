@@ -1,33 +1,22 @@
-import motion from '../Init/Motion';
+import Motion from '../Init/Motion';
 
-export default ({ dispatch, motionIndex, setModel, setPosition }) => {
-  const mousedown = (eventDown) => {
-    setModel(false);
-    const blockParams = motion[motionIndex];
-    blockParams.x = eventDown.target.getBoundingClientRect().x
-      - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
-    blockParams.y = eventDown.target.getBoundingClientRect().y
-      - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
-    blockParams.motionIndex = motionIndex;
-    dispatch({ blockParams });
+export default ({ workspaceDispatch, motionIndex }) => {
+  const onMouseEnter = (event) => {
+    if (event.target.tagName !== 'path') {
+      return;
+    }
+    event.preventDefault();
 
-    const startPoint = { x: 0, y: 0 };
-    startPoint.x = eventDown.clientX - blockParams.x;
-    startPoint.y = eventDown.clientY - blockParams.y;
-    const mousemove = (eventMove) => {
-      eventMove.preventDefault();
-      setPosition({
-        x: eventMove.clientX - startPoint.x,
-        y: eventMove.clientY - startPoint.y,
-      });
-    };
-    const mouseup = () => {
-      document.removeEventListener('mousemove', mousemove);
-      document.removeEventListener('mouseup', mouseup);
-    };
-
-    document.addEventListener('mousemove', mousemove);
-    document.addEventListener('mouseup', mouseup);
+    const blockParams = Motion[motionIndex];
+    blockParams.x = event.target.getBoundingClientRect().x
+    - event.target.ownerSVGElement.getBoundingClientRect().x;
+    blockParams.y = event.target.getBoundingClientRect().y
+    - event.target.ownerSVGElement.getBoundingClientRect().y;
+    event.preventDefault();
+    workspaceDispatch({
+      type: 'ADD_BLOCK',
+      blockParams,
+    });
   };
-  return mousedown;
+  return onMouseEnter;
 };

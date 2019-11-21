@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import motion from './Init/Motion';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
-import BlockModelList from './block_model_list';
+import GroupBlock from '../GroupModel';
 import CONSTANTS from './constants';
+import BlockModelList from './block_model_list';
 
 const blockModelList = new BlockModelList();
 export default () => {
@@ -13,7 +14,7 @@ export default () => {
   if (!isInit) {
     setIsInit(true);
     motion.forEach((json, idx) => {
-      const block = blockModelList.addBlock();
+      const block = blockModelList.addBlock(idx);
       block.makeFromJSON({
         ...json,
         x: CONSTANTS.DEFAULT_POSITION.x,
@@ -26,7 +27,7 @@ export default () => {
   return (
     <Svg>
       {Object.values(blockModelList.blockDB).map(block => (
-        <Group block={block} />
+        <GroupBlock block={block} key={block.id} />
       ))}
       {Object.values(workspace.blockDB).map(block => (
         <Group block={block} key={block.id} />

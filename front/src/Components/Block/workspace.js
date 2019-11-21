@@ -13,6 +13,10 @@ const Workspace = class {
     return new Block(this, usedId);
   }
 
+  deleteBlock(usedId) {
+    delete this.blockDB[usedId];
+  }
+
   dragStart(block, x, y) {
     this.dragging.dragStart(block, x, y);
   }
