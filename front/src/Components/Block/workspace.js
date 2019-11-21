@@ -38,7 +38,7 @@ const Workspace = class {
     const block = this.dragging.dragEnd();
 
     if (block.parentElement || block.previousElement) {
-      this.removeTopblock(this.topblocks, block);
+      this.removeTopblock(block);
     }
   }
 
