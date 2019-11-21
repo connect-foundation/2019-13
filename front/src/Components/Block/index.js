@@ -1,18 +1,28 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import motion from './Init/Motion';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
 import GroupBlock from '../GroupModel';
-import CONSTANTS from './constants';
 import BlockModelList from './block_model_list';
+import CONSTANTS from './constants';
+
+const makeBlock = function (block) {
+  if (block.nextElement) {
+    const nextElementBlock = makeBlock(block.nextElement);
+    return React.createElement(Group, { block, key: block.id }, nextElementBlock);
+  }
+  return React.createElement(Group, { block, key: block.id }, null);
+};
 
 const blockModelList = new BlockModelList();
 export default () => {
   const [isInit, setIsInit] = useState(false);
   const { workspace } = useContext(WorkspaceContext);
+  const [, setRender] = useState(0);
   if (!isInit) {
     setIsInit(true);
+    workspace.setRender = setRender;
     motion.forEach((json, idx) => {
       const block = blockModelList.addBlock(idx);
       block.makeFromJSON({
@@ -23,15 +33,13 @@ export default () => {
       });
     });
   }
-
+  // console.log(workspace.topblocks);
   return (
     <Svg>
       {Object.values(blockModelList.blockDB).map(block => (
         <GroupBlock block={block} key={block.id} />
       ))}
-      {Object.values(workspace.blockDB).map(block => (
-        <Group block={block} key={block.id} />
-      ))}
+      {workspace.topblocks.map((block) => { const a = makeBlock(block); return a; })}
     </Svg>
   );
 };

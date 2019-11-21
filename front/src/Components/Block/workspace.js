@@ -4,11 +4,12 @@ import ConnectionDB from './connection_db';
 import Utils from '../../utils/utils';
 
 const Workspace = class {
-  constructor(blockDB) {
+  constructor(blockDB, topblocks, setRender) {
     this.blockDB = blockDB || Object.create(null);
     this.connectionDB = new ConnectionDB(this);
     this.dragging = new Dragging(this.connectionDB);
-    this.topblocks = [];
+    this.topblocks = topblocks || [];
+    this.setRender = setRender || null;
   }
 
   addBlock(usedId) {
@@ -20,6 +21,11 @@ const Workspace = class {
   }
 
   addTopblock(block) {
+    for (const a of this.topblocks) {
+      if (a.id === block.id) {
+        return;
+      }
+    }
     this.topblocks.push(block);
   }
 
@@ -42,8 +48,11 @@ const Workspace = class {
     const block = this.dragging.dragEnd();
 
     if (block.parentElement || block.previousElement) {
+      block.x = 0;
+      block.y = 36;
       this.removeTopblock(block);
     }
+    this.setRender(Math.random());
   }
 
   getBlockById(blockId) {

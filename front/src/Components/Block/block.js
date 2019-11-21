@@ -39,14 +39,21 @@ Block.prototype.setNode = function (node) {
 
 Block.prototype.getLengthOfArgs = function () {
   if (this.node) {
-    let positionX = 6;
+    let positionX = Constants.PIXEL;
+    let lastChild;
     this.node.childNodes.forEach((node) => {
-      if (node.tagName !== 'path') {
+      if (node.tagName !== 'path' && node.tagName !== 'g') {
         this.setArgsPosition(node, positionX);
         positionX += node.getBoundingClientRect().width;
+        lastChild = node;
       }
     });
-    this.makeStyleFromJSON((this.node.lastChild.getBoundingClientRect().right - this.node.getBoundingClientRect().left) / 6 - 6 + 1);
+    this.makeStyleFromJSON(
+      (lastChild.getBoundingClientRect().right
+      - this.node.getBoundingClientRect().left
+      - Constants.PIXEL * 5)
+      / Constants.PIXEL,
+    );
     this.render(Math.random());
   }
 };
@@ -262,9 +269,15 @@ Block.prototype.getAvailableConnection = function (isDragged = false) {
 Block.prototype.connectBlock = function (type, conn) {
   switch (type) {
     case 'nextPosition':
+      if (this.nextElement) {
+        conn.source.nextElement = this.nextElement;
+      }
       this.nextElement = conn.source;
       break;
     case 'previousPosition':
+      if (this.previousElement) {
+        conn.source.previousElement = this.previousElement;
+      }
       this.previousElement = conn.source;
       break;
 

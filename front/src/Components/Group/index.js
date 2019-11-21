@@ -1,12 +1,12 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
-
 import PropType from 'prop-types';
 import drag from '../Block/Logic/Drag';
 import { WorkspaceContext } from '../../Context';
 
-const Group = ({ block }) => {
+const Group = ({ block, children }) => {
   const [isMoved, setMoved] = useState(false);
   const [position, setPosition] = useState({ x: block.x, y: block.y });
+  // if (block.id !== block.workspace.topblocks[0].id) { setPosition({ x: 0, y: 36 }); }
   const { workspaceDispatch } = useContext(WorkspaceContext);
   const [, setRender] = useState();
   const gRef = useRef();
@@ -16,6 +16,7 @@ const Group = ({ block }) => {
   }, []);
   return (
     <g
+      data-it={block.id}
       key={block.id}
       ref={gRef}
       onMouseLeave={isMoved ? () => {} : () => {
@@ -31,6 +32,7 @@ const Group = ({ block }) => {
     >
       {block.path}
       {block.args.map(args => args)}
+      {children || null}
     </g>
   );
 };
