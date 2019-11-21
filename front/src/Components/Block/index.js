@@ -7,14 +7,6 @@ import GroupBlock from '../GroupModel';
 import BlockModelList from './block_model_list';
 import CONSTANTS from './constants';
 
-const makeBlock = function (block) {
-  if (block.nextElement) {
-    const nextElementBlock = makeBlock(block.nextElement);
-    return React.createElement(Group, { block, key: block.id }, nextElementBlock);
-  }
-  return React.createElement(Group, { block, key: block.id }, null);
-};
-
 const blockModelList = new BlockModelList();
 export default () => {
   const [isInit, setIsInit] = useState(false);
@@ -39,7 +31,7 @@ export default () => {
       {Object.values(blockModelList.blockDB).map(block => (
         <GroupBlock block={block} key={block.id} />
       ))}
-      {workspace.topblocks.map((block) => { const a = makeBlock(block); return a; })}
+      {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}
     </Svg>
   );
 };

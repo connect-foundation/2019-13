@@ -41,7 +41,6 @@ Dragging.prototype.updateDrag = function (movedX, movedY) {
 
 Dragging.prototype.dragEnd = function (x, y) {
   const block = this.draggedBlock;
-  console.log(this.closetConnection);
   if (this.closetConnection) {
     this.connectBlock();
   }
@@ -52,7 +51,6 @@ Dragging.prototype.dragEnd = function (x, y) {
 
 Dragging.prototype.connectBlock = function () {
   this.localConnection.connectBlock(this.closetConnection);
-  this.closetConnection.connectBlock(this.localConnection);
 };
 
 export default Dragging;

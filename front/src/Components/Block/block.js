@@ -266,19 +266,41 @@ Block.prototype.getAvailableConnection = function (isDragged = false) {
   return availableConnection;
 };
 
+Block.prototype.nextPlus = function () {
+  if (this.nextElement) {
+    this.nextElement.y = this.y + 36;
+    this.nextElement.nextPlus();
+  }
+};
+
 Block.prototype.connectBlock = function (type, conn) {
   switch (type) {
     case 'nextPosition':
-      if (this.nextElement) {
-        conn.source.nextElement = this.nextElement;
+      Utils.arrayRemove(this.workspace.topblocks, conn.source);
+      if (conn.source.previousElement) {
+        this.previousElement = conn.source.previousElement;
+        conn.source.previousElement.nextElement = this;
       }
-      this.nextElement = conn.source;
+      if (this.nextElement) {
+        const lastElement = this.getNextConnection.source(true);
+        lastElement.nextElement = conn.source;
+        conn.source.previousElement = lastElement;
+      } else {
+        conn.source.previousElement = this;
+        this.nextElement = conn.source;
+      }
+      this.nextPlus();
       break;
     case 'previousPosition':
-      if (this.previousElement) {
-        conn.source.previousElement = this.previousElement;
+      if (conn.source.nextElement) {
+        const lastBlock = this.getNextConnection(true).source;
+        conn.source.nextElement.previousElement = lastBlock;
+        lastBlock.nextElement = conn.source.nextElement;
       }
       this.previousElement = conn.source;
+      conn.source.nextElement = this;
+      this.y = conn.source.y + 36;
+      this.nextPlus();
       break;
 
     case 'outputPosition':

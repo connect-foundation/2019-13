@@ -4,9 +4,9 @@ import drag from '../Block/Logic/Drag';
 import { WorkspaceContext } from '../../Context';
 
 const Group = ({ block, children }) => {
-  const [isMoved, setMoved] = useState(false);
+  let [isMoved, setMoved] = useState(false);
   const [position, setPosition] = useState({ x: block.x, y: block.y });
-  // if (block.id !== block.workspace.topblocks[0].id) { setPosition({ x: 0, y: 36 }); }
+  if (block.previousElement && position.y !== 36) { setPosition({ x: 0, y: 36 }); }
   const { workspaceDispatch } = useContext(WorkspaceContext);
   const [, setRender] = useState();
   const gRef = useRef();
@@ -14,6 +14,7 @@ const Group = ({ block, children }) => {
     block.render = setRender;
     block.setNode(gRef.current);
   }, []);
+  if (block.previousElement) isMoved = true;
   return (
     <g
       data-it={block.id}
@@ -32,7 +33,7 @@ const Group = ({ block, children }) => {
     >
       {block.path}
       {block.args.map(args => args)}
-      {children || null}
+      {block.nextElement && <Group block={block.nextElement} key={block.nextElement.id} />}
     </g>
   );
 };

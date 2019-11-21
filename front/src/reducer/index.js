@@ -10,7 +10,7 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
       block.makeFromJSON(blockParams);
       return new Workspace(workspace.blockDB, workspace.topblocks, workspace.setRender);
     case 'DELETE_BLOCK':
-      // workspace.deleteBlock(id);
+      workspace.deleteBlock(id);
       return new Workspace(workspace.blockDB, workspace.topblocks, workspace.setRender);
     default:
       throw new Error('NOT FOUND TYPE');

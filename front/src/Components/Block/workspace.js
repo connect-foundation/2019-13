@@ -17,6 +17,7 @@ const Workspace = class {
   }
 
   deleteBlock(usedId) {
+    Utils.arrayRemove(this.topblocks, this.getBlockById(usedId));
     delete this.blockDB[usedId];
   }
 
@@ -46,10 +47,7 @@ const Workspace = class {
 
   dragEnd() {
     const block = this.dragging.dragEnd();
-
     if (block.parentElement || block.previousElement) {
-      block.x = 0;
-      block.y = 36;
       this.removeTopblock(block);
     }
     this.setRender(Math.random());
