@@ -7,12 +7,14 @@ const Dragging = function () {
   this.x = 0;
   this.y = 0;
   this.closetConnection = null;
+  this.localConnection = null;
   this.connectionDB = new ConnectionDB();
 };
 
 Dragging.prototype.dragStart = function (sourceBlock, x, y) {
   this.isDragging = true;
   this.draggedBlock = sourceBlock;
+  this.draggedBlock.disconnectBlock();
   this.availableConnection = sourceBlock.getAvailableConnection(true);
   this.connectionDB.reset();
   this.connectionDB.setConnections(this.draggedBlock);
@@ -28,18 +30,29 @@ Dragging.prototype.updateDrag = function (movedX, movedY) {
     if (result.connection && result.radius < bestRadious) {
       bestRadious = result.radius;
       this.closetConnection = result.connection;
+      this.localConnection = conn;
     }
   });
   if (bestRadious === maxRadious) {
     this.closetConnection = null;
+    this.localConnection = null;
   }
 };
 
 Dragging.prototype.dragEnd = function (x, y) {
   const block = this.draggedBlock;
+  console.log(this.closetConnection);
+  if (this.closetConnection) {
+    this.connectBlock();
+  }
   this.isDragging = false;
   this.draggedBlock = null;
   return block;
+};
+
+Dragging.prototype.connectBlock = function () {
+  this.localConnection.connectBlock(this.closetConnection);
+  this.closetConnection.connectBlock(this.localConnection);
 };
 
 export default Dragging;

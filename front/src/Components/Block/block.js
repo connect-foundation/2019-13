@@ -29,6 +29,7 @@ const Block = function (workspace, usedId) {
   this.motionIndex = -1;
   this.isDragged = false;
   this.parentElement = null;
+  this.parentConnection = null;
 };
 
 Block.prototype.setNode = function (node) {
@@ -256,6 +257,34 @@ Block.prototype.getAvailableConnection = function (isDragged = false) {
   }
 
   return availableConnection;
+};
+
+Block.prototype.connectBlock = function (type, conn) {
+  switch (type) {
+    case 'nextPosition':
+      this.nextElement = conn.source;
+      break;
+    case 'previousPosition':
+      this.previousElement = conn.source;
+      break;
+
+    case 'outputPosition':
+      break;
+
+    case 'inputPosition':
+
+      break;
+
+    default:
+      throw new Error('잘못된 커넥션 타입입니다.');
+  }
+};
+
+Block.prototype.disconnectBlock = function () {
+  if (this.previousElement) {
+    this.previousElement.nextElement = null;
+    this.previousElement = null;
+  }
 };
 
 export default Block;

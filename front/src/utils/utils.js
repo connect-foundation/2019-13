@@ -11,7 +11,7 @@ const Utils = {
     return id.join('');
   },
   arrayRemove: (arr, obj) => {
-    const i = arr.indexOf(...obj);
+    const i = arr.indexOf(obj);
     if (i === -1) {
       return false;
     }

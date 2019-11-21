@@ -19,8 +19,8 @@ const Connection = function (type, source, positiontype) {
   this.diffX = 0;
   this.diffY = 0;
   this.positionSetting = {
-    previousPosition: { x: Constants.PREVIOUS_NEXT_POS_X, y: 0 },
-    nextPosition: { x: Constants.PREVIOUS_NEXT_POS_X, y: 48 },
+    previousPosition: { x: Constants.PREVIOUS_NEXT_POS_X, y: 6 },
+    nextPosition: { x: Constants.PREVIOUS_NEXT_POS_X, y: 42 },
   };
   this.isSelected = false;
   this.setDiff();
@@ -64,9 +64,13 @@ Connection.prototype.canConnect = function (connect, radius) {
 
 Connection.prototype.distanceFrom = function (connect) {
   return Math.sqrt(
-    Math.pow(this.X_() - connect.X_(), 2)
-      + Math.pow(this.X_() - connect.X_(), 2),
+    ((this.X_() - connect.X_()) ** 2)
+      + ((this.Y_() - connect.Y_()) ** 2),
   );
+};
+
+Connection.prototype.connectBlock = function (conn) {
+  this.source.connectBlock(this.positiontype, conn);
 };
 
 export default Connection;
