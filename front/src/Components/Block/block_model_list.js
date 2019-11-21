@@ -9,6 +9,10 @@ const BlockModelList = class {
     return new Block(this, usedId);
   }
 
+  deleteBlock(usedId) {
+    delete this.blockDB[usedId];
+  }
+
   getBlockById(blockId) {
     return this.blockDB[blockId];
   }

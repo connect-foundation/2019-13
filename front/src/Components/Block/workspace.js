@@ -15,6 +15,9 @@ const Workspace = class {
     return new Block(this, usedId);
   }
 
+  deleteBlock(usedId) {
+    delete this.blockDB[usedId];
+
   addTopblock(block) {
     this.topblocks.push(block);
   }

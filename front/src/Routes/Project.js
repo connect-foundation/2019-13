@@ -1,9 +1,8 @@
-import React, { useState, createContext, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import Blockspace from '../Components/Block/index';
-// import BlockModel from '../Components/BlockFlyout';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext } from '../Context/index';
 import { workspaceReducer } from '../reducer';
@@ -67,9 +66,7 @@ const Project = () => {
               <span> 나만의 블록 </span>
             </TypesButton>
           </div>
-          <div className="Contents__Column block-lists">
-            {/* <BlockModel /> */}
-          </div>
+          <div className="Contents__Column block-lists" />
 
           <div className="Contents__Column block-space">
             <div>블록 코딩</div>
