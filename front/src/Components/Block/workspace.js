@@ -1,12 +1,14 @@
 import Block from './block';
 import Dragging from './dragging';
 import ConnectionDB from './connection_db';
+import Utils from '../../utils/utils';
 
 const Workspace = class {
   constructor(blockDB) {
     this.blockDB = blockDB || Object.create(null);
     this.connectionDB = new ConnectionDB(this);
     this.dragging = new Dragging(this.connectionDB);
+    this.topblocks = [];
   }
 
   addBlock(usedId) {
@@ -15,9 +17,19 @@ const Workspace = class {
 
   deleteBlock(usedId) {
     delete this.blockDB[usedId];
+
+  addTopblock(block) {
+    this.topblocks.push(block);
+  }
+
+  removeTopblock(block) {
+    if (!Utils.arrayRemove(this.topblocks, block)) {
+      throw Error('탑블록 어레이 내에 없음! ㅜㅜ');
+    }
   }
 
   dragStart(block, x, y) {
+    this.addTopblock(block);
     this.dragging.dragStart(block, x, y);
   }
 
@@ -26,7 +38,11 @@ const Workspace = class {
   }
 
   dragEnd() {
-    this.dragging.dragEnd();
+    const block = this.dragging.dragEnd();
+
+    if (block.parentElement || block.previousElement) {
+      this.removeTopblock(this.topblocks, block);
+    }
   }
 
   getBlockById(blockId) {

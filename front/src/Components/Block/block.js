@@ -1,6 +1,6 @@
 import React from 'react';
 import Path from './Path';
-import Uid from '../../utils/uid';
+import Utils from '../../utils/utils';
 import Connection from './connection';
 import Constants from './constants';
 
@@ -28,6 +28,7 @@ const Block = function (workspace, usedId) {
   this.render = null;
   this.motionIndex = -1;
   this.isDragged = false;
+  this.parentElement = null;
 };
 
 Block.prototype.setNode = function (node) {
@@ -81,7 +82,7 @@ Block.prototype.makeFromJSON = function (json) {
   this.motionIndex = json.motionIndex === 0 || Number(json.motionIndex) ? json.motionIndex : -1;
 
   if (!this.id) {
-    this.id = Uid();
+    this.id = Utils.uid();
   }
 
   json.args.forEach((arg) => {

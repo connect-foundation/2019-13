@@ -6,7 +6,6 @@ export default ({ workspaceDispatch, motionIndex }) => {
       return;
     }
     event.preventDefault();
-
     const blockParams = Motion[motionIndex];
     blockParams.x = event.target.getBoundingClientRect().x
     - event.target.ownerSVGElement.getBoundingClientRect().x;
