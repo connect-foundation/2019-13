@@ -1,6 +1,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
-const prismaLib1 = require('prisma-client-lib');
+const prismaClientLib = require('prisma-client-lib');
 const { typeDefs } = require('./prisma-schema');
 
 const models = [
@@ -29,9 +29,10 @@ const models = [
     embedded: false,
   },
 ];
-exports.Prisma = prismaLib1.makePrismaClientClass({
+exports.Prisma = prismaClientLib.makePrismaClientClass({
   typeDefs,
   models,
   endpoint: process.env.PRISMA_URL,
   secret: process.env.PRISMA_SECRET,
 });
+exports.prisma = new exports.Prisma();
