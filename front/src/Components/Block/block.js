@@ -34,10 +34,10 @@ const Block = function (workspace, usedId) {
 
 Block.prototype.setNode = function (node) {
   this.node = node;
-  this.getLengthOfArgs();
+  this.setArgs();
 };
 
-Block.prototype.getLengthOfArgs = function () {
+Block.prototype.setArgs = function () {
   if (this.node) {
     let positionX = Constants.PIXEL;
     let lastChild;
@@ -78,7 +78,7 @@ Block.prototype.changeInputWidth = function (event) {
     target.parentNode.style.width = '30px';
     target.style.width = '30px';
   }
-  this.getLengthOfArgs();
+  this.setArgs();
 };
 
 Block.prototype.makeFromJSON = function (json) {
@@ -227,9 +227,9 @@ Block.prototype.dragEnd = function (x, y) {
   this.workspace.dragEnd();
 };
 
-Block.prototype.getNextConnection = function (isDragged) {
-  if (this.nextElement && isDragged) {
-    return this.nextElement.getNextConnection();
+Block.prototype.getNextConnection = function (goEndPoint = false) {
+  if (this.nextElement && goEndPoint) {
+    return this.nextElement.getNextConnection(goEndPoint);
   }
 
   return this.nextConnection;
@@ -266,10 +266,11 @@ Block.prototype.getAvailableConnection = function (isDragged = false) {
   return availableConnection;
 };
 
-Block.prototype.nextPlus = function () {
+Block.prototype.setNextElementPosition = function () {
   if (this.nextElement) {
     this.nextElement.y = this.y + 36;
-    this.nextElement.nextPlus();
+    this.nextElement.x = this.x;
+    this.nextElement.setNextElementPosition();
   }
 };
 
@@ -282,14 +283,14 @@ Block.prototype.connectBlock = function (type, conn) {
         conn.source.previousElement.nextElement = this;
       }
       if (this.nextElement) {
-        const lastElement = this.getNextConnection.source(true);
+        const lastElement = this.getNextConnection(true).source;
         lastElement.nextElement = conn.source;
         conn.source.previousElement = lastElement;
       } else {
         conn.source.previousElement = this;
         this.nextElement = conn.source;
       }
-      this.nextPlus();
+      this.setNextElementPosition();
       break;
     case 'previousPosition':
       if (conn.source.nextElement) {
@@ -300,7 +301,8 @@ Block.prototype.connectBlock = function (type, conn) {
       this.previousElement = conn.source;
       conn.source.nextElement = this;
       this.y = conn.source.y + 36;
-      this.nextPlus();
+      this.x = conn.source.x;
+      this.setNextElementPosition();
       break;
 
     case 'outputPosition':

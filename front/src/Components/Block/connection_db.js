@@ -23,6 +23,7 @@ ConnectionDB.prototype.setConnections = function (block) {
       this.connections.push(...b.getAvailableConnection());
     }
   });
+
   this.sortAxisY();
 };
 

@@ -39,6 +39,7 @@ const Workspace = class {
   dragStart(block, x, y) {
     this.addTopblock(block);
     this.dragging.dragStart(block, x, y);
+    console.log(this.blockDB, Object.keys(this.blockDB).length);
   }
 
   dragUpdate(x, y) {
