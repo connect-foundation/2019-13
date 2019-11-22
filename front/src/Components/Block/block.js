@@ -227,17 +227,16 @@ Block.prototype.dragEnd = function (x, y) {
   this.workspace.dragEnd();
 };
 
-Block.prototype.getNextConnection = function (goEndPoint = false) {
+Block.prototype.getLastBlock = function (goEndPoint = false) {
   if (this.nextElement && goEndPoint) {
-    return this.nextElement.getNextConnection(goEndPoint);
+    return this.nextElement.getLastBlock(goEndPoint);
   }
 
-  return this.nextConnection;
+  return this;
 };
 
 Block.prototype.setDrag = function (isDragged) {
   this.isDragged = isDragged;
-
   if (this.nextElement) {
     this.nextElement.setDrag(isDragged);
   }
@@ -259,7 +258,7 @@ Block.prototype.getAvailableConnection = function (isDragged = false) {
   }
 
   if (this.nextConnection) {
-    const nextConn = this.getNextConnection(isDragged);
+    const nextConn = this.getLastBlock(isDragged).nextConnection;
     if (nextConn) availableConnection.push(nextConn);
   }
 
@@ -274,35 +273,36 @@ Block.prototype.setNextElementPosition = function () {
   }
 };
 
+Block.prototype.setpreviousElement = function (previousElement) {
+  this.previousElement = previousElement;
+};
+
+Block.prototype.setNextElement = function (nextElement) {
+  this.nextElement = nextElement;
+};
+
 Block.prototype.connectBlock = function (type, conn) {
   switch (type) {
     case 'nextPosition':
       Utils.arrayRemove(this.workspace.topblocks, conn.source);
-      if (conn.source.previousElement) {
-        this.previousElement = conn.source.previousElement;
-        conn.source.previousElement.nextElement = this;
-      }
       if (this.nextElement) {
-        const lastElement = this.getNextConnection(true).source;
-        lastElement.nextElement = conn.source;
-        conn.source.previousElement = lastElement;
-      } else {
-        conn.source.previousElement = this;
-        this.nextElement = conn.source;
+        const lastBlock = conn.source.getLastBlock(true);
+        lastBlock.setNextElement(this.nextElement);
+        this.nextElement.setpreviousElement(lastBlock);
       }
+      conn.source.setpreviousElement(this);
+      this.setNextElement(conn.source);
       this.setNextElementPosition();
       break;
     case 'previousPosition':
       if (conn.source.nextElement) {
-        const lastBlock = this.getNextConnection(true).source;
-        conn.source.nextElement.previousElement = lastBlock;
-        lastBlock.nextElement = conn.source.nextElement;
+        const lastBlock = this.getLastBlock(true);
+        conn.source.nextElement.setpreviousElement(lastBlock);
+        lastBlock.setNextElement(conn.source.nextElement);
       }
       this.previousElement = conn.source;
-      conn.source.nextElement = this;
-      this.y = conn.source.y + 36;
-      this.x = conn.source.x;
-      this.setNextElementPosition();
+      conn.source.setNextElement(this);
+      conn.source.setNextElementPosition();
       break;
 
     case 'outputPosition':

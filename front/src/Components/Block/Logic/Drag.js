@@ -12,6 +12,7 @@ const mouseHandler = ({ set, block, setMoved }) => {
     startPosition.y = eventDown.target.getBoundingClientRect().y
     - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
 
+
     set({
       x: startPosition.x,
       y: startPosition.y,
@@ -23,7 +24,7 @@ const mouseHandler = ({ set, block, setMoved }) => {
 
     block.dragStart(clickedPosition.x, clickedPosition.y);
 
-    const currentPosition = { x: 0, y: 0 };
+    const currentPosition = { x: startPosition.x, y: startPosition.y };
 
     const mousemove = (eventMove) => {
       eventMove.preventDefault();
@@ -36,6 +37,10 @@ const mouseHandler = ({ set, block, setMoved }) => {
     const mouseup = () => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
+      if (startPosition.x === currentPosition.x && startPosition.y === currentPosition.y) {
+        block.workspace.dragging.reset();
+        return;
+      }
       block.dragEnd(currentPosition.x, currentPosition.y);
     };
 

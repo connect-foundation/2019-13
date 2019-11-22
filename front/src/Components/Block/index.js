@@ -25,7 +25,7 @@ export default () => {
       });
     });
   }
-  // console.log(workspace.topblocks);
+  
   return (
     <Svg>
       {Object.values(blockModelList.blockDB).map(block => (

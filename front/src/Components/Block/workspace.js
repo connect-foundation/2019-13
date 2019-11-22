@@ -22,11 +22,7 @@ const Workspace = class {
   }
 
   addTopblock(block) {
-    for (const a of this.topblocks) {
-      if (a.id === block.id) {
-        return;
-      }
-    }
+    if (this.topblocks.some(b => b.id === block.id)) return;
     this.topblocks.push(block);
   }
 
@@ -39,7 +35,6 @@ const Workspace = class {
   dragStart(block, x, y) {
     this.addTopblock(block);
     this.dragging.dragStart(block, x, y);
-    console.log(this.blockDB, Object.keys(this.blockDB).length);
   }
 
   dragUpdate(x, y) {
