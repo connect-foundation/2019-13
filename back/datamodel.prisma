@@ -6,7 +6,6 @@ type User {
   projects: [project!]! @relation(name: "ProjectsByUser")
   authes: [project_auth!]! @relation(name : "AuthesByUser")
 }
-
 type project {
   id: ID!  @id
   title: String!
@@ -17,13 +16,11 @@ type project {
   blocks:[block!]! @relation(name: "BlocksByProject")
   authes: [project_auth!]! @relation(name: "AuthesByProject")
 }
-
 type project_auth{
   id: ID! @id
   project:project! @relation(link : TABLE, name:"AuthesByProject")
   user:User! @relation(link : TABLE, name: "AuthesByUser")
 }
-
 type block{
   id:ID! @id
   position_X: Float
@@ -33,14 +30,12 @@ type block{
   parent:block @relation(link: TABLE, name:"ParentBlock")
   type: block_type! @relation(link: TABLE, name:"TypeByBlock")
 }
-
 type block_category{
   id:ID! @id
   text: String @unique
   color: String
   block_types: [block_type!]! @relation(name : "TypeByCategory")
 }
-
 type block_type{
   id:ID! @id
   name: String @unique

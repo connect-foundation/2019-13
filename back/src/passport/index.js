@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Strategy as GoogleTokenStrategy } from 'passport-google-token';
+import FacebookTokenStrategy from 'passport-facebook-token';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { prisma } from '../../prisma-client';
 
@@ -40,6 +41,40 @@ export default (passport) => {
             },
           });
 
+          done(null, user);
+        } catch (e) {
+          done(e);
+        }
+      },
+    ),
+  );
+  passport.use(
+    new FacebookTokenStrategy(
+      {
+        clientID: process.env.FACEBOOK_APP_ID,
+        clientSecret: process.env.FACEBOOK_APP_SECRET,
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        const {
+          id, displayName, emails, photos,
+        } = profile;
+        try {
+          const user = await prisma.upsertUser({
+            where: {
+              id: `F-${id}`,
+            },
+            create: {
+              id: `F-${id}`,
+              email: emails[0].value,
+              name: displayName,
+              picture: photos[0].value,
+            },
+            update: {
+              email: emails[0].value,
+              name: displayName,
+              picture: photos[0].value,
+            },
+          });
           done(null, user);
         } catch (e) {
           done(e);
