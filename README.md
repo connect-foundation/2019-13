@@ -1,4 +1,4 @@
-<h1 align="center">The Duck</h1>
+<img src="docs/assets/readme-banner.png">
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <img alt="Version" src="https://img.shields.io/node/v/react" />
@@ -16,7 +16,16 @@
   <img alt="License: Apache Lisence 2.0" src="https://img.shields.io/badge/github-GIVEME--STAR-red" />
 </p>
 
-> block coding clone project
+## 나를 소개하지!
+안녕! 나는 블록코딩 하는 오리 더덕이야👋<br>
+나는 너희들에게 **프로그래밍**이 재밌다는걸 알려주고 싶어<br><br>
+<img src="docs/assets/w3-demo.gif">
+<br><br>이렇게 블록을 붙여서  실행시키면! &nbsp;**별똥더덕**도 만들 수 있다구 🔭
+<br><br>
+<img src="docs/assets/fireduck.gif">
+<br><br>
+
+### 얼른 더덕이랑 블록코딩하자구!
 
 ## Getting started
 ### 1. Front-end
@@ -46,10 +55,6 @@
 ```javascript
   npm run dev
 ```
-
-## Documentation
-- [Wiki&nbsp;📖](https://github.com/connect-foundation/2019-13/wiki)
-
 
 ## Team 
 
