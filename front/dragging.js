@@ -11,6 +11,7 @@ const Dragging = class {
     this.localConnection = null;
     this.connectionDB = new ConnectionDB();
   }
+
   dragStart (sourceBlock, x, y) {
     this.isDragging = true;
     this.draggedBlock = sourceBlock;
@@ -20,7 +21,7 @@ const Dragging = class {
     this.connectionDB.setConnections(this.draggedBlock);
   };
   
- updateDrag (movedX, movedY) {
+  updateDrag (movedX, movedY) {
     const maxRadious = 50;
     let bestRadious = maxRadious;
     this.x = movedX;
@@ -50,7 +51,8 @@ const Dragging = class {
     this.draggedBlock = null;
     return block;
   };
-connectBlock () {
+
+  connectBlock () {
     this.localConnection.connectBlock(this.closetConnection);
   };
 };
