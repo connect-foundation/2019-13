@@ -7,6 +7,8 @@ import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext } from '../Context/index';
 import { workspaceReducer } from '../reducer';
 import Canvas from '../Components/Canvas';
+import DialMenu from '../Components/DialMenu';
+import SpriteSelector from '../Components/SpriteSelector';
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -95,6 +97,7 @@ const Project = () => {
                   <div> 방향 </div>
                   <input />
                 </div>
+                <SpriteSelector />
               </div>
             </div>
           </div>
@@ -169,7 +172,7 @@ const Contents = styled.div`
   .draw-section__row {
     & > div {
       width: 100%;
-      height: 300px;
+      height: 100%;
       background-color: white;
       border-radius: 5px;
       border: 1px solid ${props => props.theme.mainBorderColor};
@@ -209,6 +212,13 @@ const Contents = styled.div`
       border: 1px solid black;
     }
   }
+  .sprint {
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 400px;
+    background-color: #e9f1fc;
+  }
 `;
 
 const TypesButton = styled.div`
@@ -234,6 +244,5 @@ const TypesButton = styled.div`
     color: ${props => props.theme.typeHoverColor};
   }
 `;
-
 
 export default Project;
