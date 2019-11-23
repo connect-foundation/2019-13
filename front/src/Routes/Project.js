@@ -6,6 +6,7 @@ import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext } from '../Context/index';
 import { workspaceReducer } from '../reducer';
+import Canvas from '../Components/Canvas';
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -77,7 +78,8 @@ const Project = () => {
               <FontAwesomeIcon icon={faStop} className="stop-button" />
             </div>
             <div className="draw-section__row">
-              <div className="canvas">캔버스</div>
+              {/* <div className="canvas">캔버스</div> */}
+              <Canvas />
             </div>
             <div className="draw-section__row">
               <div className="setting">
@@ -232,5 +234,6 @@ const TypesButton = styled.div`
     color: ${props => props.theme.typeHoverColor};
   }
 `;
+
 
 export default Project;
