@@ -41,7 +41,7 @@ Connection.prototype.revertType = function (type) {
 
 Connection.prototype.X_ = function () {
   if (this.source.isDragged) {
-    return this.source.workspace.dragging.x + this.diffX;
+    return this.source.x + this.diffX;
   }
 
   return this.source.x + this.diffX;
@@ -49,7 +49,7 @@ Connection.prototype.X_ = function () {
 
 Connection.prototype.Y_ = function () {
   if (this.source.isDragged) {
-    return this.source.workspace.dragging.y + this.diffY;
+    return this.source.y + this.diffY;
   }
 
   return this.source.y + this.diffY;

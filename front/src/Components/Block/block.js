@@ -227,17 +227,16 @@ Block.prototype.dragEnd = function (x, y) {
   this.workspace.dragEnd();
 };
 
-Block.prototype.getNextConnection = function (isDragged) {
-  if (this.nextElement && isDragged) {
-    return this.nextElement.getNextConnection();
+Block.prototype.getLastBlock = function (goEndPoint = false) {
+  if (this.nextElement && goEndPoint) {
+    return this.nextElement.getLastBlock(goEndPoint);
   }
 
-  return this.nextConnection;
+  return this;
 };
 
 Block.prototype.setDrag = function (isDragged) {
   this.isDragged = isDragged;
-
   if (this.nextElement) {
     this.nextElement.setDrag(isDragged);
   }
@@ -259,20 +258,51 @@ Block.prototype.getAvailableConnection = function (isDragged = false) {
   }
 
   if (this.nextConnection) {
-    const nextConn = this.getNextConnection(isDragged);
+    const nextConn = this.getLastBlock(isDragged).nextConnection;
     if (nextConn) availableConnection.push(nextConn);
   }
 
   return availableConnection;
 };
 
+Block.prototype.setNextElementPosition = function () {
+  if (this.nextElement) {
+    this.nextElement.y = this.y + 36;
+    this.nextElement.x = this.x;
+    this.nextElement.setNextElementPosition();
+  }
+};
+
+Block.prototype.setpreviousElement = function (previousElement) {
+  this.previousElement = previousElement;
+};
+
+Block.prototype.setNextElement = function (nextElement) {
+  this.nextElement = nextElement;
+};
+
 Block.prototype.connectBlock = function (type, conn) {
   switch (type) {
     case 'nextPosition':
-      this.nextElement = conn.source;
+      Utils.arrayRemove(this.workspace.topblocks, conn.source);
+      if (this.nextElement) {
+        const lastBlock = conn.source.getLastBlock(true);
+        lastBlock.setNextElement(this.nextElement);
+        this.nextElement.setpreviousElement(lastBlock);
+      }
+      conn.source.setpreviousElement(this);
+      this.setNextElement(conn.source);
+      this.setNextElementPosition();
       break;
     case 'previousPosition':
+      if (conn.source.nextElement) {
+        const lastBlock = this.getLastBlock(true);
+        conn.source.nextElement.setpreviousElement(lastBlock);
+        lastBlock.setNextElement(conn.source.nextElement);
+      }
       this.previousElement = conn.source;
+      conn.source.setNextElement(this);
+      conn.source.setNextElementPosition();
       break;
 
     case 'outputPosition':

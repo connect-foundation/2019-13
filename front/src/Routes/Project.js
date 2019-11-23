@@ -104,7 +104,8 @@ const Project = () => {
 
 const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
-  height: 92vh;
+  height: 89vh;
+  overflow: hidden;
 `;
 
 const ProjectHeader = styled.div`

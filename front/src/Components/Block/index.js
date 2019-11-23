@@ -4,15 +4,17 @@ import motion from './Init/Motion';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
 import GroupBlock from '../GroupModel';
-import CONSTANTS from './constants';
 import BlockModelList from './block_model_list';
+import CONSTANTS from './constants';
 
 const blockModelList = new BlockModelList();
 export default () => {
   const [isInit, setIsInit] = useState(false);
   const { workspace } = useContext(WorkspaceContext);
+  const [, setRender] = useState(0);
   if (!isInit) {
     setIsInit(true);
+    workspace.setRender = setRender;
     motion.forEach((json, idx) => {
       const block = blockModelList.addBlock(idx);
       block.makeFromJSON({
@@ -23,15 +25,13 @@ export default () => {
       });
     });
   }
-
+  
   return (
     <Svg>
       {Object.values(blockModelList.blockDB).map(block => (
         <GroupBlock block={block} key={block.id} />
       ))}
-      {Object.values(workspace.blockDB).map(block => (
-        <Group block={block} key={block.id} />
-      ))}
+      {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}
     </Svg>
   );
 };
