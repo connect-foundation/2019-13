@@ -5,6 +5,7 @@ const mouseHandler = ({ set, block, setMoved }) => {
       return;
     }
     eventDown.preventDefault();
+    eventDown.stopPropagation();
 
     const startPosition = { x: 0, y: 0 };
     startPosition.x = eventDown.target.getBoundingClientRect().x
