@@ -1,4 +1,5 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
+/* eslint-disable no-restricted-globals */
+import React, { useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -7,8 +8,9 @@ import SpriteSelector from '../SpriteSelector';
 import { SpriteCoordinateContext } from '../../Context';
 
 export default () => {
-  const { sprites } = useContext(SpriteCoordinateContext);
-  const [position, setPosition] = useState(sprites[Object.keys(sprites)[0]]);
+  const { sprites, spritesDispatch } = useContext(SpriteCoordinateContext);
+  const key = Object.keys(sprites)[0];
+  const [position, setPosition] = useState({ ...sprites[key], key });
   const checkPositionHandler = ({ type }, event) => {
     let inputEl = 0;
     if (!isNaN(Number(event.target.value))) {
@@ -16,6 +18,7 @@ export default () => {
     }
     position[type] = inputEl;
     setPosition({ ...position });
+    spritesDispatch({ type: 'CHANGE_POSITION', position });
   };
   return (
     <DrawSectionWrapper className="Contents__Column">
@@ -47,7 +50,7 @@ export default () => {
               value={position.size}
               onChange={checkPositionHandler.bind(null, { type: 'size' })}
             />
-            <div> 방향 </div>
+            <div> 회전 </div>
             <input
               value={position.direction}
               onChange={checkPositionHandler.bind(null, { type: 'direction' })}
@@ -61,7 +64,7 @@ export default () => {
 };
 
 const DrawSectionWrapper = styled.div`
-    min-width: 400px;
+  min-width: 400px;
   .draw-section__row {
     & > div {
       width: 100%;
@@ -70,4 +73,5 @@ const DrawSectionWrapper = styled.div`
       border-radius: 5px;
       border: 1px solid ${props => props.theme.mainBorderColor};
     }
+  }
 `;

@@ -1,16 +1,18 @@
-import React, { useRef, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useContext } from 'react';
+import { Stage, Layer } from 'react-konva';
+import { SpriteCoordinateContext } from '../../Context';
+import URLImage from '../URLImage';
 
 export default () => {
-  const canvasRef = useRef();
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(0, 0, 100, 100);
-  }, []);
-  return (<CanvasContainer ref={canvasRef} width="600" height="400" />);
+  const { sprites } = useContext(SpriteCoordinateContext);
+
+  return (
+    <Stage width="600" height="400">
+      <Layer>
+        {Object.values(sprites).map(sprite => (
+          <URLImage sprite={sprite} />
+        ))}
+      </Layer>
+    </Stage>
+  );
 };
-const CanvasContainer = styled.canvas`
-    background-color : white;
-`;

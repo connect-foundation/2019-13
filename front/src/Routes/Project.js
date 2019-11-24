@@ -1,14 +1,11 @@
 import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext, SpriteCoordinateContext } from '../Context/index';
 import { workspaceReducer, SpriteCoordinateReducer } from '../reducer';
-import Canvas from '../Components/Canvas';
-import DialMenu from '../Components/DialMenu';
-import SpriteSelector from '../Components/SpriteSelector';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
 
@@ -21,7 +18,7 @@ const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
   url: '/logo.png',
   size: 100,
-  direction: 90,
+  direction: 0,
   x: 0,
   y: 0,
 };
@@ -157,7 +154,6 @@ const Contents = styled.div`
     width: 70vw;
   }
  
-  }
   .controller {
     display: flex;
     align-items: center;
