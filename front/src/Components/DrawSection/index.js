@@ -1,14 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
+import { SpriteCoordinateContext } from '../../Context';
 
 export default () => {
-  const x = useRef(0);
-  const y = useRef(0);
-
+  const { sprites } = useContext(SpriteCoordinateContext);
+  const [position, setPosition] = useState(sprites[Object.keys(sprites)[0]]);
+  const checkPositionHandler = ({ type }, event) => {
+    let inputEl = 0;
+    if (!isNaN(Number(event.target.value))) {
+      inputEl = Number(event.target.value);
+    }
+    position[type] = inputEl;
+    setPosition({ ...position });
+  };
   return (
     <DrawSectionWrapper className="Contents__Column">
       <div className="draw-section__row controller">
@@ -23,16 +31,27 @@ export default () => {
           <div className="setting__row">
             <div> X </div>
             <input
-              ref={x}
+              pattern="[0-9]*"
+              value={position.x}
+              onChange={checkPositionHandler.bind(null, { type: 'x' })}
             />
             <div> Y</div>
-            <input ref={y} />
+            <input
+              value={position.y}
+              onChange={checkPositionHandler.bind(null, { type: 'y' })}
+            />
           </div>
           <div className="setting__row">
             <div> 크기 </div>
-            <input />
+            <input
+              value={position.size}
+              onChange={checkPositionHandler.bind(null, { type: 'size' })}
+            />
             <div> 방향 </div>
-            <input />
+            <input
+              value={position.direction}
+              onChange={checkPositionHandler.bind(null, { type: 'direction' })}
+            />
           </div>
           <SpriteSelector />
         </div>
