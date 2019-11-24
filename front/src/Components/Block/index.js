@@ -25,7 +25,7 @@ export default () => {
       });
     });
   }
-  
+
   return (
     <Svg>
       {Object.values(blockModelList.blockDB).map(block => (
@@ -38,8 +38,8 @@ export default () => {
 
 const Svg = styled.svg`
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 70%;
+  height: 70%;
   text {
     font-size: 12px;
     fill: white;
