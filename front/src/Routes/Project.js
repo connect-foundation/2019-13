@@ -29,12 +29,12 @@ const Project = () => {
     new Workspace(),
   );
   const [sprites, spritesDispatch] = useReducer(
-    SpriteCoordinateReducer,
+    spritesReducer,
     defaultSprite,
   );
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
-      <SpriteCoordinateContext.Provider value={{ sprites, spritesDispatch }}>
+      <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
         <Wrapper>
           <ProjectHeader isStared={dummyProject.star.toString()}>
             <div className="project-info">
@@ -89,7 +89,7 @@ const Project = () => {
             <DrawSection />
           </Contents>
         </Wrapper>
-      </SpriteCoordinateContext.Provider>
+      </SpritesContext.Provider>
     </WorkspaceContext.Provider>
   );
 };

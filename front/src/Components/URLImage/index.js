@@ -5,7 +5,7 @@ import PropType from 'prop-types';
 import useImage from '../../custom_hooks/useImage';
 import CANVASCONSTANTS from '../Canvas/constants';
 
-const URLImage = ({ sprite }) => {
+const URLImage = ({ sprite, spritekey, spritesDispatch }) => {
   const [image] = useImage(sprite);
   const handleDragStart = (e) => {
     e.target.setAttrs({
@@ -13,8 +13,16 @@ const URLImage = ({ sprite }) => {
         x: 15,
         y: 15,
       },
-      scaleX: 1.1,
-      scaleY: 1.1,
+    });
+  };
+  const handleDragMove = (e) => {
+    spritesDispatch({
+      type: 'DRAG_END',
+      key: spritekey,
+      value: {
+        x: e.target.attrs.x - CANVASCONSTANTS.CANVAS.WIDTH / 2,
+        y: e.target.attrs.y - CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+      },
     });
   };
   const handleDragEnd = (e) => {
@@ -23,8 +31,8 @@ const URLImage = ({ sprite }) => {
       easing: Konva.Easings.ElasticEaseOut,
       scaleX: 1,
       scaleY: 1,
-      shadowOffsetX: 5,
-      shadowOffsetY: 5,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
     });
   };
   return (
@@ -34,6 +42,7 @@ const URLImage = ({ sprite }) => {
       image={image}
       draggable
       onDragStart={handleDragStart}
+      onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
       rotation={sprite.direction}
       offsetX={image ? image.width / 2 : 0}
@@ -42,8 +51,9 @@ const URLImage = ({ sprite }) => {
   );
 };
 
-
 URLImage.propTypes = {
   sprite: PropType.object.isRequired,
+  spritekey: PropType.string.isRequired,
+  spritesDispatch: PropType.func.isRequired,
 };
 export default URLImage;

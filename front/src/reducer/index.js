@@ -32,10 +32,11 @@ export const spritesReducer = (
 ) => {
   const changeSprites = { ...sprites };
   const position = sprites[key];
-  const eventValue = value.charCodeAt(value.length - 1);
+  let eventValue = null;
   let inputEl = '';
   switch (type) {
     case 'CHANGE_POSITION':
+      eventValue = value.charCodeAt(value.length - 1);
       if (eventValue === 45 && value.length === 1) {
         position[coordinate] = '-';
         changeSprites[key] = position;
@@ -67,13 +68,20 @@ export const spritesReducer = (
       changeSprites[key] = position;
       return changeSprites;
     case 'CHANGE_SIZE':
+      eventValue = value.charCodeAt(value.length - 1);
       if (eventValue < 48 || eventValue > 57) return sprites;
       position.size = value;
       changeSprites[key] = position;
       return changeSprites;
     case 'CHANGE_DIRECTION':
+      eventValue = value.charCodeAt(value.length - 1);
       if (eventValue < 48 || eventValue > 57) return sprites;
       position.direction = value % 360;
+      changeSprites[key] = position;
+      return changeSprites;
+    case 'DRAG_END':
+      position.x = value.x;
+      position.y = value.y;
       changeSprites[key] = position;
       return changeSprites;
     default:
