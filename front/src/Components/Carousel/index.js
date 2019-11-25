@@ -38,19 +38,22 @@ const Example = (props) => {
     setActiveIndex(newIndex);
   }
 
-  const ImageWrapper=styled.div`
-      
-  `
+  const ImageWrapper=styled.div``
+  
+  const customTag={
+    maxWidth: "100%",
+    height: "400px",
+    background: "gray"
+  }
+
   const CarouselImage=styled.img`
     width:100%;
     height:400px;
   `
   const slides = items.map((item) => {
-
-    
     return (
       <CarouselItem
-        className="custom-tag"
+        style={customTag}
         tag="div"
         key={item.id}
         onExiting={() => setAnimating(true)}
@@ -62,18 +65,9 @@ const Example = (props) => {
       </CarouselItem>
     );
   });
-
   return (
     <div>
-      <style>
-        {
-          `.custom-tag {
-              max-width: 100%;
-              height: 400px;
-              background: gray;
-            }`
-        }
-      </style>
+
       <Carousel
         activeIndex={activeIndex}
         next={next}
