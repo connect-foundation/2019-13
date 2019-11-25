@@ -3,6 +3,7 @@ import { Image } from 'react-konva';
 import Konva from 'konva';
 import PropType from 'prop-types';
 import useImage from '../../custom_hooks/useImage';
+import CANVASCONSTANTS from '../Canvas/constants';
 
 const URLImage = ({ sprite }) => {
   const [image] = useImage(sprite);
@@ -28,8 +29,8 @@ const URLImage = ({ sprite }) => {
   };
   return (
     <Image
-      x={sprite.x}
-      y={sprite.y}
+      x={CANVASCONSTANTS.CANVAS.WIDTH / 2 + Number(sprite.x)}
+      y={CANVASCONSTANTS.CANVAS.HEIGHT / 2 + Number(sprite.y)}
       image={image}
       draggable
       onDragStart={handleDragStart}
