@@ -1,15 +1,13 @@
 import React from 'react';
 import Path from './Path';
 import Utils from '../../utils/utils';
-import Connection from './connection';
 import Constants from './constants';
 
 const create = React.createElement;
-const BlockModel = function (workspace, usedId) {
+const BlockModel = function (usedId) {
   this.id = usedId;
   this.type = '';
   this.style = '';
-  this.workspace = workspace;
   this.x = 0;
   this.y = 0;
   this.args = [];
