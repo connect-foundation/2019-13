@@ -11,7 +11,6 @@ export default ({ workspaceDispatch, motionIndex }) => {
     - event.target.ownerSVGElement.getBoundingClientRect().x;
     blockParams.y = event.target.getBoundingClientRect().y
     - event.target.ownerSVGElement.getBoundingClientRect().y;
-    event.preventDefault();
     workspaceDispatch({
       type: 'ADD_BLOCK',
       blockParams,
