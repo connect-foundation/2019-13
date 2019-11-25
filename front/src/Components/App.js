@@ -11,7 +11,6 @@ const Wrapper = styled.div`
     margin-top: 72px;
 `;
 
-
 export default () => {
   const [isLoggedIn, setLoggedIn] = useState(!!localStorage.getItem('token') && localStorage.getItem('token') !== 'undefined');
   return (
