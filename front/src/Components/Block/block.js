@@ -2,7 +2,7 @@ import React from 'react';
 import Path from './Path';
 import Utils from '../../utils/utils';
 import Connection from './connection';
-import Constants from './constants';
+import CONSTANTS from './constants';
 
 const create = React.createElement;
 const Block = class {
@@ -27,10 +27,12 @@ const Block = class {
     this.path = null;
     this.node = null;
     this.render = null;
-    this.motionIndex = -1;
+    this.allIdx = -1;
+    this.styleIdx = -1;
     this.isDragged = false;
     this.parentElement = null;
     this.parentConnection = null;
+    this.height = 0;
   }
 
   setNode = (node) => {
@@ -40,7 +42,7 @@ const Block = class {
 
   setArgs = () => {
     if (this.node) {
-      let positionX = Constants.PIXEL;
+      let positionX = CONSTANTS.PIXEL;
       let lastChild;
       this.node.childNodes.forEach((node) => {
         if (node.tagName !== 'path' && node.tagName !== 'g') {
@@ -52,10 +54,11 @@ const Block = class {
       this.makeStyleFromJSON(
         (lastChild.getBoundingClientRect().right
         - this.node.getBoundingClientRect().left
-        - Constants.PIXEL * 5)
-        / Constants.PIXEL,
+        - CONSTANTS.PIXEL * 5)
+        / CONSTANTS.PIXEL,
       );
       this.render(Math.random());
+      this.height = this.node.getBoundingClientRect().height;
     }
   };
 
@@ -88,7 +91,9 @@ const Block = class {
     this.strokeColor = json.stroke_color;
     this.x = json.x ? json.x : 0;
     this.y = json.y ? json.y : 0;
-    this.motionIndex = json.motionIndex === 0 || Number(json.motionIndex) ? json.motionIndex : -1;
+    this.allIdx = json.allIdx === 0 || Number(json.allIdx) ? json.allIdx : -1;
+    this.styleIdx = json.styleIdx === 0 || Number(json.styleIdx) ? json.styleIdx : -1;
+
 
     if (!this.id) {
       this.id = Utils.uid();
@@ -100,13 +105,13 @@ const Block = class {
 
     if (json.previousConnection && !this.previousConnection) {
       this.previousConnection = new Connection(
-        Constants.PREVIOUS_CONNECTION,
+        CONSTANTS.PREVIOUS_CONNECTION,
         this, 'previousPosition',
       );
     }
 
     if (json.nextConnection && !this.nextConnection) {
-      this.nextConnection = new Connection(Constants.NEXT_CONNECTION, this, 'nextPosition');
+      this.nextConnection = new Connection(CONSTANTS.NEXT_CONNECTION, this, 'nextPosition');
     }
 
     this.style = json.style;
@@ -121,9 +126,11 @@ const Block = class {
     if (json.type === 'text') {
       this.args.push(create(json.type, { key: json.value }, json.value));
     } else if (json.type === 'input') {
-      this.args.push(create('foreignObject', { key: 'foreign' },
-        create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
-        create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)));
+      this.args.push(
+        create('foreignObject', { key: 'foreign' },
+          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
+          create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
+      );
     }
   };
 
@@ -268,7 +275,7 @@ const Block = class {
 
   setNextElementPosition = () => {
     if (this.nextElement) {
-      this.nextElement.y = this.y + 36;
+      this.nextElement.y = this.y + this.height;
       this.nextElement.x = this.x;
       this.nextElement.setNextElementPosition();
     }
