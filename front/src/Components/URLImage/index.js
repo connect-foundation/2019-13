@@ -45,3 +45,4 @@ const URLImage = ({ sprite }) => {
 URLImage.propTypes = {
   sprite: PropType.object.isRequired,
 };
+export default URLImage;
