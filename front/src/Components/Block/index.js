@@ -4,7 +4,7 @@ import Motion from './Init/Motion';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
 import GroupBlock from '../GroupModel';
-import BlockModelList from './block_model_list';
+import BlockModelList from './blockmodel_list';
 import CONSTANTS from './constants';
 // import Block from './block';
 import BlockModel from './blockmodel';
@@ -18,7 +18,7 @@ export default () => {
     setIsInit(true);
     workspace.setRender = setRender;
     Motion.forEach((json, idx) => {
-      const blockModel = new BlockModel().makeFromJSON({
+      const blockModel = new BlockModel(idx).makeFromJSON({
         ...json,
         x: CONSTANTS.DEFAULT_POSITION.x,
         y: CONSTANTS.DEFAULT_POSITION.y + 75 * idx,
@@ -29,7 +29,7 @@ export default () => {
   }
   return (
     <Svg>
-      {Object.values(blockModelList.blockDB).map(block => (
+      {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} />
       ))}
       {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}

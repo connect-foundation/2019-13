@@ -1,16 +1,15 @@
-import BlockModel from './blockmodel';
 
 const BlockModelList = class {
-  constructor(blockDB = {}) {
+  constructor(blockDB = new Map()) {
     this.blockDB = blockDB;
   }
 
-  addBlock(block) {
-    this.blockDB[block.id] = block;
+  addBlock(blockmodel) {
+    this.blockDB.set(blockmodel.id, blockmodel);
   }
 
   deleteBlock(usedId) {
-    delete this.blockDB[usedId];
+    this.blockDB.delete(usedId);
   }
 
   getBlockDB() {
