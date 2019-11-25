@@ -5,10 +5,10 @@ import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
-import { SpriteCoordinateContext } from '../../Context';
+import { SpritesContext } from '../../Context';
 
 export default () => {
-  const { sprites, spritesDispatch } = useContext(SpriteCoordinateContext);
+  const { sprites, spritesDispatch } = useContext(SpritesContext);
   const key = Object.keys(sprites)[0];
   const position = { ...sprites[key], key };
   const checkPositionHandler = ({ type, coordinate }, event) => {

@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
-import { WorkspaceContext, SpriteCoordinateContext } from '../Context/index';
-import { workspaceReducer, SpriteCoordinateReducer } from '../reducer';
+import { WorkspaceContext, SpritesContext } from '../Context/index';
+import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
 

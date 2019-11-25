@@ -26,7 +26,7 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
   }
 };
 
-export const SpriteCoordinateReducer = (
+export const spritesReducer = (
   sprites,
   { type, coordinate, key, value },
 ) => {
