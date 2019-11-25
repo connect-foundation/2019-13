@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -10,15 +10,9 @@ import { SpriteCoordinateContext } from '../../Context';
 export default () => {
   const { sprites, spritesDispatch } = useContext(SpriteCoordinateContext);
   const key = Object.keys(sprites)[0];
-  const [position, setPosition] = useState({ ...sprites[key], key });
-  const checkPositionHandler = ({ type }, event) => {
-    let inputEl = 0;
-    if (!isNaN(Number(event.target.value))) {
-      inputEl = Number(event.target.value);
-    }
-    position[type] = inputEl;
-    setPosition({ ...position });
-    spritesDispatch({ type: 'CHANGE_POSITION', position });
+  const position = { ...sprites[key], key };
+  const checkPositionHandler = ({ type, coordinate }, event) => {
+    spritesDispatch({ type, coordinate, key, value: event.target.value });
   };
   return (
     <DrawSectionWrapper className="Contents__Column">
@@ -36,24 +30,24 @@ export default () => {
             <input
               pattern="[0-9]*"
               value={position.x}
-              onChange={checkPositionHandler.bind(null, { type: 'x' })}
+              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_POSITION', coordinate: 'x' })}
             />
             <div> Y</div>
             <input
               value={position.y}
-              onChange={checkPositionHandler.bind(null, { type: 'y' })}
+              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_POSITION', coordinate: 'y' })}
             />
           </div>
           <div className="setting__row">
             <div> 크기 </div>
             <input
               value={position.size}
-              onChange={checkPositionHandler.bind(null, { type: 'size' })}
+              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_SIZE' })}
             />
             <div> 회전 </div>
             <input
               value={position.direction}
-              onChange={checkPositionHandler.bind(null, { type: 'direction' })}
+              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_DIRECTION' })}
             />
           </div>
           <SpriteSelector />
