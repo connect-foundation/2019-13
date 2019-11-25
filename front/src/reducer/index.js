@@ -16,3 +16,14 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
       throw new Error('NOT FOUND TYPE');
   }
 };
+
+export const SpriteCoordinateReducer = (sprites, { type, position }) => {
+  const changeSprites = sprites;
+  switch (type) {
+    case 'CHANGE_POSITION':
+      changeSprites[position.key] = { ...position };
+      return { ...changeSprites };
+    default:
+      throw new Error('NOT FOUND TYPE');
+  }
+};
