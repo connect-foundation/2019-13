@@ -1,19 +1,19 @@
-import React from 'react'
-import styled from 'styled-components'
-import Spinner from 'react-spinkit'
+import React from 'react';
+import styled from 'styled-components';
+import Spinner from 'react-spinkit';
 
-export default ({isLoading})=>{
-    if(!isLoading)return null;
+export default ({ isLoading }) => {
+  if (!isLoading) return null;
 
-    const SpinnerWrapper=styled.div`
+  const SpinnerWrapper = styled.div`
         display:flex;
         justify-content:center;
         padding-bottom:50px;
-    `
+    `;
 
-    return(
-        <SpinnerWrapper>
-            <Spinner name="line-scale" color="#fa8000"/>
-        </SpinnerWrapper>
-    )
-}
+  return (
+    <SpinnerWrapper>
+      <Spinner name="line-scale" color="#fa8000" />
+    </SpinnerWrapper>
+  );
+};
