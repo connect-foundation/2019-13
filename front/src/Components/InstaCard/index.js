@@ -10,7 +10,7 @@ export default ()=>{
         border-radius:6px;
         width: 400px;
         height:300px;
-        
+        margin-bottom:40px;
     `
     const UserName=styled.div`
         padding: 10px 5px;

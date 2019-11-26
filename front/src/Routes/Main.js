@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Example from '../Components/Carousel/index.js'
-import Card from '../Components/Card/index.js'
-import { style } from '@material-ui/system';
+import InstaCard from '../Components/InstaCard/index.js';
 const Wrapper = styled.div`
 `;
 
@@ -22,10 +21,9 @@ const main = () => (
     <RecommendComtainer>
       <h3>이런것도 추천한다구</h3>
       <CardContainer>
-        <Card></Card>
-        <Card></Card>
-        <Card></Card>
-        <Card></Card>
+          <InstaCard></InstaCard>
+          <InstaCard></InstaCard>
+          <InstaCard></InstaCard>
       </CardContainer>
     </RecommendComtainer>
     
