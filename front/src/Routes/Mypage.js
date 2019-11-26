@@ -4,19 +4,62 @@ import InstaCard from '../Components/InstaCard/index.js'
 import Spinkit from '../Components/Spinkit/index.js'
 import {getDocumentHeight,getScrollTop} from '../utils/endScroll.js'
 
-// const getDocumentHeight=()=>{
-//   const body=document.body;
-//   const html=document.documentElement;
-
-//   return Math.max(
-//     body.scrollHeight,body.offsetHeight,
-//     html.offsetHeight,html.clientHeight,html.scrollHeight
-//   )
-// }
-
-// const getScrollTop=()=>{
-//   return (window.pageYOffset!==undefined)?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop;
-// }
+const projects=[
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  }
+]
 
 
 export default () => {
@@ -69,20 +112,23 @@ export default () => {
 
   const handleToggle=(e)=>setSelected(parseInt(e.target.id));
 
+  const renderProject=(projects)=>{
+    return (
+      <CardContainer>
+        {projects.map(project=>(
+          <InstaCard project={project} key={project.title}/>
+        ))}
+      </CardContainer>
+    );
+  }
+
   return (
   <Wrapper>
     <SwitchContainer>
       <LeftToggle id="0" onClick={handleToggle}>나의 프로젝트</LeftToggle>
       <RightToggle id="1" onClick={handleToggle}>공유 프로젝트</RightToggle>
     </SwitchContainer>
-    <CardContainer>
-      <InstaCard/>
-      <InstaCard/>
-      <InstaCard/>
-      <InstaCard/>
-      <InstaCard/>
-      <InstaCard/>
-    </CardContainer>
+    {renderProject(projects)}
     <Spinkit isLoading={loading}/>
   </Wrapper>
   );

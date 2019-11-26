@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import React,{useState} from 'react';
-export default ()=>{
-    
-    const [hover,setHover]=useState(0)
-
+export default ({project})=>{
     const CardContainer=styled.div`
         position:relative;
         border : 2px solid #DADADA;
@@ -20,7 +17,7 @@ export default ()=>{
         width:100%;
         height:80%;
         border-radius: 4px 4px 0px 0px;
-        background-image:url("https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg");
+        background-image:url("${project.image}");
     `
     const InfoContainer=styled.div`
         display:flex;
@@ -45,7 +42,7 @@ export default ()=>{
     `
 
     const StarPath=styled.polygon`
-        fill: white;
+        fill: ${project.pushLike?'yellow':'white'};
     `
 
     const StarText=styled.div`
@@ -56,7 +53,7 @@ export default ()=>{
     const UserImage=styled.div`
         width:20px;
         height:20px;
-        background-image:url("https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg");
+        background-image:url("${project.userImg}");
         background-size:20px;
         border-radius:4px;
     `
@@ -96,19 +93,19 @@ export default ()=>{
     return (
         <CardContainer >
             <DetailContainer>
-                <ProjectTitle>Project1</ProjectTitle>
-                <ProjectDescription>김영준의 프론트-엔드 아트워크. 비핸스를 모티브로 제작하였다.(2019)</ProjectDescription>
+                <ProjectTitle>{project.title}</ProjectTitle>
+                <ProjectDescription>{project.description}</ProjectDescription>
             </DetailContainer>
             <ProjectImage></ProjectImage>
             <InfoContainer>
                 <ProfileWrapper>
                     <UserImage></UserImage>
-                    <UserName>Kimjouny</UserName>
+                    <UserName>{project.user}</UserName>
                 </ProfileWrapper>
                 
                 <StarWrapper>
                     <StarSVG><StarPath points={points}/></StarSVG>
-                    <StarText>5 stars</StarText>   
+                    <StarText>{project.likes} stars</StarText>   
                 </StarWrapper>
             </InfoContainer>
         </CardContainer>

@@ -14,6 +14,32 @@ const CardContainer=styled.div`
   justify-content:space-between;
   padding:40px 0px;
 `
+const projects=[
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  },
+  {
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:true
+  }
+]
 
 const main = () => (
   <Wrapper>
