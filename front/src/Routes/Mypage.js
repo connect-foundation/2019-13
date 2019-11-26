@@ -2,21 +2,21 @@ import React,{useState} from 'react';
 import styled from 'styled-components';
 import InstaCard from '../Components/InstaCard/index.js'
 import Spinkit from '../Components/Spinkit/index.js'
+import {getDocumentHeight,getScrollTop} from '../utils/endScroll.js'
 
+// const getDocumentHeight=()=>{
+//   const body=document.body;
+//   const html=document.documentElement;
 
-const getDocumentHeight=()=>{
-  const body=document.body;
-  const html=document.documentElement;
+//   return Math.max(
+//     body.scrollHeight,body.offsetHeight,
+//     html.offsetHeight,html.clientHeight,html.scrollHeight
+//   )
+// }
 
-  return Math.max(
-    body.scrollHeight,body.offsetHeight,
-    html.offsetHeight,html.clientHeight,html.scrollHeight
-  )
-}
-
-const getScrollTop=()=>{
-  return (window.pageYOffset!==undefined)?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop;
-}
+// const getScrollTop=()=>{
+//   return (window.pageYOffset!==undefined)?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop;
+// }
 
 
 export default () => {
@@ -28,7 +28,6 @@ export default () => {
   const handleScroll=(e)=>{
     if(loading)return;
     if(getScrollTop()<getDocumentHeight()-window.innerHeight)return;
-    console.log(111)
     setLoading(true);
   }
 
