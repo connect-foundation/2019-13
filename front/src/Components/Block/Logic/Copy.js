@@ -13,7 +13,6 @@ export default ({ workspaceDispatch, allIdx, styleIdx }) => {
     - event.target.ownerSVGElement.getBoundingClientRect().x;
     blockParams.y = event.target.getBoundingClientRect().y
     - event.target.ownerSVGElement.getBoundingClientRect().y;
-
     workspaceDispatch({
       type: 'ADD_BLOCK',
       blockParams,

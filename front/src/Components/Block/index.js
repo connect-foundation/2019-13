@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
 import GroupBlock from '../GroupModel';
-import BlockModelList from './block_model_list';
+import BlockModelList from './blockmodel_list';
 import CONSTANTS from './constants';
+import BlockModel from './blockmodel';
 import init from './Init';
 
 const blockModelList = new BlockModelList();
@@ -18,8 +19,7 @@ export default () => {
     let idx = 0;
     init.forEach((blocks, allIdx) => {
       blocks.forEach((json, styleIdx) => {
-        const block = blockModelList.addBlock(idx);
-        block.makeFromJSON({
+        const blockModel = new BlockModel(idx).makeFromJSON({
           ...json,
           x: CONSTANTS.DEFAULT_POSITION.x,
           y: CONSTANTS.DEFAULT_POSITION.y + idx * 100,
@@ -28,11 +28,12 @@ export default () => {
         });
         idx += 1;
       });
+      blockModelList.addBlock(blockModel);
     });
   }
   return (
     <Svg>
-      {Object.values(blockModelList.blockDB).map(block => (
+      {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} />
       ))}
       {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}
