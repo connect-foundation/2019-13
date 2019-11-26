@@ -1,9 +1,10 @@
 import React,{useState} from 'react';
 import styled from 'styled-components';
 import InstaCard from '../Components/InstaCard/index.js'
+import Spinkit from '../Components/Spinkit/index.js'
 export default () => {
   const [selected, setSelected]=useState(0);
-
+  const [loading,setLoading]=useState(true);
   const Wrapper = styled.div`
   `;
 
@@ -57,6 +58,7 @@ export default () => {
       <InstaCard/>
       <InstaCard/>
     </CardContainer>
+    <Spinkit isLoading={loading}/>
   </Wrapper>
   );
 }
