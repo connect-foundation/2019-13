@@ -150,8 +150,7 @@ export default () => {
 
   const CardContainer = styled.div`
     display:flex;
-    padding:80px;
-    justify-content:space-between;
+    justify-content:center;
     flex-wrap:wrap;
   `;
 

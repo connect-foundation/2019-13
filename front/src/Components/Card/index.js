@@ -8,7 +8,7 @@ export default ({ project }) => {
         border-radius:6px;
         width: 400px;
         height:300px;
-        margin-bottom:40px;
+        margin:30px;
     `;
   const UserName = styled.div`
         padding: 10px 5px;
