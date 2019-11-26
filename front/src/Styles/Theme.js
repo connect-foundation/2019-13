@@ -19,4 +19,11 @@ export default {
   myblocksStrokeColor: '#ff3355',
   typeHoverColor: '#4280d7',
   lightGreyColor: '#fafafa',
+  duckOrangeColor: '#fa8000',
+  unactivedColor: '#808080',
+  activeButtonColor: '#3897f5',
+  whiteColor: '#fff',
+  activeStarColor: 'yellow',
+  cardBackgroundColor: 'rgba(0,0,0,0.5)',
+  cardBorderColor: '#dadada',
 };

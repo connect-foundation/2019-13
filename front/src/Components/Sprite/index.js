@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default ({ title, sprite }) => (
+export default () => (
   <SpriteContainer>
     <Image />
     <Title />
