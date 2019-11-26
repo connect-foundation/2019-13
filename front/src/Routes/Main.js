@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Example from '../Components/Carousel/index.js'
-import InstaCard from '../Components/InstaCard/index.js';
+import Card from '../Components/Card/index.js';
 const Wrapper = styled.div`
 `;
 
@@ -54,7 +54,7 @@ const main = () => (
       <h3>이런것도 추천한다구</h3>
       <CardContainer>
         {projects.map(project=>(
-            <InstaCard project={project} key={project.id}/>
+            <Card project={project} key={project.id}/>
           ))}
       </CardContainer>
     </RecommendComtainer>

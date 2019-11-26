@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Example from '../Components/Carousel/index.js'
-import Insta from '../Components/InstaCard'
+import Insta from '../Components/Card'
 const Wrapper = styled.div`
 
 `;

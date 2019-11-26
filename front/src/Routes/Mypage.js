@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import styled from 'styled-components';
-import InstaCard from '../Components/InstaCard/index.js'
+import Card from '../Components/Card/index.js'
 import Spinkit from '../Components/Spinkit/index.js'
 import {getDocumentHeight,getScrollTop} from '../utils/endScroll.js'
 
@@ -161,7 +161,7 @@ export default () => {
     return (
       <CardContainer>
         {projects.map(project=>(
-          <InstaCard project={project} key={project.id}/>
+          <Card project={project} key={project.id}/>
         ))}
       </CardContainer>
     );
