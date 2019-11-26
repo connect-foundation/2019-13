@@ -50,19 +50,17 @@ export const spritesReducer = (
         inputEl = value;
       }
       if (coordinate === 'x') {
-        inputEl = inputEl < CANVASCONSTANTS.CANVAS.WIDTH / 2
-          ? inputEl
-          : CANVASCONSTANTS.CANVAS.WIDTH / 2;
-        inputEl = inputEl > -(CANVASCONSTANTS.CANVAS.WIDTH / 2)
-          ? inputEl
-          : -(CANVASCONSTANTS.CANVAS.WIDTH / 2);
+        inputEl = Utils.checkRange(
+          inputEl,
+          -CANVASCONSTANTS.CANVAS.WIDTH / 2,
+          CANVASCONSTANTS.CANVAS.WIDTH / 2,
+        );
       } else if (coordinate === 'y') {
-        inputEl = inputEl < CANVASCONSTANTS.CANVAS.HEIGHT / 2
-          ? inputEl
-          : CANVASCONSTANTS.CANVAS.HEIGHT / 2;
-        inputEl = inputEl > -(CANVASCONSTANTS.CANVAS.HEIGHT / 2)
-          ? inputEl
-          : -(CANVASCONSTANTS.CANVAS.HEIGHT / 2);
+        inputEl = Utils.checkRange(
+          inputEl,
+          -CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+          CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+        );
       }
       position[coordinate] = inputEl;
       changeSprites[key] = position;

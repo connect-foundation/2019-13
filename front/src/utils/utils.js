@@ -18,6 +18,11 @@ const Utils = {
     arr.splice(i, 1);
     return true;
   },
+  checkRange: (value, min, max) => {
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+  },
 };
 
 
