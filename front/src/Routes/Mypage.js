@@ -110,11 +110,9 @@ export default () => {
   };
   const handleScroll = () => {
     if (loading) return;
-    // console.log(getScrollTop(), getDocumentHeight() - window.innerHeight);
     if (getScrollTop() < getDocumentHeight() - window.innerHeight) return;
 
     setLoading(true);
-    console.log('chek');
     setTimeout(() => {
       addProject();
       setLoading(false);
@@ -134,8 +132,8 @@ export default () => {
     justify-content:center;
     width:300px;
     height:60px;
-    background-color:${!selected ? '#fa8000' : 'gray'};
-    color:white;
+    background-color:${!selected ? props => props.theme.duckOrangeColor : props => props.theme.unactivedColor};
+    color: ${props => props.theme.whiteColor};
     border-radius: 8px 0px 0px 8px;
   `;
 
@@ -146,8 +144,8 @@ export default () => {
     width:300px;
     height:60px;
     border-radius: 0px 8px 8px 0px;
-    color:white;
-    background-color:${selected ? '#fa8000' : 'gray'};
+    color:${props => props.theme.whiteColor};
+    background-color:${selected ? props => props.theme.duckOrangeColor : props => props.theme.unactivedColor};
   `;
 
   const CardContainer = styled.div`

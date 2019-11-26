@@ -4,7 +4,7 @@ import React from 'react';
 export default ({ project }) => {
   const CardContainer = styled.div`
         position:relative;
-        border : 2px solid #DADADA;
+        border : 2px solid ${props => props.theme.cardBorderColor};
         border-radius:6px;
         width: 400px;
         height:300px;
@@ -30,7 +30,7 @@ export default ({ project }) => {
 
   const StarWrapper = styled.div`
         display:flex;
-        background-color:${project.pushLike ? '#3897f5' : 'gray'};
+        background-color:${project.pushLike ? props => props.theme.activeButtonColor : props => props.theme.unactivedColor};
         border-radius:5px;
         height:30px;
         align-items:center;
@@ -43,12 +43,12 @@ export default ({ project }) => {
     `;
 
   const StarPath = styled.polygon`
-        fill: ${project.pushLike ? 'yellow' : 'white'};
+        fill: ${project.pushLike ? props => props.theme.activeStarColor : props => props.theme.whiteColor};
     `;
 
   const StarText = styled.div`
         margin-right:10px;
-        color:white;
+        color:${props => props.theme.whiteColor};
     `;
 
   const UserImage = styled.div`
@@ -73,7 +73,7 @@ export default ({ project }) => {
         position:absolute;
         width:100%;
         height:80%;
-        background-color:rgba(0,0,0,0.5);
+        background-color:${props => props.theme.cardBackgroundColor};
         border-radius:4px;
         padding:20px;
         transition: 0.5s all;
@@ -85,11 +85,11 @@ export default ({ project }) => {
 
   const ProjectTitle = styled.div`
         font-size:30px;
-        color:white;
+        color:${props => props.theme.whiteColor};;
     `;
   const ProjectDescription = styled.div`
         font-size:20px;
-        color:white;
+        color:${props => props.theme.whiteColor};;
     `;
   return (
     <CardContainer>
