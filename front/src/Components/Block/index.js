@@ -27,7 +27,6 @@ export default () => {
           styleIdx,
         });
         idx += 1;
-        console.log(allIdx, styleIdx);
       });
     });
   }
