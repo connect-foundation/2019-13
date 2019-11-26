@@ -1,16 +1,21 @@
 import React, { useContext } from 'react';
 import { Stage, Layer } from 'react-konva';
-import { SpriteCoordinateContext } from '../../Context';
+import { SpritesContext } from '../../Context';
 import URLImage from '../URLImage';
+import CONSTANTS from './constants';
 
 export default () => {
-  const { sprites } = useContext(SpriteCoordinateContext);
+  const { sprites, spritesDispatch } = useContext(SpritesContext);
 
   return (
-    <Stage width="600" height="400">
+    <Stage width={CONSTANTS.CANVAS.WIDTH} height={CONSTANTS.CANVAS.HEIGHT}>
       <Layer>
-        {Object.values(sprites).map(sprite => (
-          <URLImage sprite={sprite} />
+        {Object.values(sprites).map((sprite, idx) => (
+          <URLImage
+            sprite={sprite}
+            spritekey={Object.keys(sprites)[idx]}
+            spritesDispatch={spritesDispatch}
+          />
         ))}
       </Layer>
     </Stage>

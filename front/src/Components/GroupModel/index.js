@@ -17,7 +17,7 @@ const GroupModel = ({ block }) => {
     <g
       ref={gRef}
       key={block.id}
-      onMouseEnter={copy({ workspaceDispatch, motionIndex: block.motionIndex })}
+      onMouseEnter={copy({ workspaceDispatch, allIdx: block.allIdx, styleIdx: block.styleIdx })}
       transform={`translate(${position.x},${position.y})`}
     >
       {block.path}

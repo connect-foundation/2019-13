@@ -1,12 +1,14 @@
-import Motion from '../Init/Motion';
+import init from '../Init';
 
-export default ({ workspaceDispatch, motionIndex }) => {
+export default ({ workspaceDispatch, allIdx, styleIdx }) => {
   const onMouseEnter = (event) => {
     if (event.target.tagName !== 'path') {
       return;
     }
     event.preventDefault();
-    const blockParams = Motion[motionIndex];
+    event.stopPropagation();
+
+    const blockParams = init[allIdx][styleIdx];
     blockParams.x = event.target.getBoundingClientRect().x
     - event.target.ownerSVGElement.getBoundingClientRect().x;
     blockParams.y = event.target.getBoundingClientRect().y
