@@ -290,6 +290,9 @@ Block.prototype.connectBlock = function (type, conn) {
         lastBlock.setNextElement(this.nextElement);
         this.nextElement.setpreviousElement(lastBlock);
       }
+      if (conn.source.previousElement) {
+        conn.source.previousElement.setNextElement(null);
+      }
       conn.source.setpreviousElement(this);
       this.setNextElement(conn.source);
       this.setNextElementPosition();
