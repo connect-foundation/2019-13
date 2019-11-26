@@ -14,11 +14,13 @@ const Cont=styled.div`
   padding : 40px;
 `
 
+
+
 const loginMain = () => (
   <Wrapper>
     <Example></Example>
     <Title>인기가 많다구</Title>
-    <Cont><Insta></Insta></Cont>
+    <Cont></Cont>
   </Wrapper>
 );
 

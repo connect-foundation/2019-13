@@ -4,8 +4,39 @@ import InstaCard from '../Components/InstaCard/index.js'
 import Spinkit from '../Components/Spinkit/index.js'
 import {getDocumentHeight,getScrollTop} from '../utils/endScroll.js'
 
-const projects=[
+let projects=[
   {
+    id:1,
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:10,
+    pushLike:true
+  },
+  {
+    id:2,
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:777,
+    pushLike:true
+  },
+  {
+    id:3,
+    title:'Project1',
+    description:'it is an apple.',
+    user:'youngjun',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:1000,
+    pushLike:false
+  },
+  {
+    id:4,
     title:'Project1',
     description:'it is an apple.',
     user:'youngjun',
@@ -15,42 +46,17 @@ const projects=[
     pushLike:true
   },
   {
+    id:5,
     title:'Project1',
     description:'it is an apple.',
     user:'youngjun',
     userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
     image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes:1000,
-    pushLike:true
+    likes:1,
+    pushLike:false
   },
   {
-    title:'Project1',
-    description:'it is an apple.',
-    user:'youngjun',
-    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes:1000,
-    pushLike:true
-  },
-  {
-    title:'Project1',
-    description:'it is an apple.',
-    user:'youngjun',
-    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes:1000,
-    pushLike:true
-  },
-  {
-    title:'Project1',
-    description:'it is an apple.',
-    user:'youngjun',
-    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes:1000,
-    pushLike:true
-  },
-  {
+    id:6,
     title:'Project1',
     description:'it is an apple.',
     user:'youngjun',
@@ -67,11 +73,50 @@ export default () => {
   const [loading,setLoading]=useState(false);
   const Wrapper = styled.div`
   `;
-
+  const addProject=()=>{
+    const appendedProject=[
+      {
+        id:7,
+        title:'Project1',
+        description:'it is an apple.',
+        user:'youngjun',
+        userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+        image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+        likes:10,
+        pushLike:true
+      },
+      {
+        id:8,
+        title:'Project1',
+        description:'it is an apple.',
+        user:'youngjun',
+        userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+        image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+        likes:777,
+        pushLike:true
+      },
+      {
+        id:9,
+        title:'Project1',
+        description:'it is an apple.',
+        user:'youngjun',
+        userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+        image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+        likes:1000,
+        pushLike:false
+      }
+    ];
+    projects=projects.concat(appendedProject);
+  }
   const handleScroll=(e)=>{
     if(loading)return;
     if(getScrollTop()<getDocumentHeight()-window.innerHeight)return;
     setLoading(true);
+    setTimeout(()=>{
+      addProject();
+      setLoading(false);
+    },2000);
+
   }
 
   window.addEventListener('scroll', handleScroll)
@@ -116,7 +161,7 @@ export default () => {
     return (
       <CardContainer>
         {projects.map(project=>(
-          <InstaCard project={project} key={project.title}/>
+          <InstaCard project={project} key={project.id}/>
         ))}
       </CardContainer>
     );

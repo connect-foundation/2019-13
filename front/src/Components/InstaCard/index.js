@@ -29,7 +29,7 @@ export default ({project})=>{
 
     const StarWrapper=styled.div`
         display:flex;
-        background-color:#3897f5
+        background-color:${project.pushLike?"#3897f5":"gray"};
         border-radius:5px;
         height:30px;
         align-items:center;
@@ -102,7 +102,6 @@ export default ({project})=>{
                     <UserImage></UserImage>
                     <UserName>{project.user}</UserName>
                 </ProfileWrapper>
-                
                 <StarWrapper>
                     <StarSVG><StarPath points={points}/></StarSVG>
                     <StarText>{project.likes} stars</StarText>   

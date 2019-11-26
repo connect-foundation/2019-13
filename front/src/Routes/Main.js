@@ -16,28 +16,34 @@ const CardContainer=styled.div`
 `
 const projects=[
   {
+    id:1,
     title:'Project1',
     description:'it is an apple.',
     user:'youngjun',
-    userImg:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes:1000,
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:10,
     pushLike:true
   },
   {
+    id:2,
     title:'Project1',
     description:'it is an apple.',
     user:'youngjun',
-    userImg:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes:1000,
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    likes:777,
     pushLike:true
   },
   {
+    id:3,
     title:'Project1',
     description:'it is an apple.',
     user:'youngjun',
-    userImg:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
+    userImg:'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
+    image:'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
     likes:1000,
-    pushLike:true
+    pushLike:false
   }
 ]
 
@@ -47,9 +53,9 @@ const main = () => (
     <RecommendComtainer>
       <h3>이런것도 추천한다구</h3>
       <CardContainer>
-          <InstaCard></InstaCard>
-          <InstaCard></InstaCard>
-          <InstaCard></InstaCard>
+        {projects.map(project=>(
+            <InstaCard project={project} key={project.id}/>
+          ))}
       </CardContainer>
     </RecommendComtainer>
     
