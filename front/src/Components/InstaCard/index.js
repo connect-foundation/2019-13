@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import React,{useState} from 'react';
-import Velocity from 'velocity-react'
 export default ()=>{
     
     const [hover,setHover]=useState(0)
@@ -79,7 +78,11 @@ export default ()=>{
         background-color:rgba(0,0,0,0.5);
         border-radius:4px;
         padding:20px;
-        transition: 1s all;
+        transition: 0.5s all;
+        opacity:0;
+        &:hover{
+            opacity:1;
+        }
     `
 
     const ProjectTitle=styled.div`
@@ -90,27 +93,12 @@ export default ()=>{
         font-size:20px;
         color:white;
     `
-
-    const showDescription=(e)=>{
-        setHover(1)
-    }
-
-    const hideDescription=(e)=>{
-        setHover(0)
-    }
-
     return (
-        <CardContainer 
-            onMouseOver={showDescription}
-            onMouseLeave={hideDescription}
-        >
-            <Velocity.VelocityComponent animation={{opacity:hover}} duration={500}>
-                <DetailContainer>
-                    <ProjectTitle>Project1</ProjectTitle>
-                    <ProjectDescription>김영준의 프론트-엔드 아트워크. 비핸스를 모티브로 제작하였다.(2019)</ProjectDescription>
-                </DetailContainer>
-            </Velocity.VelocityComponent>
-            
+        <CardContainer >
+            <DetailContainer>
+                <ProjectTitle>Project1</ProjectTitle>
+                <ProjectDescription>김영준의 프론트-엔드 아트워크. 비핸스를 모티브로 제작하였다.(2019)</ProjectDescription>
+            </DetailContainer>
             <ProjectImage></ProjectImage>
             <InfoContainer>
                 <ProfileWrapper>
