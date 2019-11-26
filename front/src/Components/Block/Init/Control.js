@@ -2,7 +2,7 @@ import color from '../../../Styles/Theme';
 
 export default [
   {
-    type: 'control_while',
+    type: 'control_for',
     args: [
       {
         type: 'input',
