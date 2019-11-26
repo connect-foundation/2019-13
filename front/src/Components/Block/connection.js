@@ -40,18 +40,10 @@ Connection.prototype.revertType = function (type) {
 };
 
 Connection.prototype.X_ = function () {
-  if (this.source.isDragged) {
-    return this.source.x + this.diffX;
-  }
-
   return this.source.x + this.diffX;
 };
 
 Connection.prototype.Y_ = function () {
-  if (this.source.isDragged) {
-    return this.source.y + this.diffY;
-  }
-
   return this.source.y + this.diffY;
 };
 
