@@ -44,7 +44,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch }) => {
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
-      rotation={sprite.direction}
+      rotation={(sprite.direction - 90) % 360}
       offsetX={image ? image.width / 2 : 0}
       offsetY={image ? image.height / 2 : 0}
     />

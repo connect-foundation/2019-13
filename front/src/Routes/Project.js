@@ -18,7 +18,7 @@ const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
   url: '/logo.png',
   size: 100,
-  direction: 0,
+  direction: 90,
   x: 0,
   y: 0,
 };

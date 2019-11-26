@@ -1,5 +1,6 @@
 import Workspace from '../Components/Block/workspace';
 import CANVASCONSTANTS from '../Components/Canvas/constants';
+import Utils from '../utils/utils';
 /* eslint-disable import/prefer-default-export */
 
 export const workspaceReducer = (workspace, { type, blockParams, id }) => {
@@ -26,10 +27,7 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
   }
 };
 
-export const spritesReducer = (
-  sprites,
-  { type, coordinate, key, value },
-) => {
+export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
   const changeSprites = { ...sprites };
   const position = sprites[key];
   let eventValue = null;
@@ -91,6 +89,9 @@ export const spritesReducer = (
       );
       changeSprites[key] = position;
       return changeSprites;
+    case 'ROTATE':
+      position.direction = value.direction % 360;
+      if (position.direction < 0) position.direction = 360 + position.direction;
       changeSprites[key] = position;
       return changeSprites;
     default:
