@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import motion from './Init/Motion';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
 import GroupBlock from '../GroupModel';
 import BlockModelList from './block_model_list';
 import CONSTANTS from './constants';
+import init from './Init';
 
 const blockModelList = new BlockModelList();
 export default () => {
@@ -15,17 +15,21 @@ export default () => {
   if (!isInit) {
     setIsInit(true);
     workspace.setRender = setRender;
-    motion.forEach((json, idx) => {
-      const block = blockModelList.addBlock(idx);
-      block.makeFromJSON({
-        ...json,
-        x: CONSTANTS.DEFAULT_POSITION.x,
-        y: CONSTANTS.DEFAULT_POSITION.y + 75 * idx,
-        motionIndex: idx,
+    let idx = 0;
+    init.forEach((blocks, allIdx) => {
+      blocks.forEach((json, styleIdx) => {
+        const block = blockModelList.addBlock(idx);
+        block.makeFromJSON({
+          ...json,
+          x: CONSTANTS.DEFAULT_POSITION.x,
+          y: CONSTANTS.DEFAULT_POSITION.y + idx * 100,
+          allIdx,
+          styleIdx,
+        });
+        idx += 1;
       });
     });
   }
-
   return (
     <Svg>
       {Object.values(blockModelList.blockDB).map(block => (
