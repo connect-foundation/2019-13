@@ -78,8 +78,19 @@ export const spritesReducer = (
       changeSprites[key] = position;
       return changeSprites;
     case 'DRAG_END':
-      position.x = value.x;
-      position.y = value.y;
+    case 'MOVE':
+      position.x = Utils.checkRange(
+        value.x,
+        -CANVASCONSTANTS.CANVAS.WIDTH / 2,
+        CANVASCONSTANTS.CANVAS.WIDTH / 2,
+      );
+      position.y = Utils.checkRange(
+        value.y,
+        -CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+        CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+      );
+      changeSprites[key] = position;
+      return changeSprites;
       changeSprites[key] = position;
       return changeSprites;
     default:

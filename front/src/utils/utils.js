@@ -18,6 +18,7 @@ const Utils = {
     arr.splice(i, 1);
     return true;
   },
+  parseInt10: value => parseInt(value, 10),
   checkRange: (value, min, max) => {
     if (value < min) return min;
     if (value > max) return max;
