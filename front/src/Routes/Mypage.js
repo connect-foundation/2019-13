@@ -2,12 +2,38 @@ import React,{useState} from 'react';
 import styled from 'styled-components';
 import InstaCard from '../Components/InstaCard/index.js'
 import Spinkit from '../Components/Spinkit/index.js'
+
+
+const getDocumentHeight=()=>{
+  const body=document.body;
+  const html=document.documentElement;
+
+  return Math.max(
+    body.scrollHeight,body.offsetHeight,
+    html.offsetHeight,html.clientHeight,html.scrollHeight
+  )
+}
+
+const getScrollTop=()=>{
+  return (window.pageYOffset!==undefined)?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop;
+}
+
+
 export default () => {
   const [selected, setSelected]=useState(0);
-  const [loading,setLoading]=useState(true);
+  const [loading,setLoading]=useState(false);
   const Wrapper = styled.div`
   `;
 
+  const handleScroll=(e)=>{
+    if(loading)return;
+    if(getScrollTop()<getDocumentHeight()-window.innerHeight)return;
+    console.log(111)
+    setLoading(true);
+  }
+
+  window.addEventListener('scroll', handleScroll)
+  
   const SwitchContainer=styled.div`
     padding: 60px;
     display:flex;

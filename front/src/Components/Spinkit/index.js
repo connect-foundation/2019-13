@@ -13,7 +13,7 @@ export default ({isLoading})=>{
 
     return(
         <SpinnerWrapper>
-            <Spinner name="ball-pulse-rise" color="#fa8000"/>
+            <Spinner name="line-scale" color="#fa8000"/>
         </SpinnerWrapper>
     )
 }
