@@ -275,7 +275,7 @@ const Block = class {
 
   setNextElementPosition = () => {
     if (this.nextElement) {
-      this.nextElement.y = this.y + this.height;
+      this.nextElement.y = this.y + this.height - CONSTANTS.PIXEL;
       this.nextElement.x = this.x;
       this.nextElement.setNextElementPosition();
     }
