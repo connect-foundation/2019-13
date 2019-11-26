@@ -27,8 +27,8 @@ export default () => {
           styleIdx,
         });
         idx += 1;
+        blockModelList.addBlock(blockModel);
       });
-      blockModelList.addBlock(blockModel);
     });
   }
   return (

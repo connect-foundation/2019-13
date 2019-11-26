@@ -9,7 +9,7 @@ const setArgsPosition = (childnode, positionX) => {
   if (childnode.tagName !== 'foreignObject') {
     childnode.setAttribute('transform', `translate(${positionX},23)`);
   } else {
-    childnode.setAttribute('transform', `translate(${positionX + 3},8)`);
+    childnode.setAttribute('transform', `translate(${positionX + 3},5)`);
   }
   return childnode;
 };
@@ -26,7 +26,8 @@ const BlockModel = class {
     this.path = null;
     this.node = null;
     this.render = null;
-    this.motionIndex = -1;
+    this.allIdx = -1;
+    this.styleIdx = -1;
   }
 
   setNode(node) {
@@ -77,8 +78,11 @@ const BlockModel = class {
     this.strokeColor = json.stroke_color;
     this.x = json.x ? json.x : 0;
     this.y = json.y ? json.y : 0;
-    this.motionIndex = json.motionIndex === 0 || Number(json.motionIndex)
-      ? json.motionIndex
+    this.allIdx = json.allIdx === 0 || Number(json.allIdx)
+      ? json.allIdx
+      : -1;
+    this.styleIdx = json.styleIdx === 0 || Number(json.styleIdx)
+      ? json.styleIdx
       : -1;
 
     if (!this.id) {
