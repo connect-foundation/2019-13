@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -27,25 +27,28 @@ defaultSprite[Utils.uid()] = {
   y: 0,
 };
 
+const PrettoSlider = withStyles({
+  root: {
+    color: Theme.duckOrangeColor,
+  },
+})(Slider);
+
 const Project = () => {
+  const [degree, setDegree] = useState(100);
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
   );
+
   const [sprites, spritesDispatch] = useReducer(
     spritesReducer,
     defaultSprite,
   );
-  function valuetext(value) {
-    return value;
-  }
 
-  const PrettoSlider = withStyles({
-    root: {
-      color: Theme.duckOrangeColor,
-    },
+  const handlScrollChange = (event, value) => {
+    setDegree(value);
+  };
 
-  })(Slider);
 
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
@@ -99,9 +102,8 @@ const Project = () => {
             <div className="Contents__Column block-lists">
               <PrettoSlider
                 orientation="vertical"
-                getAriaValueText={valuetext}
-                defaultValue={30}
-                aria-labelledby="vertical-slider"
+                defaultValue={degree}
+                onChange={handlScrollChange}
               />
             </div>
 
@@ -180,7 +182,7 @@ const Contents = styled.div`
     background-color: white;
     width: 70vw;
   }
- 
+
   .controller {
     display: flex;
     align-items: center;
