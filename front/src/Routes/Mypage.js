@@ -108,15 +108,11 @@ export default () => {
     ];
     projects = projects.concat(appendedProject);
   };
+
   const handleScroll = () => {
     if (loading) return;
-    if (getScrollTop() < getDocumentHeight() - window.innerHeight) return;
-
+    if (getScrollTop() + 1 < getDocumentHeight() - window.innerHeight) return;
     setLoading(true);
-    setTimeout(() => {
-      addProject();
-      setLoading(false);
-    }, 2000);
   };
 
   window.addEventListener('scroll', handleScroll);
@@ -163,8 +159,12 @@ export default () => {
       ))}
     </CardContainer>
   );
-
+  if (loading) {
+    addProject();
+    setLoading(false);
+  }
   return (
+
     <Wrapper>
       <SwitchContainer>
         <LeftToggle id="0" onClick={handleToggle}>나의 프로젝트</LeftToggle>

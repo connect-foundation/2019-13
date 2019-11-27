@@ -1,83 +1,28 @@
-import React, { useState } from 'react';
-import {
-  Carousel,
-  CarouselItem,
-  CarouselControl,
-  CarouselIndicators,
-} from 'reactstrap';
+import Slider from 'react-slick';
+import React from 'react';
 import styled from 'styled-components';
-import 'bootstrap/dist/css/bootstrap.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-const items = [
-  {
-    src: 'banner1.png',
-  },
-  {
-    src: 'banner2.png',
-  },
-];
-
-const Example = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
-
-  const next = () => {
-    if (animating) return;
-    const nextIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
-    setActiveIndex(nextIndex);
+export default () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
   };
-
-  const previous = () => {
-    if (animating) return;
-    const nextIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
-    setActiveIndex(nextIndex);
-  };
-
-  const goToIndex = (newIndex) => {
-    if (animating) return;
-    setActiveIndex(newIndex);
-  };
-
-  const ImageWrapper = styled.div``;
-
-  const customTag = {
-    maxWidth: '100%',
-    height: '400px',
-    background: 'gray',
-  };
-
-  const CarouselImage = styled.img`
-    width:100%;
-    height:400px;
+  const CarouselContainer = styled.div`
+    padding :40px;
   `;
-  const slides = items.map(item => (
-    <CarouselItem
-      style={customTag}
-      tag="div"
-      key={item.id}
-      onExiting={() => setAnimating(true)}
-      onExited={() => setAnimating(false)}
-    >
-      <ImageWrapper>
-        <CarouselImage src={item.src} alt={item.altText} />
-      </ImageWrapper>
-    </CarouselItem>
-  ));
-  return (
-    <div>
 
-      <Carousel
-        activeIndex={activeIndex}
-        next={next}
-        previous={previous}
-      >
-        <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={goToIndex} />
-        {slides}
-        <CarouselControl direction="prev" directionText="Previous" onClickHandler={previous} />
-        <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
-      </Carousel>
-    </div>
+  return (
+    <CarouselContainer>
+      <Slider {...settings}>
+        <img src="banner1.png" />
+        <img src="banner2.png" />
+      </Slider>
+    </CarouselContainer>
   );
 };
-
-export default Example;
