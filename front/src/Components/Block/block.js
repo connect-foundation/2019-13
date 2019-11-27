@@ -33,6 +33,7 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
+    this.value = 0;
   }
 
   setNode = (node) => {
@@ -58,7 +59,8 @@ const Block = class {
         / CONSTANTS.PIXEL,
       );
       this.render(Math.random());
-      this.height = this.node.getBoundingClientRect().height;
+      this.height = this.node.firstChild.getBoundingClientRect().height;
+      this.setConnectionPosition();
     }
   };
 
@@ -69,6 +71,32 @@ const Block = class {
       node.setAttribute('transform', `translate(${positionX + 3},5)`);
     }
   };
+
+  setConnectionPosition = () => {
+    if (this.previousConnection) {
+      this.previousConnection = new Connection(
+        CONSTANTS.PREVIOUS_CONNECTION,
+        this, 'previousPosition',
+      );
+      this.previousConnection.setPositions();
+    }
+
+    if (this.nextConnection) {
+      this.nextConnection = new Connection(
+        CONSTANTS.NEXT_CONNECTION,
+        this, 'nextPosition',
+      );
+      this.nextConnection.setPositions();
+    }
+
+    if (this.firstchildConnection) {
+      this.firstchildConnection = new Connection(
+        CONSTANTS.NEXT_CONNECTION,
+        this, 'firstChildPosition',
+      );
+      this.firstchildConnection.setPositions();
+    }
+  }
 
   changeInputWidth = (event) => {
     const { target } = event;
@@ -82,6 +110,7 @@ const Block = class {
       target.parentNode.style.width = '30px';
       target.style.width = '30px';
     }
+    this.value = Number(target.value);
     this.setArgs();
   };
 
@@ -103,19 +132,20 @@ const Block = class {
       this.makeArgsFromJSON(arg);
     });
 
-    if (json.previousConnection && !this.previousConnection) {
-      this.previousConnection = new Connection(
-        CONSTANTS.PREVIOUS_CONNECTION,
-        this, 'previousPosition',
-      );
-    }
-
-    if (json.nextConnection && !this.nextConnection) {
-      this.nextConnection = new Connection(CONSTANTS.NEXT_CONNECTION, this, 'nextPosition');
-    }
-
     this.style = json.style;
     this.makeStyleFromJSON();
+
+    if (json.previousConnection) {
+      this.previousConnection = true;
+    }
+
+    if (json.nextConnection) {
+      this.nextConnection = true;
+    }
+
+    if (json.firstchildConnection) {
+      this.firstchildConnection = true;
+    }
 
     if (!this.workspace.getBlockById(this.id)) {
       this.workspace.blockDB[this.id] = this;
@@ -128,7 +158,7 @@ const Block = class {
     } else if (json.type === 'input') {
       this.args.push(
         create('foreignObject', { key: 'foreign' },
-          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
+          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this), value: json.value }, null),
           create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
       );
     }

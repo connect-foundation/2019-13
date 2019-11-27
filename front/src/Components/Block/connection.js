@@ -10,7 +10,7 @@
  * */
 
 
-import Constants from './constants';
+import CONSTANTS from './constants';
 
 const Connection = function (type, source, positiontype) {
   this.type = type;
@@ -18,11 +18,17 @@ const Connection = function (type, source, positiontype) {
   this.positiontype = positiontype;
   this.diffX = 0;
   this.diffY = 0;
-  this.positionSetting = {
-    previousPosition: { x: Constants.PREVIOUS_NEXT_POS_X, y: 6 },
-    nextPosition: { x: Constants.PREVIOUS_NEXT_POS_X, y: 42 },
-  };
+  this.positionSetting = {};
   this.isSelected = false;
+};
+
+Connection.prototype.setPositions = function () {
+  this.positionSetting = {
+    previousPosition: { x: CONSTANTS.PREVIOUS_NEXT_POS_X, y: CONSTANTS.PIXEL },
+    nextPosition: { x: CONSTANTS.PREVIOUS_NEXT_POS_X, y: this.source.height },
+    firstChildPosition: { x: CONSTANTS.CHILD_NEXT_POS_X,
+      y: CONSTANTS.BLOCK_HEAD_HEIGHT + CONSTANTS.PIXEL },
+  };
   this.setDiff();
 };
 
