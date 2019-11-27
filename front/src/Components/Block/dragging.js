@@ -25,8 +25,8 @@ Dragging.prototype.dragStart = function (sourceBlock, x, y) {
 };
 
 Dragging.prototype.updateBlockPosition = function () {
-  this.sourceBlock.x = this.x;
-  this.sourceBlock.y = this.y;
+  this.draggedBlock.x = this.x;
+  this.draggedBlock.y = this.y;
   this.lastBlock.x = this.x + this.lastBlockDiff.x;
   this.lastBlock.y = this.y + this.lastBlockDiff.y;
 };
