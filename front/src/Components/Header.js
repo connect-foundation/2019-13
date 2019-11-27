@@ -74,6 +74,7 @@ const Header = styled.header`
   position: fixed;
   top: 0px;
   left: 0px;
+  z-index:23;
   padding: 0px 32px;
   width: 100%;
   height: 72px;
