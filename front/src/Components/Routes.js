@@ -4,12 +4,13 @@ import { Route, Switch } from 'react-router-dom';
 import LoginMain from '../Routes/LoginMain';
 import Main from '../Routes/Main';
 import Project from '../Routes/Project';
+import Mypage from '../Routes/Mypage';
 
 const LoggedInRoutes = () => (
   <>
     <Route exact path="/" component={LoginMain} />
     <Route exact path="/project" component={Project} />
-    <Route exact path="/mypage" component={Project}/>
+    <Route exact path="/mypage" component={Mypage} />
   </>
 );
 
@@ -17,7 +18,7 @@ const LoggedOutRoutes = () => (
   <>
     <Route exact path="/" component={Main} />
     <Route exact path="/project" component={Project} />
-    <Route exact path="/mypage" component={Project}/>
+    <Route exact path="/mypage" component={Mypage} />
   </>
 );
 

@@ -11,6 +11,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.33",
     "apollo-boost": "^0.4.4",
+    "bootstrap": "^4.3.1",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
     "konva": "^4.0.18",
@@ -25,6 +26,7 @@
     "react-leaf-carousel": "^1.2.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "react-spinkit": "^3.0.0",
     "reactstrap": "^8.1.1",
     "styled-components": "^4.4.1",
     "styled-reset": "^4.0.6"
