@@ -7,10 +7,16 @@ import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
 import { SpritesContext } from '../../Context';
 
+let key;
+let position;
+let dispatch;
+export const getPosition = () => ({ key, position, dispatch });
+
 export default () => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
-  const key = Object.keys(sprites)[0];
-  const position = { ...sprites[key], key };
+  dispatch = spritesDispatch;
+  key = Object.keys(sprites)[0];
+  position = { ...sprites[key], key };
   const checkPositionHandler = ({ type, coordinate }, event) => {
     spritesDispatch({ type, coordinate, key, value: event.target.value });
   };

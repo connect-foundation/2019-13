@@ -4,7 +4,6 @@ import Utils from '../../utils/utils';
 import Constants from './constants';
 
 const create = React.createElement;
-
 const setArgsPosition = (childnode, positionX) => {
   if (childnode.tagName !== 'foreignObject') {
     childnode.setAttribute('transform', `translate(${positionX},23)`);

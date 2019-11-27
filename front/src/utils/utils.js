@@ -18,6 +18,12 @@ const Utils = {
     arr.splice(i, 1);
     return true;
   },
+  parseInt10: value => parseInt(value, 10),
+  checkRange: (value, min, max) => {
+    if (value < min) return Math.round(min);
+    if (value > max) return Math.round(max);
+    return Math.round(value);
+  },
 };
 
 
