@@ -20,9 +20,9 @@ const Utils = {
   },
   parseInt10: value => parseInt(value, 10),
   checkRange: (value, min, max) => {
-    if (value < min) return min;
-    if (value > max) return max;
-    return value;
+    if (value < min) return Math.round(min);
+    if (value > max) return Math.round(max);
+    return Math.round(value);
   },
 };
 
