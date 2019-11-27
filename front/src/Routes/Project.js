@@ -2,12 +2,14 @@ import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import Slider from '@material-ui/core/Slider';
 import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
+
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -32,6 +34,9 @@ const Project = () => {
     spritesReducer,
     defaultSprite,
   );
+  function valuetext(value) {
+    return value;
+  }
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
@@ -81,7 +86,14 @@ const Project = () => {
                 <span> 나만의 블록 </span>
               </TypesButton>
             </div>
-            <div className="Contents__Column block-lists" />
+            <div className="Contents__Column block-lists">
+              <Slider
+                orientation="vertical"
+                getAriaValueText={valuetext}
+                defaultValue={30}
+                aria-labelledby="vertical-slider"
+              />
+            </div>
 
             <div className="Contents__Column block-space">
               <div>블록 코딩</div>
@@ -93,6 +105,7 @@ const Project = () => {
     </WorkspaceContext.Provider>
   );
 };
+
 
 const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
@@ -140,7 +153,11 @@ const Contents = styled.div`
     height: 85vh;
   }
   .block-lists {
+    display:flex;
+    flex-direction:row-reverse;
+    padding:20px 0px;
     min-width: 300px;
+    height:800px;
     border: 1px solid ${props => props.theme.mainBorderColor};
     background-color: ${props => props.theme.lightGreyColor};
   }
