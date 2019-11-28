@@ -9,7 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { SpritesContext } from '../../Context';
 import Utils from '../../utils/utils';
 
-const imageRegExp = /image\/(bmp|jpg|jpeg|giff|png|svg)$/i;
+const imageRegExp = /image\/(bmp|jpg|jpeg|iff|png|svg)$/i;
 
 const useStyles = makeStyles(theme => ({
   speedDial: {
