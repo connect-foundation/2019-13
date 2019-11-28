@@ -94,6 +94,9 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       if (position.direction < 0) position.direction = 360 + position.direction;
       changeSprites[key] = position;
       return changeSprites;
+    case 'ADD_IMAGE':
+      changeSprites[key] = value;
+      return changeSprites;
     default:
       throw new Error('NOT FOUND TYPE');
   }
