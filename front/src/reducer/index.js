@@ -35,7 +35,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
   switch (type) {
     case 'CHANGE_POSITION':
       eventValue = value.charCodeAt(value.length - 1);
-      if (eventValue === 45 && value.length === 1) {
+      if (eventValue === 45 && (value[0] === '0' || value.length < 2)) {
         position[coordinate] = '-';
         changeSprites[key] = position;
         return changeSprites;
@@ -65,13 +65,13 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       return changeSprites;
     case 'CHANGE_SIZE':
       eventValue = value.charCodeAt(value.length - 1);
-      if (eventValue < 48 || eventValue > 57) return sprites;
+      if (eventValue < 48 || eventValue > 57 || value.includes('-')) return sprites;
       position.size = value;
       changeSprites[key] = position;
       return changeSprites;
     case 'CHANGE_DIRECTION':
       eventValue = value.charCodeAt(value.length - 1);
-      if (eventValue < 48 || eventValue > 57) return sprites;
+      if (eventValue < 48 || eventValue > 57 || value.includes('-')) return sprites;
       position.direction = value % 360;
       changeSprites[key] = position;
       return changeSprites;
@@ -94,9 +94,14 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       if (position.direction < 0) position.direction = 360 + position.direction;
       changeSprites[key] = position;
       return changeSprites;
+    case 'BOUNCE':
+      position.x = value.x;
+      position.y = value.y;
+      position.direction = value.direction;
+      position.reversal = value.reversal;
+      return changeSprites;
     case 'ADD_IMAGE':
       changeSprites[key] = value;
-      return changeSprites;
     default:
       throw new Error('NOT FOUND TYPE');
   }

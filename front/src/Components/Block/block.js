@@ -33,6 +33,10 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
+    this.inputElement = {
+      type: 'input',
+      value: 10,
+    };
   }
 
   setNode = (node) => {
@@ -40,7 +44,7 @@ const Block = class {
     this.setArgs();
   };
 
-  setArgs = () => {
+  setArgs = (height = 24, secondHeight = 24) => {
     if (this.node) {
       let positionX = CONSTANTS.PIXEL;
       let lastChild;
@@ -56,9 +60,12 @@ const Block = class {
         - this.node.getBoundingClientRect().left
         - CONSTANTS.PIXEL * 5)
         / CONSTANTS.PIXEL,
+        height / CONSTANTS.PIXEL - 2,
+        secondHeight / CONSTANTS.PIXEL - 2,
       );
       this.render(Math.random());
-      this.height = this.node.getBoundingClientRect().height;
+      this.height = this.node.firstChild.getBoundingClientRect().height;
+      this.setConnectionPosition();
     }
   };
 
@@ -69,6 +76,32 @@ const Block = class {
       node.setAttribute('transform', `translate(${positionX + 3},5)`);
     }
   };
+
+  setConnectionPosition = () => {
+    if (this.previousConnection) {
+      this.previousConnection = new Connection(
+        CONSTANTS.PREVIOUS_CONNECTION,
+        this, 'previousPosition',
+      );
+      this.previousConnection.setPositions();
+    }
+
+    if (this.nextConnection) {
+      this.nextConnection = new Connection(
+        CONSTANTS.NEXT_CONNECTION,
+        this, 'nextPosition',
+      );
+      this.nextConnection.setPositions();
+    }
+
+    if (this.firstchildConnection) {
+      this.firstchildConnection = new Connection(
+        CONSTANTS.NEXT_CONNECTION,
+        this, 'firstChildPosition',
+      );
+      this.firstchildConnection.setPositions();
+    }
+  }
 
   changeInputWidth = (event) => {
     const { target } = event;
@@ -82,6 +115,7 @@ const Block = class {
       target.parentNode.style.width = '30px';
       target.style.width = '30px';
     }
+    this.inputElement.value = Number(target.value);
     this.setArgs();
   };
 
@@ -103,19 +137,20 @@ const Block = class {
       this.makeArgsFromJSON(arg);
     });
 
-    if (json.previousConnection && !this.previousConnection) {
-      this.previousConnection = new Connection(
-        CONSTANTS.PREVIOUS_CONNECTION,
-        this, 'previousPosition',
-      );
-    }
-
-    if (json.nextConnection && !this.nextConnection) {
-      this.nextConnection = new Connection(CONSTANTS.NEXT_CONNECTION, this, 'nextPosition');
-    }
-
     this.style = json.style;
     this.makeStyleFromJSON();
+
+    if (json.previousConnection) {
+      this.previousConnection = true;
+    }
+
+    if (json.nextConnection) {
+      this.nextConnection = true;
+    }
+
+    if (json.firstchildConnection) {
+      this.firstchildConnection = true;
+    }
 
     if (!this.workspace.getBlockById(this.id)) {
       this.workspace.blockDB[this.id] = this;
@@ -128,7 +163,9 @@ const Block = class {
     } else if (json.type === 'input') {
       this.args.push(
         create('foreignObject', { key: 'foreign' },
-          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
+          create(json.type, { key: json.value,
+            onChange: this.changeInputWidth.bind(this),
+            value: json.value }, null),
           create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
       );
     }
@@ -143,7 +180,7 @@ const Block = class {
             d: Path.single(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'single',
           },
           null,
@@ -156,7 +193,7 @@ const Block = class {
             d: Path.double(width, height),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'double',
           },
           null,
@@ -169,7 +206,7 @@ const Block = class {
             d: Path.triple(width, height, secondHeight),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'triple',
           },
           null,
@@ -182,7 +219,7 @@ const Block = class {
             d: Path.variable(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'variable',
           },
           null,
@@ -195,7 +232,7 @@ const Block = class {
             d: Path.event(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'event',
           },
           null,
@@ -208,7 +245,7 @@ const Block = class {
             d: Path.condition(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'condition',
           },
           null,
@@ -250,7 +287,7 @@ const Block = class {
     }
 
     if (this.firstchildElement) {
-      this.firstchildConnection.setDrag(isDragged);
+      this.firstchildElement.setDrag(isDragged);
     }
 
     if (this.secondchildElement) {
@@ -270,6 +307,10 @@ const Block = class {
       if (nextConn) availableConnection.push(nextConn);
     }
 
+    if (this.firstchildConnection) {
+      availableConnection.push(this.firstchildConnection);
+    }
+
     return availableConnection;
   };
 
@@ -281,6 +322,13 @@ const Block = class {
     }
   };
 
+  setFirstChildPosition = () => {
+    if (this.firstchildElement) {
+      this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
+      this.firstchildElement.x = this.x + CONSTANTS.CHILD_NEXT_POS_X;
+    }
+  }
+
   setpreviousElement = (previousElement) => {
     this.previousElement = previousElement;
   };
@@ -288,6 +336,18 @@ const Block = class {
   setNextElement = (nextElement) => {
     this.nextElement = nextElement;
   };
+
+  setParentElement = (parentElement) => {
+    this.parentElement = parentElement;
+  }
+
+  setFirstChildElement = (firstchildElement) => {
+    this.firstchildElement = firstchildElement;
+  }
+
+  setSecondChildElement = (secondchildElement) => {
+    this.secondchildElement = secondchildElement;
+  }
 
   connectBlock = (type, conn) => {
     switch (type) {
@@ -306,23 +366,36 @@ const Block = class {
         this.setNextElementPosition();
         break;
       case 'previousPosition':
-        if (conn.source.nextElement) {
-          const lastBlock = this.getLastBlock(true);
-          conn.source.nextElement.setpreviousElement(lastBlock);
-          lastBlock.setNextElement(conn.source.nextElement);
+        if (conn.positiontype === 'nextPosition') {
+          if (conn.source.nextElement) {
+            const lastBlock = this.getLastBlock(true);
+            conn.source.nextElement.setpreviousElement(lastBlock);
+            lastBlock.setNextElement(conn.source.nextElement);
+          }
+          this.previousElement = conn.source;
+          conn.source.setNextElement(this);
+          conn.source.setNextElementPosition();
+        } else if (conn.positiontype === 'firstChildPosition') {
+          if (conn.source.firstchildElement) {
+            const lastBlock = this.getLastBlock(true);
+            conn.source.firstchildElement.setpreviousElement(lastBlock);
+            lastBlock.setNextElement(conn.source.firstchildElement);
+          }
+          this.parentElement = conn.source;
+          conn.source.setFirstChildElement(this);
+          conn.source.setFirstChildPosition();
+          this.setNextElementPosition();
+          conn.source.setArgs(this.node.getBoundingClientRect().height - CONSTANTS.PIXEL);
         }
-        this.previousElement = conn.source;
-        conn.source.setNextElement(this);
-        conn.source.setNextElementPosition();
         break;
-
       case 'outputPosition':
         break;
-
       case 'inputPosition':
-
         break;
-
+      case 'firstChildPosition':
+        break;
+      case 'secondChildPosition':
+        break;
       default:
         throw new Error('잘못된 커넥션 타입입니다.');
     }
@@ -332,6 +405,15 @@ const Block = class {
     if (this.previousElement) {
       this.previousElement.nextElement = null;
       this.previousElement = null;
+    }
+    if (this.parentElement) {
+      if (this.parentElement.firstchildElement === this) {
+        this.parentElement.firstchildElement = null;
+        this.parentElement = null;
+      } else if (this.parentElement.secondchildElement === this) {
+        this.parentElement.secondchildElement = null;
+        this.parentElement = null;
+      }
     }
   };
 };

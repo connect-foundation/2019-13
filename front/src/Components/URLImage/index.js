@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Image } from 'react-konva';
 import Konva from 'konva';
 import PropType from 'prop-types';
@@ -45,6 +45,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
       image={image}
       onMouseDown={handleMouseDown}
       draggable
+      scaleY={sprite.reversal ? -1 : 1}
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}

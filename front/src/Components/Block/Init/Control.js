@@ -6,7 +6,7 @@ export default [
     args: [
       {
         type: 'input',
-        value: 10,
+        value: 3,
       },
       {
         type: 'text',
@@ -16,7 +16,7 @@ export default [
     style: 'double',
     nextConnection: true,
     previousConnection: true,
-    childConnection: true,
+    firstchildConnection: true,
     color: color.controlColor,
     stroke_color: color.controlStrokeColor,
   },
@@ -29,7 +29,7 @@ export default [
       },
       {
         type: 'input',
-        value: 10,
+        value: '3 > 0',
       },
       {
         type: 'text',
@@ -39,7 +39,7 @@ export default [
     style: 'double',
     nextConnection: true,
     previousConnection: true,
-    childConnection: true,
+    firstchildConnection: true,
     color: color.controlColor,
     stroke_color: color.controlStrokeColor,
   },
