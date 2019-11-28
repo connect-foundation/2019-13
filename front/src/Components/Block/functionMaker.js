@@ -99,6 +99,14 @@ const FunctionList = {
     };
     return { func };
   },
+
+  control_if: (args) => {
+    const value = true;
+    const func = {};
+    func.next = () => {};
+    args.input = 1;
+    return value ? FunctionList.control_for(args) : { func };
+  },
 };
 
 export default FunctionList;
