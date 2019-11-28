@@ -5,15 +5,46 @@ import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
-import { SpritesContext } from '../../Context';
+import { SpritesContext, WorkspaceContext } from '../../Context';
+import Generator from '../Block/generator';
 
 let key;
 let position;
 let dispatch;
+let interval;
+let isPlay = false;
 export const getPosition = () => ({ key, position, dispatch });
+const playHandler = (workspace) => {
+  if (!isPlay) {
+    const generator = new Generator();
+    const codes = generator.workspaceToCode(workspace.getStartBlocks());
+    isPlay = true;
+    interval = setInterval(() => {
+      let isEnd = true;
+      codes.forEach((code, i) => {
+        const res = code.func.next();
+        if (res && !res.done) {
+          isEnd = false;
+        }
+      });
+      if (isEnd) {
+        clearInterval(interval);
+        isPlay = false;
+      }
+    }, 1000 / 30);
+  }
+};
+
+const stopHadler = () => {
+  if (interval) {
+    clearInterval(interval);
+    isPlay = false;
+  }
+};
 
 export default () => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
+  const { workspace } = useContext(WorkspaceContext);
   dispatch = spritesDispatch;
   key = Object.keys(sprites)[0];
   position = { ...sprites[key], key };
@@ -23,8 +54,8 @@ export default () => {
   return (
     <DrawSectionWrapper className="Contents__Column">
       <div className="draw-section__row controller">
-        <FontAwesomeIcon icon={faPlay} className="play-button" />
-        <FontAwesomeIcon icon={faStop} className="stop-button" />
+        <FontAwesomeIcon icon={faPlay} onClick={() => playHandler(workspace)} className="play-button" />
+        <FontAwesomeIcon icon={faStop} onClick={stopHadler} className="stop-button" />
       </div>
       <div className="draw-section__row">
         <Canvas />
