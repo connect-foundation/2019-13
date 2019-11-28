@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Image } from 'react-konva';
 import Konva from 'konva';
 import PropType from 'prop-types';
@@ -41,6 +41,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch }) => {
       y={CANVASCONSTANTS.CANVAS.HEIGHT / 2 + Number(sprite.y)}
       image={image}
       draggable
+      scaleY={sprite.reversal ? -1 : 1}
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
       onDragEnd={handleDragEnd}
