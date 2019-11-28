@@ -27,7 +27,6 @@ defaultSprite[Utils.uid()] = {
 };
 
 const Project = () => {
-  const [degree, setDegree] = useState(100);
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
