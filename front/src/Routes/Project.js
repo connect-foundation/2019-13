@@ -4,12 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Blockspace from '../Components/Block/index';
+import Blocks from '../Components/Block/Init';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
 import Theme from '../Styles/Theme';
+
+const getScrollHeight = () => `${Blocks.reduce((acc, block) => acc + block.length, 0) * 100}px`;
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -99,7 +102,7 @@ const Project = () => {
             </div>
             <div className="Contents__Column block-lists">
               <Scrollbars
-                style={{ height: '100%', fontSize: '2000px' }}
+                style={{ height: '100%', fontSize: getScrollHeight() }}
               >
                 &nbsp;
               </Scrollbars>
