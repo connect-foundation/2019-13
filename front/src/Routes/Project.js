@@ -1,13 +1,16 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import Blockspace from '../Components/Block/index';
+import Blocks from '../Components/Block/Init';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
+
+const getScrollHeight = () => `${Blocks.reduce((acc, block) => acc + block.length, 0) * 100}px`;
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -29,10 +32,12 @@ const Project = () => {
     workspaceReducer,
     new Workspace(),
   );
+
   const [sprites, spritesDispatch] = useReducer(
     spritesReducer,
     defaultSprite,
   );
+
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
@@ -83,7 +88,6 @@ const Project = () => {
               </TypesButton>
             </div>
             <div className="Contents__Column block-lists" />
-
             <div className="Contents__Column block-space">
               <div>블록 코딩</div>
             </div>
@@ -141,7 +145,12 @@ const Contents = styled.div`
     height: 85vh;
   }
   .block-lists {
+    display:flex;
+    flex-direction:row-reverse;
     min-width: 300px;
+    overflow:scroll;
+    height:800px;
+    padding:10px;
     border: 1px solid ${props => props.theme.mainBorderColor};
     background-color: ${props => props.theme.lightGreyColor};
   }
@@ -154,7 +163,7 @@ const Contents = styled.div`
     background-color: white;
     width: 70vw;
   }
- 
+
   .controller {
     display: flex;
     align-items: center;
