@@ -2,7 +2,6 @@ import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { Scrollbars } from 'react-custom-scrollbars';
 import Blockspace from '../Components/Block/index';
 import Blocks from '../Components/Block/Init';
 import Workspace from '../Components/Block/workspace';
@@ -10,7 +9,6 @@ import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
-import Theme from '../Styles/Theme';
 
 const getScrollHeight = () => `${Blocks.reduce((acc, block) => acc + block.length, 0) * 100}px`;
 
@@ -28,12 +26,6 @@ defaultSprite[Utils.uid()] = {
   y: 0,
 };
 
-// const PrettoSlider = withStyles({
-//   root: {
-//     color: 'gray',
-//   },
-// })(Slider);
-
 const Project = () => {
   const [degree, setDegree] = useState(100);
   const [workspace, workspaceDispatch] = useReducer(
@@ -45,11 +37,6 @@ const Project = () => {
     spritesReducer,
     defaultSprite,
   );
-
-  // const handlScrollChange = (event, value) => {
-  //   setDegree(value);
-  // };
-
 
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
@@ -69,7 +56,7 @@ const Project = () => {
             </div>
           </ProjectHeader>
           <Contents>
-            <Blockspace degree={degree} />
+            <Blockspace />
             <div className="Contents__Column block-types">
               <TypesButton className="block-types__button" btype="motion">
                 <div />
@@ -100,13 +87,7 @@ const Project = () => {
                 <span> 나만의 블록 </span>
               </TypesButton>
             </div>
-            <div className="Contents__Column block-lists">
-              <Scrollbars
-                style={{ height: '100%', fontSize: getScrollHeight() }}
-              >
-                &nbsp;
-              </Scrollbars>
-            </div>
+            <div className="Contents__Column block-lists" />
             <div className="Contents__Column block-space">
               <div>블록 코딩</div>
             </div>
@@ -169,7 +150,7 @@ const Contents = styled.div`
     min-width: 300px;
     overflow:scroll;
     height:800px;
-    padding:20px;
+    padding:10px;
     border: 1px solid ${props => props.theme.mainBorderColor};
     background-color: ${props => props.theme.lightGreyColor};
   }
