@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Example from '../Components/Carousel';
 import Card from '../Components/Card';
+import Carousel from '../Components/Carousel';
 
 const Wrapper = styled.div`
 `;
@@ -48,21 +48,17 @@ const projects = [
   },
 ];
 
-const main = () => (
+
+export default () => (
   <Wrapper>
-    <Example />
+    <Carousel />
     <RecommendComtainer>
-      <h3>이런것도 추천한다구</h3>
+      <h2>이런것도 추천한다구</h2>
       <CardContainer>
         {projects.map(project => (
           <Card project={project} key={project.id} />
         ))}
       </CardContainer>
     </RecommendComtainer>
-
-
   </Wrapper>
-
 );
-
-export default main;

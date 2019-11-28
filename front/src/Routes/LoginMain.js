@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Example from '../Components/Carousel';
 
 const Wrapper = styled.div`
 
@@ -16,7 +15,6 @@ const Cont = styled.div`
 
 const loginMain = () => (
   <Wrapper>
-    <Example />
     <Title>인기가 많다구</Title>
     <Cont />
   </Wrapper>
