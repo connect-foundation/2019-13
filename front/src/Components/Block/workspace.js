@@ -21,6 +21,14 @@ const Workspace = class {
     delete this.blockDB[usedId];
   }
 
+  getStartBlocks() {
+    const blocks = [];
+    this.topblocks.forEach((v) => {
+      if (v.type === 'event_start' && v.nextElement) blocks.push(v.nextElement);
+    });
+    return blocks;
+  }
+
   addTopblock(block) {
     if (this.topblocks.some(b => b.id === block.id)) return;
     this.topblocks.push(block);
