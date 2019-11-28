@@ -35,6 +35,13 @@ export default ({ degree }) => {
     setMove(false);
   };
 
+  const clickHandler = (scrollEvent) => {
+    let currentY = scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y;
+    if (currentY < 20)currentY = 20;
+    else if (currentY > 670)currentY = 670;
+    setScrollY(currentY);
+  };
+
   // if (!isInit) {
   // setIsInit(true);
   const blockModelList = new BlockModelList();
@@ -71,6 +78,7 @@ export default ({ degree }) => {
         onMouseUp={dragEndHandler}
         onMouseMove={dragMoveHandler}
         onMouseLeave={dragEndHandler}
+        onClick={clickHandler}
       />
       <rect
         width="20"
