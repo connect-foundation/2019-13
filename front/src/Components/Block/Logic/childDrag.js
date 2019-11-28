@@ -1,3 +1,5 @@
+import CONSTANTS from '../constants';
+
 const mouseHandler = ({ set, block, setMoved }) => {
   const mousedown = (eventDown) => {
     setMoved(true);
@@ -19,6 +21,10 @@ const mouseHandler = ({ set, block, setMoved }) => {
     - node.parentNode.getBoundingClientRect().left;
     startPosition.y = node.parentNode.getBoundingClientRect().height
     - node.getBoundingClientRect().height;
+    if (block.parentElement) {
+      startPosition.y = node.parentNode.firstChild.getBoundingClientRect().height
+      - node.getBoundingClientRect().height - CONSTANTS.BLOCK_TAIL_HEIGHT;
+    }
 
     set({ x: startPosition.x, y: startPosition.y });
 
@@ -48,11 +54,11 @@ const mouseHandler = ({ set, block, setMoved }) => {
     const mouseup = () => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
-      if (startRealPosition.x === currentRealPosition.x
-        && startRealPosition.y === currentRealPosition.y) {
-        block.workspace.dragging.reset();
-        return;
-      }
+      // if (startRealPosition.x === currentRealPosition.x
+      //   && startRealPosition.y === currentRealPosition.y) {
+      //   block.workspace.dragging.reset();
+      //   return;
+      // }
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
     };
 

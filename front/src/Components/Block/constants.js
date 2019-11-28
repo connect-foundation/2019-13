@@ -7,5 +7,6 @@ export default {
   PREVIOUS_NEXT_POS_X: 24,
   CHILD_NEXT_POS_X: 48,
   BLOCK_HEAD_HEIGHT: 36,
+  BLOCK_TAIL_HEIGHT: 30,
   PIXEL: 6,
 };
