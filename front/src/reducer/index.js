@@ -102,6 +102,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       return changeSprites;
     case 'ADD_IMAGE':
       changeSprites[key] = value;
+      return changeSprites;
     default:
       throw new Error('NOT FOUND TYPE');
   }
