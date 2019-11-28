@@ -63,4 +63,26 @@ export default [
     color: color.motionColor,
     stroke_color: color.motionStrokeColor,
   },
+  {
+    type: 'motion_rotate_clock',
+    args: [
+      {
+        type: 'text',
+        value: '시계 방향으로',
+      },
+      {
+        type: 'input',
+        value: 15,
+      },
+      {
+        type: 'text',
+        value: '회전하기',
+      },
+    ],
+    style: 'single',
+    nextConnection: true,
+    previousConnection: true,
+    color: color.motionColor,
+    stroke_color: color.motionStrokeColor,
+  },
 ];
