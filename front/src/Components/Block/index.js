@@ -11,9 +11,6 @@ import Theme from '../../Styles/Theme';
 
 const blockModelList = new BlockModelList();
 
-window.addEventListener('mousewheel', (events) => {
-  console.log('getta');
-});
 
 export default () => {
   const [isInit, setIsInit] = useState(false);
@@ -22,6 +19,15 @@ export default () => {
   const [isMove, setMove] = useState(false);
   const [scrollY, setScrollY] = useState(20);
   const [initY, setInitY] = useState(20);
+
+  // window.addEventListener('mouseWheel', (events) => {
+  //   const delta = Math.floor(events.wheelDelta / 10);
+  //   if (delta < 1) return;
+  //   if (events.clientX > 60 && events.clientX < 355) {
+  //     setScrollY(scrollY + 1);
+  //   }
+  // });
+
   const dragStartHandler = (scrollEvent) => {
     setMove(true);
     setInitY(scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y
@@ -46,6 +52,12 @@ export default () => {
     setScrollY(currentY);
   };
 
+  const wheelSVG = (events) => {
+    const newY = scrollY + events.deltaY;
+    if (newY < 20 || newY > 670) return;
+    setScrollY(newY);
+  };
+
   if (!isInit) {
     setIsInit(true);
     workspace.setRender = setRender;
@@ -65,7 +77,7 @@ export default () => {
     });
   }
   return (
-    <Svg>
+    <Svg onWheel={wheelSVG}>
       {isMove ? null
         : (
           <rect
