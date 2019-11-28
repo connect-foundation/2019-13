@@ -386,11 +386,12 @@ const Block = class {
 
       case 'outputPosition':
         break;
-
       case 'inputPosition':
-
         break;
-
+      case 'firstChildPosition':
+        break;
+      case 'secondChildPosition':
+        break;
       default:
         throw new Error('잘못된 커넥션 타입입니다.');
     }
@@ -400,6 +401,15 @@ const Block = class {
     if (this.previousElement) {
       this.previousElement.nextElement = null;
       this.previousElement = null;
+    }
+    if (this.parentElement) {
+      if (this.parentElement.firstchildElement === this) {
+        this.parentElement.firstchildElement = null;
+        this.parentElement = null;
+      } else if (this.parentElement.secondchildElement === this) {
+        this.parentElement.secondchildElement = null;
+        this.parentElement = null;
+      }
     }
   };
 };
