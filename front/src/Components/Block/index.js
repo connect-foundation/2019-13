@@ -90,7 +90,7 @@ export default () => {
       {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
-      {workspace.topblocks.map(block => <Group block={block} key={block.id} scroll={isMove} />)}
+      {workspace.topblocks.map(block => <Group block={block} key={block.id} x={500} scroll={isMove} />)}
       {!isMove ? null
         : (
           <rect
