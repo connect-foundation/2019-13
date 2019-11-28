@@ -54,11 +54,6 @@ const mouseHandler = ({ set, block, setMoved }) => {
     const mouseup = () => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
-      // if (startRealPosition.x === currentRealPosition.x
-      //   && startRealPosition.y === currentRealPosition.y) {
-      //   block.workspace.dragging.reset();
-      //   return;
-      // }
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
     };
 
