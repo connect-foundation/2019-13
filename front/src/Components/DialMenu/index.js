@@ -39,7 +39,7 @@ const actions = [
 export default () => {
   const classes = useStyles();
   const image = useRef();
-  const [direction, setDirection] = useState('up');
+  const [direction] = useState('up');
   const [open, setOpen] = useState(false);
   const { spritesDispatch } = useContext(SpritesContext);
 
