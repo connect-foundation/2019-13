@@ -20,14 +20,6 @@ export default () => {
   const [scrollY, setScrollY] = useState(20);
   const [initY, setInitY] = useState(20);
 
-  // window.addEventListener('mouseWheel', (events) => {
-  //   const delta = Math.floor(events.wheelDelta / 10);
-  //   if (delta < 1) return;
-  //   if (events.clientX > 60 && events.clientX < 355) {
-  //     setScrollY(scrollY + 1);
-  //   }
-  // });
-
   const dragStartHandler = (scrollEvent) => {
     setMove(true);
     setInitY(scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y
@@ -129,7 +121,6 @@ export default () => {
         onMouseMove={dragMoveHandler}
       />
     </Svg>
-
   );
 };
 
