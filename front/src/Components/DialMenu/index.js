@@ -65,7 +65,7 @@ export default () => {
           url: event.target.result,
           size: 100,
           direction: 90,
-          x: 50,
+          x: 0,
           y: 0,
         };
         spritesDispatch({ type: 'ADD_IMAGE', key: Utils.uid(), value });

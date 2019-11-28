@@ -35,7 +35,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
   switch (type) {
     case 'CHANGE_POSITION':
       eventValue = value.charCodeAt(value.length - 1);
-      if (eventValue === 45 && (value[0] === '0' || value.length < 2)) {
+      if (eventValue === 45) {
         position[coordinate] = '-';
         changeSprites[key] = position;
         return changeSprites;
