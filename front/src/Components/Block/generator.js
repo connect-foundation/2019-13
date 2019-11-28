@@ -1,7 +1,7 @@
 import FuctionMaker from './functionMaker';
 
 export default class {
-  workspaceToCode(blocks = dummyBlocks) {
+  workspaceToCode(blocks) {
     const allCodes = [];
     if (blocks.length < 1) {
       return allCodes;
