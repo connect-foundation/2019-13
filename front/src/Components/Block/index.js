@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
 import GroupBlock from '../GroupModel';
@@ -8,11 +7,11 @@ import BlockModelList from './blockmodel_list';
 import CONSTANTS from './constants';
 import BlockModel from './blockmodel';
 import init from './Init';
+import Theme from '../../Styles/Theme';
 
-
-// const blockModelList = new BlockModelList();
-export default ({ degree }) => {
-  // const [isInit, setIsInit] = useState(false);
+const blockModelList = new BlockModelList();
+export default () => {
+  const [isInit, setIsInit] = useState(false);
   const { workspace } = useContext(WorkspaceContext);
   const [, setRender] = useState(0);
   const [isMove, setMove] = useState(false);
@@ -30,7 +29,7 @@ export default ({ degree }) => {
     else if (diff > 670)diff = 670;
     setScrollY(diff);
   };
-  const dragEndHandler = (scrollEvent) => {
+  const dragEndHandler = () => {
     if (!isMove) return;
     setMove(false);
   };
@@ -42,37 +41,37 @@ export default ({ degree }) => {
     setScrollY(currentY);
   };
 
-  // if (!isInit) {
-  // setIsInit(true);
-  const blockModelList = new BlockModelList();
-  workspace.setRender = setRender;
-  let idx = 0;
-  init.forEach((blocks, allIdx) => {
-    blocks.forEach((json, styleIdx) => {
-      const blockModel = new BlockModel(idx).makeFromJSON({
-        ...json,
-        x: CONSTANTS.DEFAULT_POSITION.x,
-        y: CONSTANTS.DEFAULT_POSITION.y + idx * 100,
-        allIdx,
-        styleIdx,
+  if (!isInit) {
+    setIsInit(true);
+
+    workspace.setRender = setRender;
+    let idx = 0;
+    init.forEach((blocks, allIdx) => {
+      blocks.forEach((json, styleIdx) => {
+        const blockModel = new BlockModel(idx).makeFromJSON({
+          ...json,
+          x: CONSTANTS.DEFAULT_POSITION.x,
+          y: CONSTANTS.DEFAULT_POSITION.y + idx * 100,
+          allIdx,
+          styleIdx,
+        });
+        idx += 1;
+        blockModelList.addBlock(blockModel);
       });
-      idx += 1;
-      blockModelList.addBlock(blockModel);
     });
-  });
-  // }
+  }
   return (
     <Svg>
       {[...blockModelList.getBlockDB().values()].map(block => (
-        <GroupBlock block={block} key={block.id} />
+        <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
       {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}
       <rect
-        width="25"
-        height="750"
-        fill="rgba(0,0,0,0.1)"
-        x="330"
-        y="20"
+        width="100"
+        height="800"
+        fill={Theme.bgColor}
+        x="260"
+        y="0"
         rx="4"
         ry="4"
         onMouseUp={dragEndHandler}
@@ -83,8 +82,8 @@ export default ({ degree }) => {
       <rect
         width="20"
         height="100"
-        fill="orange"
-        x="332"
+        fill={isMove ? Theme.duckOrangeColor : Theme.unactivedColor}
+        x="320"
         y={scrollY}
         rx="4"
         ry="4"
