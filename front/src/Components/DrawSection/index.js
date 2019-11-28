@@ -45,12 +45,10 @@ const stopHadler = () => {
 export default () => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const [currentSprite, setCurrentSprite] = useState({
-    key: Object.keys(sprites)[0],
-    position: { ...sprites[Object.keys(sprites)[0]] },
+    key: key || Object.keys(sprites)[0],
+    position: position || { ...sprites[Object.keys(sprites)[0]] },
   });
-
   const { workspace } = useContext(WorkspaceContext);
-
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
   const checkPositionHandler = ({ type, coordinate }, event) => {
@@ -62,7 +60,7 @@ export default () => {
     });
   };
   useEffect(() => {
-    setCurrentSprite({ key, position });
+    setCurrentSprite({ key, position: sprites[key] });
   }, [sprites]);
   return (
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
