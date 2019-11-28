@@ -8,7 +8,7 @@ const setArgsPosition = (childnode, positionX) => {
   if (childnode.tagName !== 'foreignObject') {
     childnode.setAttribute('transform', `translate(${positionX},23)`);
   } else {
-    childnode.setAttribute('transform', `translate(${positionX + 3},5)`);
+    childnode.setAttribute('transform', `translate(${positionX + 3},8)`);
   }
   return childnode;
 };

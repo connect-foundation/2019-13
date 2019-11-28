@@ -73,7 +73,7 @@ const Block = class {
     if (node.tagName !== 'foreignObject') {
       node.setAttribute('transform', `translate(${positionX},23)`);
     } else {
-      node.setAttribute('transform', `translate(${positionX + 3},5)`);
+      node.setAttribute('transform', `translate(${positionX + 3},8)`);
     }
   };
 
