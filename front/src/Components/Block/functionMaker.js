@@ -8,7 +8,7 @@ const FunctionList = {
     let i = 0;
     let j = 0;
     function* ONCE() {
-      while (i < 1) {
+      while (i < 1 && codes) {
         while (j < codes.length) {
           codes[j].isPlay = true;
           isChildEnd = true;
@@ -31,7 +31,7 @@ const FunctionList = {
     let j = 0;
     const codes = args.firstChild;
     function* FOR_LOOP() {
-      while (true) {
+      while (true && codes) {
         if (i >= limit) i = 0;
         if (j === codes.length) j = 0;
         while (j < codes.length) {
@@ -98,6 +98,14 @@ const FunctionList = {
       func.isPlay = false;
     };
     return { func };
+  },
+
+  control_if: (args) => {
+    const value = true;
+    const func = {};
+    func.next = () => {};
+    args.input = 1;
+    return value ? FunctionList.control_for(args) : { func };
   },
 };
 
