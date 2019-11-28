@@ -102,7 +102,7 @@ const Wrapper = styled.div`
 `;
 
 const ProjectHeader = styled.div`
-  width: 100%;
+  width: fit-content;
   height: 50px;
   position: relative;
   padding: 12px 20px;
@@ -161,11 +161,17 @@ const Contents = styled.div`
     height: 50px;
     margin-top: -50px;
     .play-button {
-      color: green;
+      color: ${props => props.theme.operatorsColor};
+      &:hover {
+        color: ${props => props.theme.motionColor}
+      }
     }
     .stop-button {
       margin-left: 15px;
-      color: red;
+      color: grey;
+      &:hover {
+        color : red;
+      }
     }
   }
   .setting {
