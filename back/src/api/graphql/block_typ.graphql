@@ -1,0 +1,8 @@
+type block_type {
+  id: ID!
+  name: String
+  shape: String
+  content: String
+  block_id: ID
+  block_category_id: ID
+}
