@@ -13,8 +13,8 @@ export default (movement, type) => {
     case 'y':
     case 'xy':
       value = {
-        x: Utils.parseInt10(position.x) + movement.x || 0,
-        y: Utils.parseInt10(position.y) + movement.y || 0,
+        x: Utils.parseInt10(position.x) + (movement.x || 0),
+        y: Utils.parseInt10(position.y) + (movement.y || 0),
       };
       break;
     case 'locationX':
