@@ -100,6 +100,8 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       position.direction = value.direction;
       position.reversal = value.reversal;
       return changeSprites;
+    case 'ADD_IMAGE':
+      changeSprites[key] = value;
     default:
       throw new Error('NOT FOUND TYPE');
   }

@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-globals */
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
-import { SpritesContext, WorkspaceContext } from '../../Context';
+import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
 import Generator from '../Block/generator';
 
 let key;
@@ -44,53 +44,77 @@ const stopHadler = () => {
 
 export default () => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
+  const [currentSprite, setCurrentSprite] = useState({
+    key: Object.keys(sprites)[0],
+    position: { ...sprites[Object.keys(sprites)[0]] },
+  });
+
   const { workspace } = useContext(WorkspaceContext);
+
   dispatch = spritesDispatch;
-  key = Object.keys(sprites)[0];
-  position = { ...sprites[key], key };
+  ({ key, position } = currentSprite);
   const checkPositionHandler = ({ type, coordinate }, event) => {
-    spritesDispatch({ type, coordinate, key, value: event.target.value });
+    spritesDispatch({
+      type,
+      coordinate,
+      key: currentSprite.key,
+      value: event.target.value,
+    });
   };
+  useEffect(() => {
+    setCurrentSprite({ key, position });
+  }, [sprites]);
   return (
-    <DrawSectionWrapper className="Contents__Column">
-      <div className="draw-section__row controller">
-        <FontAwesomeIcon icon={faPlay} onClick={() => playHandler(workspace)} className="play-button" />
-        <FontAwesomeIcon icon={faStop} onClick={stopHadler} className="stop-button" />
-      </div>
-      <div className="draw-section__row">
-        <Canvas />
-      </div>
-      <div className="draw-section__row">
-        <div className="setting">
-          <div className="setting__row">
-            <div> X </div>
-            <input
-              pattern="[0-9]*"
-              value={position.x}
-              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_POSITION', coordinate: 'x' })}
-            />
-            <div> Y</div>
-            <input
-              value={position.y}
-              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_POSITION', coordinate: 'y' })}
-            />
-          </div>
-          <div className="setting__row">
-            <div> 크기 </div>
-            <input
-              value={position.size}
-              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_SIZE' })}
-            />
-            <div> 회전 </div>
-            <input
-              value={position.direction}
-              onChange={checkPositionHandler.bind(null, { type: 'CHANGE_DIRECTION' })}
-            />
-          </div>
-          <SpriteSelector />
+    <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
+      <DrawSectionWrapper className="Contents__Column">
+        <div className="draw-section__row controller">
+          <FontAwesomeIcon icon={faPlay} onClick={() => playHandler(workspace)} className="play-button" />
+          <FontAwesomeIcon icon={faStop} onClick={stopHadler} className="stop-button" />
         </div>
-      </div>
-    </DrawSectionWrapper>
+        <div className="draw-section__row">
+          <Canvas />
+        </div>
+        <div className="draw-section__row">
+          <div className="setting">
+            <div className="setting__row">
+              <div> X </div>
+              <input
+                value={currentSprite.position.x}
+                onChange={checkPositionHandler.bind(null, {
+                  type: 'CHANGE_POSITION',
+                  coordinate: 'x',
+                })}
+              />
+              <div> Y</div>
+              <input
+                value={currentSprite.position.y}
+                onChange={checkPositionHandler.bind(null, {
+                  type: 'CHANGE_POSITION',
+                  coordinate: 'y',
+                })}
+              />
+            </div>
+            <div className="setting__row">
+              <div> 크기 </div>
+              <input
+                value={currentSprite.position.size}
+                onChange={checkPositionHandler.bind(null, {
+                  type: 'CHANGE_SIZE',
+                })}
+              />
+              <div> 회전 </div>
+              <input
+                value={currentSprite.position.direction}
+                onChange={checkPositionHandler.bind(null, {
+                  type: 'CHANGE_DIRECTION',
+                })}
+              />
+            </div>
+            <SpriteSelector />
+          </div>
+        </div>
+      </DrawSectionWrapper>
+    </CurrentSpriteContext.Provider>
   );
 };
 

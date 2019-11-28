@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Switch from '@material-ui/core/Switch';
 
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
+import { SpritesContext } from '../../Context';
+import Utils from '../../utils/utils';
+
+const imageRegExp = /image\/(bmp|jpg|jpeg|iff|png|svg)$/i;
 
 const useStyles = makeStyles(theme => ({
   speedDial: {
@@ -24,25 +23,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const actions = [
-  { icon: <FileCopyIcon />, name: '이미지 복사' },
-  { icon: <SaveIcon />, name: '이미지 추가' },
+const uploadHandler = () => {
+  document.all.uploadImage.click();
+};
+const copyHandler = () => {
 
+};
+
+const actions = [
+  { icon: <FileCopyIcon />, name: '이미지 복사', clickHandlers: [copyHandler] },
+  { icon: <SaveIcon />, name: '이미지 추가', clickHandlers: [uploadHandler] },
 ];
+
 
 export default () => {
   const classes = useStyles();
-  const [direction, setDirection] = React.useState('up');
-  const [open, setOpen] = React.useState(false);
-  const [hidden, setHidden] = React.useState(false);
-
-  const handleDirectionChange = (event) => {
-    setDirection(event.target.value);
-  };
-
-  const handleHiddenChange = (event) => {
-    setHidden(event.target.checked);
-  };
+  const image = useRef();
+  const [direction] = useState('up');
+  const [open, setOpen] = useState(false);
+  const { spritesDispatch } = useContext(SpritesContext);
 
   const handleClose = () => {
     setOpen(false);
@@ -52,11 +51,40 @@ export default () => {
     setOpen(true);
   };
 
+  const changeHandler = (e) => {
+    const { files } = e.target;
+    const filesArr = Array.prototype.slice.call(files);
+    filesArr.forEach((file) => {
+      if (!file.type.match(imageRegExp)) {
+        window.alert('이미지 파일이 아닙니다.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const value = {
+          url: event.target.result,
+          size: 100,
+          direction: 90,
+          x: 50,
+          y: 0,
+        };
+        spritesDispatch({ type: 'ADD_IMAGE', key: Utils.uid(), value });
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  const onClickhandlerFunction = (callbacks) => {
+    const func = (e) => {
+      callbacks.forEach((callback) => {
+        callback(e);
+      });
+    };
+    return func;
+  };
   return (
     <SpeedDial
-      ariaLabel="SpeedDial example"
+      ariaLabel="Image Block"
       className={classes.speedDial}
-      hidden={hidden}
       icon={<SpeedDialIcon />}
       onClose={handleClose}
       onOpen={handleOpen}
@@ -68,9 +96,17 @@ export default () => {
           key={action.name}
           icon={action.icon}
           tooltipTitle={action.name}
-          onClick={handleClose}
+          onClick={onClickhandlerFunction([...action.clickHandlers, handleClose])}
         />
       ))}
+      <input
+        type="file"
+        ref={image}
+        accept={['.png', '.jpg', '.jpeg', '.svg', '.bmp']}
+        name="uploadImage"
+        style={{ display: 'none' }}
+        onChange={changeHandler}
+      />
     </SpeedDial>
   );
 };
