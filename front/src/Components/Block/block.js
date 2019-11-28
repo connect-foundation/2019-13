@@ -33,7 +33,10 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
-    this.value = 0;
+    this.inputElement = {
+      type: 'input',
+      value: 10,
+    };
   }
 
   setNode = (node) => {
@@ -112,7 +115,7 @@ const Block = class {
       target.parentNode.style.width = '30px';
       target.style.width = '30px';
     }
-    this.value = Number(target.value);
+    this.inputElement.value = Number(target.value);
     this.setArgs();
   };
 
@@ -160,7 +163,9 @@ const Block = class {
     } else if (json.type === 'input') {
       this.args.push(
         create('foreignObject', { key: 'foreign' },
-          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
+          create(json.type, { key: json.value,
+            onChange: this.changeInputWidth.bind(this),
+            value: json.value }, null),
           create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
       );
     }
@@ -383,7 +388,6 @@ const Block = class {
           conn.source.setArgs(this.node.getBoundingClientRect().height - CONSTANTS.PIXEL);
         }
         break;
-
       case 'outputPosition':
         break;
       case 'inputPosition':

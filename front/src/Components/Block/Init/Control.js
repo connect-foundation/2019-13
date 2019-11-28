@@ -6,7 +6,7 @@ export default [
     args: [
       {
         type: 'input',
-        value: 10,
+        value: 3,
       },
       {
         type: 'text',
@@ -29,7 +29,7 @@ export default [
       },
       {
         type: 'input',
-        value: 10,
+        value: '3 > 0',
       },
       {
         type: 'text',
