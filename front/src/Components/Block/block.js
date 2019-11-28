@@ -41,7 +41,7 @@ const Block = class {
     this.setArgs();
   };
 
-  setArgs = () => {
+  setArgs = (height = 24, secondHeight = 24) => {
     if (this.node) {
       let positionX = CONSTANTS.PIXEL;
       let lastChild;
@@ -57,6 +57,8 @@ const Block = class {
         - this.node.getBoundingClientRect().left
         - CONSTANTS.PIXEL * 5)
         / CONSTANTS.PIXEL,
+        height / CONSTANTS.PIXEL - 2,
+        secondHeight / CONSTANTS.PIXEL - 2,
       );
       this.render(Math.random());
       this.height = this.node.firstChild.getBoundingClientRect().height;
@@ -158,7 +160,7 @@ const Block = class {
     } else if (json.type === 'input') {
       this.args.push(
         create('foreignObject', { key: 'foreign' },
-          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this), value: json.value }, null),
+          create(json.type, { key: json.value, onChange: this.changeInputWidth.bind(this) }, null),
           create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
       );
     }
@@ -173,7 +175,7 @@ const Block = class {
             d: Path.single(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'single',
           },
           null,
@@ -186,7 +188,7 @@ const Block = class {
             d: Path.double(width, height),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'double',
           },
           null,
@@ -199,7 +201,7 @@ const Block = class {
             d: Path.triple(width, height, secondHeight),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'triple',
           },
           null,
@@ -212,7 +214,7 @@ const Block = class {
             d: Path.variable(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'variable',
           },
           null,
@@ -225,7 +227,7 @@ const Block = class {
             d: Path.event(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'event',
           },
           null,
@@ -238,7 +240,7 @@ const Block = class {
             d: Path.condition(width),
             fill: this.color,
             stroke: this.strokeColor,
-            strokeWidth: 0.5,
+            strokeWidth: 1,
             key: 'condition',
           },
           null,
@@ -280,7 +282,7 @@ const Block = class {
     }
 
     if (this.firstchildElement) {
-      this.firstchildConnection.setDrag(isDragged);
+      this.firstchildElement.setDrag(isDragged);
     }
 
     if (this.secondchildElement) {
@@ -300,6 +302,10 @@ const Block = class {
       if (nextConn) availableConnection.push(nextConn);
     }
 
+    if (this.firstchildConnection) {
+      availableConnection.push(this.firstchildConnection);
+    }
+
     return availableConnection;
   };
 
@@ -311,6 +317,13 @@ const Block = class {
     }
   };
 
+  setFirstChildPosition = () => {
+    if (this.firstchildElement) {
+      this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
+      this.firstchildElement.x = this.x + CONSTANTS.CHILD_NEXT_POS_X;
+    }
+  }
+
   setpreviousElement = (previousElement) => {
     this.previousElement = previousElement;
   };
@@ -318,6 +331,18 @@ const Block = class {
   setNextElement = (nextElement) => {
     this.nextElement = nextElement;
   };
+
+  setParentElement = (parentElement) => {
+    this.parentElement = parentElement;
+  }
+
+  setFirstChildElement = (firstchildElement) => {
+    this.firstchildElement = firstchildElement;
+  }
+
+  setSecondChildElement = (secondchildElement) => {
+    this.secondchildElement = secondchildElement;
+  }
 
   connectBlock = (type, conn) => {
     switch (type) {
@@ -336,14 +361,27 @@ const Block = class {
         this.setNextElementPosition();
         break;
       case 'previousPosition':
-        if (conn.source.nextElement) {
-          const lastBlock = this.getLastBlock(true);
-          conn.source.nextElement.setpreviousElement(lastBlock);
-          lastBlock.setNextElement(conn.source.nextElement);
+        if (conn.positiontype === 'nextPosition') {
+          if (conn.source.nextElement) {
+            const lastBlock = this.getLastBlock(true);
+            conn.source.nextElement.setpreviousElement(lastBlock);
+            lastBlock.setNextElement(conn.source.nextElement);
+          }
+          this.previousElement = conn.source;
+          conn.source.setNextElement(this);
+          conn.source.setNextElementPosition();
+        } else if (conn.positiontype === 'firstChildPosition') {
+          if (conn.source.firstchildElement) {
+            const lastBlock = this.getLastBlock(true);
+            conn.source.firstchildElement.setpreviousElement(lastBlock);
+            lastBlock.setNextElement(conn.source.firstchildElement);
+          }
+          this.parentElement = conn.source;
+          conn.source.setFirstChildElement(this);
+          conn.source.setFirstChildPosition();
+          this.setNextElementPosition();
+          conn.source.setArgs(this.node.getBoundingClientRect().height - CONSTANTS.PIXEL);
         }
-        this.previousElement = conn.source;
-        conn.source.setNextElement(this);
-        conn.source.setNextElementPosition();
         break;
 
       case 'outputPosition':

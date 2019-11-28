@@ -9,7 +9,6 @@
  *
  * */
 
-
 import CONSTANTS from './constants';
 
 const Connection = function (type, source, positiontype) {
