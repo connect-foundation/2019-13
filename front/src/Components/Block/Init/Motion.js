@@ -72,7 +72,7 @@ export default [
       },
       {
         type: 'input',
-        value: 15,
+        value: 10,
       },
       {
         type: 'text',
