@@ -1,6 +1,6 @@
 import childDrag from './childDrag';
 
-const mouseHandler = ({ set, block, setMoved }) => {
+const mouseHandler = ({ set, block, x, setMoved, workspaceDispatch }) => {
   if (block.parentElement || block.previousElement) {
     const mousedownChild = childDrag({ set, block, setMoved });
     return mousedownChild;
@@ -41,7 +41,13 @@ const mouseHandler = ({ set, block, setMoved }) => {
       block.dragUpdate(currentPosition.x, currentPosition.y);
     };
 
-    const mouseup = () => {
+    const mouseup = (eventUp) => {
+      if (eventUp.clientX < x) {
+        workspaceDispatch({
+          type: 'DELETE_BLOCK',
+          id: block.id,
+        });
+      }
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
       if (startPosition.x === currentPosition.x && startPosition.y === currentPosition.y) {
