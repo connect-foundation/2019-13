@@ -2,8 +2,7 @@ import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import Slider from '@material-ui/core/Slider';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { Scrollbars } from 'react-custom-scrollbars';
 import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext, SpritesContext } from '../Context/index';
@@ -11,7 +10,6 @@ import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
 import Theme from '../Styles/Theme';
-
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
@@ -27,11 +25,11 @@ defaultSprite[Utils.uid()] = {
   y: 0,
 };
 
-const PrettoSlider = withStyles({
-  root: {
-    color: Theme.duckOrangeColor,
-  },
-})(Slider);
+// const PrettoSlider = withStyles({
+//   root: {
+//     color: 'gray',
+//   },
+// })(Slider);
 
 const Project = () => {
   const [degree, setDegree] = useState(100);
@@ -45,9 +43,9 @@ const Project = () => {
     defaultSprite,
   );
 
-  const handlScrollChange = (event, value) => {
-    setDegree(value);
-  };
+  // const handlScrollChange = (event, value) => {
+  //   setDegree(value);
+  // };
 
 
   return (
@@ -68,7 +66,7 @@ const Project = () => {
             </div>
           </ProjectHeader>
           <Contents>
-            <Blockspace />
+            <Blockspace degree={degree} />
             <div className="Contents__Column block-types">
               <TypesButton className="block-types__button" btype="motion">
                 <div />
@@ -100,13 +98,12 @@ const Project = () => {
               </TypesButton>
             </div>
             <div className="Contents__Column block-lists">
-              <PrettoSlider
-                orientation="vertical"
-                defaultValue={degree}
-                onChange={handlScrollChange}
-              />
+              <Scrollbars
+                style={{ height: '100%', fontSize: '2000px' }}
+              >
+                &nbsp;
+              </Scrollbars>
             </div>
-
             <div className="Contents__Column block-space">
               <div>블록 코딩</div>
             </div>
@@ -117,7 +114,6 @@ const Project = () => {
     </WorkspaceContext.Provider>
   );
 };
-
 
 const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
@@ -167,9 +163,10 @@ const Contents = styled.div`
   .block-lists {
     display:flex;
     flex-direction:row-reverse;
-    padding:20px 0px;
     min-width: 300px;
+    overflow:scroll;
     height:800px;
+    padding:20px;
     border: 1px solid ${props => props.theme.mainBorderColor};
     background-color: ${props => props.theme.lightGreyColor};
   }
