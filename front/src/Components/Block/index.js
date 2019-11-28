@@ -10,6 +10,11 @@ import init from './Init';
 import Theme from '../../Styles/Theme';
 
 const blockModelList = new BlockModelList();
+
+window.addEventListener('mousewheel', (events) => {
+  console.log('getta');
+});
+
 export default () => {
   const [isInit, setIsInit] = useState(false);
   const { workspace } = useContext(WorkspaceContext);
@@ -43,7 +48,6 @@ export default () => {
 
   if (!isInit) {
     setIsInit(true);
-
     workspace.setRender = setRender;
     let idx = 0;
     init.forEach((blocks, allIdx) => {
@@ -62,23 +66,44 @@ export default () => {
   }
   return (
     <Svg>
+      {isMove ? null
+        : (
+          <rect
+            width="500"
+            height="800"
+            fill="rgba(0,0,0,0)"
+            x="0"
+            y="0"
+            rx="4"
+            ry="4"
+            onMouseUp={dragEndHandler}
+            onMouseMove={dragMoveHandler}
+            onMouseLeave={dragEndHandler}
+            onClick={clickHandler}
+          />
+        )
+      }
       {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
-      {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}
-      <rect
-        width="100"
-        height="800"
-        fill={Theme.bgColor}
-        x="260"
-        y="0"
-        rx="4"
-        ry="4"
-        onMouseUp={dragEndHandler}
-        onMouseMove={dragMoveHandler}
-        onMouseLeave={dragEndHandler}
-        onClick={clickHandler}
-      />
+      {workspace.topblocks.map(block => <Group block={block} key={block.id} scroll={isMove} />)}
+      {!isMove ? null
+        : (
+          <rect
+            width="500"
+            height="800"
+            fill="rgba(0,0,0,0)"
+            x="0"
+            y="0"
+            rx="4"
+            ry="4"
+            onMouseUp={dragEndHandler}
+            onMouseMove={dragMoveHandler}
+            onMouseLeave={dragEndHandler}
+            onClick={clickHandler}
+          />
+        )}
+
       <rect
         width="20"
         height="100"
