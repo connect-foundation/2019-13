@@ -22,6 +22,7 @@ const Group = ({ block, x }) => {
     block.render = setRender;
     block.setNode(gRef.current);
   }, []);
+  if (block.previousElement || block.parentElement) isMoved = true;
   return (
     <g
       data-id={block.id}
