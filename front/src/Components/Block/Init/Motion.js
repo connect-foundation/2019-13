@@ -86,7 +86,7 @@ export default [
     stroke_color: color.motionStrokeColor,
   },
   {
-    type: 'motion_rotate_anti_block',
+    type: 'motion_rotate_anti_clock',
     args: [
       {
         type: 'text',
