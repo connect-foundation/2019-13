@@ -46,6 +46,9 @@ const Workspace = class {
     if (block.parentElement || block.previousElement) {
       this.removeTopblock(block);
     }
+    this.topblocks.forEach((topblock) => {
+      if (topblock !== block) { topblock.setAllBlockPosition(); }
+    });
     this.setRender(Math.random());
   }
 

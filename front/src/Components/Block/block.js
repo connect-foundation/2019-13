@@ -33,6 +33,8 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
+    this.firstchildHeight = 24;
+    this.secondchildHeight = 24;
     this.inputElement = {
       type: 'input',
       value: 10,
@@ -44,7 +46,7 @@ const Block = class {
     this.setArgs();
   };
 
-  setArgs = (height = 24, secondHeight = 24) => {
+  setArgs = () => {
     if (this.node) {
       let positionX = CONSTANTS.PIXEL;
       let lastChild;
@@ -55,13 +57,15 @@ const Block = class {
           lastChild = node;
         }
       });
+      if (this.firstchildHeight < 24) { this.firstchildHeight = 24; }
+      if (this.secondchildHeight < 24) { this.secondchildHeight = 24; }
       this.makeStyleFromJSON(
         (lastChild.getBoundingClientRect().right
         - this.node.getBoundingClientRect().left
         - CONSTANTS.PIXEL * 5)
         / CONSTANTS.PIXEL,
-        height / CONSTANTS.PIXEL - 2,
-        secondHeight / CONSTANTS.PIXEL - 2,
+        this.firstchildHeight / CONSTANTS.PIXEL - 2,
+        this.secondchildHeight / CONSTANTS.PIXEL - 2,
       );
       this.render(Math.random());
       this.height = this.node.firstChild.getBoundingClientRect().height;
@@ -298,7 +302,7 @@ const Block = class {
   getAvailableConnection = (isDragged = false) => {
     const availableConnection = [];
 
-    if (this.previousConnection) {
+    if (this.previousConnection && this.parentElement === null) {
       availableConnection.push(this.previousConnection);
     }
 
@@ -315,18 +319,23 @@ const Block = class {
   };
 
   setNextElementPosition = () => {
+    if (this.firstchildElement) {
+      this.setFirstChildPosition();
+      this.firstchildHeight = this.firstchildElement.node.getBoundingClientRect().height
+      - CONSTANTS.PIXEL;
+    }
     if (this.nextElement) {
       this.nextElement.y = this.y + this.height - CONSTANTS.PIXEL;
       this.nextElement.x = this.x;
       this.nextElement.setNextElementPosition();
     }
+    this.setArgs();
   };
 
   setFirstChildPosition = () => {
-    if (this.firstchildElement) {
-      this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
-      this.firstchildElement.x = this.x + CONSTANTS.CHILD_NEXT_POS_X;
-    }
+    this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
+    this.firstchildElement.x = this.x + CONSTANTS.PREVIOUS_NEXT_POS_X;
+    this.firstchildElement.setNextElementPosition();
   }
 
   setpreviousElement = (previousElement) => {
@@ -363,7 +372,6 @@ const Block = class {
         }
         conn.source.setpreviousElement(this);
         this.setNextElement(conn.source);
-        this.setNextElementPosition();
         break;
       case 'previousPosition':
         if (conn.positiontype === 'nextPosition') {
@@ -374,18 +382,15 @@ const Block = class {
           }
           this.previousElement = conn.source;
           conn.source.setNextElement(this);
-          conn.source.setNextElementPosition();
         } else if (conn.positiontype === 'firstChildPosition') {
           if (conn.source.firstchildElement) {
             const lastBlock = this.getLastBlock(true);
             conn.source.firstchildElement.setpreviousElement(lastBlock);
+            conn.source.firstchildElement.parentElement = null;
             lastBlock.setNextElement(conn.source.firstchildElement);
           }
           this.parentElement = conn.source;
           conn.source.setFirstChildElement(this);
-          conn.source.setFirstChildPosition();
-          this.setNextElementPosition();
-          conn.source.setArgs(this.node.getBoundingClientRect().height - CONSTANTS.PIXEL);
         }
         break;
       case 'outputPosition':
@@ -408,6 +413,7 @@ const Block = class {
     }
     if (this.parentElement) {
       if (this.parentElement.firstchildElement === this) {
+        this.parentElement.firstchildHeight -= this.node.getBoundingClientRect().height - CONSTANTS.PIXEL;
         this.parentElement.firstchildElement = null;
         this.parentElement = null;
       } else if (this.parentElement.secondchildElement === this) {
@@ -416,6 +422,10 @@ const Block = class {
       }
     }
   };
+
+  setAllBlockPosition = () => {
+    this.setNextElementPosition();
+  }
 };
 
 export default Block;
