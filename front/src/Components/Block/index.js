@@ -10,6 +10,8 @@ import init from './Init';
 import Theme from '../../Styles/Theme';
 
 const blockModelList = new BlockModelList();
+
+
 export default () => {
   const [isInit, setIsInit] = useState(false);
   const { workspace } = useContext(WorkspaceContext);
@@ -17,6 +19,7 @@ export default () => {
   const [isMove, setMove] = useState(false);
   const [scrollY, setScrollY] = useState(20);
   const [initY, setInitY] = useState(20);
+
   const dragStartHandler = (scrollEvent) => {
     setMove(true);
     setInitY(scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y
@@ -41,9 +44,14 @@ export default () => {
     setScrollY(currentY);
   };
 
+  const wheelSVG = (events) => {
+    const newY = scrollY + events.deltaY;
+    if (newY < 20 || newY > 670) return;
+    setScrollY(newY);
+  };
+
   if (!isInit) {
     setIsInit(true);
-
     workspace.setRender = setRender;
     let idx = 0;
     init.forEach((blocks, allIdx) => {
@@ -61,24 +69,45 @@ export default () => {
     });
   }
   return (
-    <Svg>
+    <Svg onWheel={wheelSVG}>
+      {isMove ? null
+        : (
+          <rect
+            width="500"
+            height="800"
+            fill="rgba(0,0,0,0)"
+            x="0"
+            y="0"
+            rx="4"
+            ry="4"
+            onMouseUp={dragEndHandler}
+            onMouseMove={dragMoveHandler}
+            onMouseLeave={dragEndHandler}
+            onClick={clickHandler}
+          />
+        )
+      }
       {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
-      {workspace.topblocks.map(block => <Group block={block} key={block.id} />)}
-      <rect
-        width="100"
-        height="800"
-        fill={Theme.bgColor}
-        x="260"
-        y="0"
-        rx="4"
-        ry="4"
-        onMouseUp={dragEndHandler}
-        onMouseMove={dragMoveHandler}
-        onMouseLeave={dragEndHandler}
-        onClick={clickHandler}
-      />
+      {workspace.topblocks.map(block => <Group block={block} key={block.id} x={500} scroll={isMove} />)}
+      {!isMove ? null
+        : (
+          <rect
+            width="500"
+            height="800"
+            fill="rgba(0,0,0,0)"
+            x="0"
+            y="0"
+            rx="4"
+            ry="4"
+            onMouseUp={dragEndHandler}
+            onMouseMove={dragMoveHandler}
+            onMouseLeave={dragEndHandler}
+            onClick={clickHandler}
+          />
+        )}
+
       <rect
         width="20"
         height="100"
@@ -92,7 +121,6 @@ export default () => {
         onMouseMove={dragMoveHandler}
       />
     </Svg>
-
   );
 };
 

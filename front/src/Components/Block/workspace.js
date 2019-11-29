@@ -17,8 +17,27 @@ const Workspace = class {
   }
 
   deleteBlock(usedId) {
-    Utils.arrayRemove(this.topblocks, this.getBlockById(usedId));
+    const deleteBlock = this.getBlockById(usedId);
+    if (!deleteBlock) return;
+    if (deleteBlock.nextElement) {
+      this.deleteBlock(deleteBlock.nextElement.id);
+    }
+    if (deleteBlock.firstChildElement) {
+      this.deleteBlock(deleteBlock.firstChildElement.id);
+    }
+    if (deleteBlock.secondChildElement) {
+      this.deleteBlock(deleteBlock.secondChildElement.id);
+    }
+    Utils.arrayRemove(this.topblocks, deleteBlock);
     delete this.blockDB[usedId];
+  }
+
+  getStartBlocks() {
+    const blocks = [];
+    this.topblocks.forEach((v) => {
+      if (v.type === 'event_start' && v.nextElement) blocks.push(v.nextElement);
+    });
+    return blocks;
   }
 
   addTopblock(block) {

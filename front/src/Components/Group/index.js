@@ -4,7 +4,7 @@ import drag from '../Block/Logic/Drag';
 import { WorkspaceContext } from '../../Context';
 import CONSTANTS from '../Block/constants';
 
-const Group = ({ block }) => {
+const Group = ({ block, x }) => {
   // eslint-disable-next-line
   let [isMoved, setMoved] = useState(true);
   const [position, setPosition] = useState({ x: block.x, y: block.y });
@@ -35,7 +35,7 @@ const Group = ({ block }) => {
         });
       }}
       onMouseDown={
-          drag({ set: setPosition, block, setMoved })
+          drag({ set: setPosition, block, setMoved, x, workspaceDispatch })
       }
       transform={`translate(${position.x},${position.y})`}
     >
