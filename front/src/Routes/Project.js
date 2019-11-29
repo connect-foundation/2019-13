@@ -148,7 +148,7 @@ const Contents = styled.div`
     display:flex;
     flex-direction:row-reverse;
     min-width: 300px;
-    overflow:scroll;
+    overflow:hidden;
     height:800px;
     padding:10px;
     border: 1px solid ${props => props.theme.mainBorderColor};
