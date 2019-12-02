@@ -7,7 +7,7 @@ const FunctionList = {
     let isChildEnd = false;
     let i = 0;
     let j = 0;
-    function* ONCE() {
+    function* once() {
       while (i < 1 && codes) {
         while (j < codes.length) {
           codes[j].isPlay = true;
@@ -22,7 +22,7 @@ const FunctionList = {
         yield i += isChildEnd ? 1 : 0;
       }
     }
-    return { func: ONCE() };
+    return { func: once() };
   },
   control_for: (args) => {
     const limit = args.input;
@@ -31,7 +31,7 @@ const FunctionList = {
     let j = 0;
     const codes = args.firstChild;
     function* FOR_LOOP() {
-      while (true && codes) {
+      while (codes) {
         if (i >= limit) i = 0;
         if (j === codes.length) j = 0;
         while (j < codes.length) {

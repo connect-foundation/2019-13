@@ -1,4 +1,4 @@
-import FuctionMaker from './functionMaker';
+import FunctionMaker from './functionMaker';
 
 export default class {
   workspaceToCode(blocks) {
@@ -7,7 +7,7 @@ export default class {
       return allCodes;
     }
     blocks.forEach((block) => {
-      allCodes.push(FuctionMaker.topblock(this.blockToCode(block)));
+      allCodes.push(FunctionMaker.topblock(this.blockToCode(block)));
     });
     return allCodes;
   }
@@ -27,7 +27,7 @@ export default class {
       const secondChild = this.blockToCode(block.secondchildElement);
       values.secondChild = secondChild;
     }
-    code.push(FuctionMaker[block.type](values));
+    code.push(FunctionMaker[block.type](values));
     if (block.nextElement) {
       code.push(...this.blockToCode(block.nextElement));
     }
