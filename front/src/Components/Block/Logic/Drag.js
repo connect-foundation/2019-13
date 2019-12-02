@@ -7,7 +7,7 @@ const mouseHandler = ({ set, block, x, setMoved, workspaceDispatch }) => {
   }
   const mousedown = (eventDown) => {
     setMoved(true);
-    if (eventDown.target.tagName !== 'path') {
+    if (eventDown.target.tagName !== 'path' || eventDown.button !== 0) {
       return;
     }
     eventDown.preventDefault();
