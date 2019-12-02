@@ -61,7 +61,7 @@ const Block = class {
       if (this.secondchildHeight < 24) { this.secondchildHeight = 24; }
       this.makeStyleFromJSON(
         (lastChild.getBoundingClientRect().right
-        - this.node.getBoundingClientRect().left
+        - this.node.firstChild.getBoundingClientRect().left
         - CONSTANTS.PIXEL * 5)
         / CONSTANTS.PIXEL,
         this.firstchildHeight / CONSTANTS.PIXEL - 2,
