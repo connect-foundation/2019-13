@@ -52,6 +52,7 @@ const Group = ({ block, x }) => {
 
 Group.propTypes = {
   block: PropType.object.isRequired,
+  x: PropType.number.isRequired,
 };
 
 export default Group;

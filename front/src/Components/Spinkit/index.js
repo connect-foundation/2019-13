@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Spinner from 'react-spinkit';
+import PropType from 'prop-types';
 import Theme from '../../Styles/Theme';
 
-export default ({ isLoading }) => {
+const Spinkit = ({ isLoading }) => {
   if (!isLoading) return null;
   const SpinnerWrapper = styled.div`
         display:flex;
@@ -17,3 +18,9 @@ export default ({ isLoading }) => {
     </SpinnerWrapper>
   );
 };
+
+Spinkit.propTypes = {
+  isLoading: PropType.bool.isRequired,
+};
+
+export default Spinkit;
