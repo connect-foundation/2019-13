@@ -1,7 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 
 import PropType from 'prop-types';
-import styled from 'styled-components';
 import copy from '../Block/Logic/Copy';
 import { WorkspaceContext } from '../../Context';
 
@@ -29,6 +28,7 @@ const GroupModel = ({ block, scrollY }) => {
 
 GroupModel.propTypes = {
   block: PropType.object.isRequired,
+  scrollY: PropType.number.isRequired,
 };
 
 export default GroupModel;

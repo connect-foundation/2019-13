@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Image } from 'react-konva';
 import Konva from 'konva';
 import PropType from 'prop-types';

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Modal as MaterialModal } from '@material-ui/core';
+import PropType from 'prop-types';
 import styled from 'styled-components';
 import Login from '../Auth';
-// eslint-disable-next-line react/prop-types
-export default ({ open, setOpen }) => {
+
+const Modal = ({ open, setOpen }) => {
   const closeHandler = () => {
     setOpen(false);
   };
@@ -27,6 +28,8 @@ export default ({ open, setOpen }) => {
     </MaterialModal>
   );
 };
+
+
 const Title = styled.p`
   font-size: 25px;
 `;
@@ -58,3 +61,10 @@ const ModalContent = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+Modal.propTypes = {
+  open: PropType.bool.isRequired,
+  setOpen: PropType.func.isRequired,
+};
+
+export default Modal;
