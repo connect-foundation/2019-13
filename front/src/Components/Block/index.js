@@ -54,16 +54,18 @@ export default () => {
     setIsInit(true);
     workspace.setRender = setRender;
     let idx = 0;
+    let { y } = CONSTANTS.DEFAULT_POSITION;
     init.forEach((blocks, allIdx) => {
       blocks.forEach((json, styleIdx) => {
         const blockModel = new BlockModel(idx).makeFromJSON({
           ...json,
           x: CONSTANTS.DEFAULT_POSITION.x,
-          y: CONSTANTS.DEFAULT_POSITION.y + idx * 100,
+          y,
           allIdx,
           styleIdx,
         });
         idx += 1;
+        y += (json.style === 'double' ? 100 : 50);
         blockModelList.addBlock(blockModel);
       });
     });
