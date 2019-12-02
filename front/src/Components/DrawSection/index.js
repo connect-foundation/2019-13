@@ -21,7 +21,7 @@ const playHandler = (workspace) => {
     isPlay = true;
     interval = setInterval(() => {
       let isEnd = true;
-      codes.forEach((code, i) => {
+      codes.forEach((code) => {
         const res = code.func.next();
         if (res && !res.done) {
           isEnd = false;
@@ -35,7 +35,7 @@ const playHandler = (workspace) => {
   }
 };
 
-const stopHadler = () => {
+const stopHandler = () => {
   if (interval) {
     clearInterval(interval);
     isPlay = false;
@@ -67,7 +67,7 @@ export default () => {
       <DrawSectionWrapper className="Contents__Column">
         <div className="draw-section__row controller">
           <FontAwesomeIcon icon={faPlay} onClick={() => playHandler(workspace)} className="play-button" />
-          <FontAwesomeIcon icon={faStop} onClick={stopHadler} className="stop-button" />
+          <FontAwesomeIcon icon={faStop} onClick={stopHandler} className="stop-button" />
         </div>
         <div className="draw-section__row">
           <Canvas />
