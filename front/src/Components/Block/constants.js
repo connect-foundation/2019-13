@@ -9,4 +9,5 @@ export default {
   BLOCK_HEAD_HEIGHT: 36,
   BLOCK_TAIL_HEIGHT: 30,
   PIXEL: 6,
+  DELETE_AREA_X: 360,
 };

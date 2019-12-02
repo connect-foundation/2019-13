@@ -1,8 +1,9 @@
 import childDrag from './childDrag';
+import CONSTANTS from '../constants';
 
-const mouseHandler = ({ set, block, x, setMoved, workspaceDispatch }) => {
+const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
   if (block.parentElement || block.previousElement) {
-    const mousedownChild = childDrag({ set, block, setMoved });
+    const mousedownChild = childDrag({ set, block, setMoved, workspaceDispatch });
     return mousedownChild;
   }
   const mousedown = (eventDown) => {
@@ -42,12 +43,6 @@ const mouseHandler = ({ set, block, x, setMoved, workspaceDispatch }) => {
     };
 
     const mouseup = (eventUp) => {
-      if (eventUp.clientX < x) {
-        workspaceDispatch({
-          type: 'DELETE_BLOCK',
-          id: block.id,
-        });
-      }
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
       if (startPosition.x === currentPosition.x && startPosition.y === currentPosition.y) {
@@ -55,6 +50,12 @@ const mouseHandler = ({ set, block, x, setMoved, workspaceDispatch }) => {
         return;
       }
       block.dragEnd(currentPosition.x, currentPosition.y);
+      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
+        workspaceDispatch({
+          type: 'DELETE_BLOCK',
+          id: block.id,
+        });
+      }
     };
 
     document.addEventListener('mousemove', mousemove);
