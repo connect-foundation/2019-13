@@ -33,11 +33,10 @@ const Workspace = class {
   }
 
   getStartBlocks() {
-    const blocks = [];
-    this.topblocks.forEach((v) => {
-      if (v.type === 'event_start' && v.nextElement) blocks.push(v.nextElement);
-    });
-    return blocks;
+    return this.topblocks.reduce((prev, cur) => {
+      if (cur.type === 'event_start' && cur.nextElement) prev.push(cur.nextElement);
+      return prev;
+    }, []);
   }
 
   addTopblock(block) {

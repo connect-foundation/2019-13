@@ -2,14 +2,7 @@ import FunctionMaker from './functionMaker';
 
 export default class {
   workspaceToCode(blocks) {
-    const allCodes = [];
-    if (blocks.length < 1) {
-      return allCodes;
-    }
-    blocks.forEach((block) => {
-      allCodes.push(FunctionMaker.topblock(this.blockToCode(block)));
-    });
-    return allCodes;
+    return blocks.map(block => FunctionMaker.topblock(this.blockToCode(block)));
   }
 
   blockToCode(block) {
