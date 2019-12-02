@@ -125,6 +125,6 @@ export default ({ moving, x, y }, callback) => {
     } else if (y) {
       type = 'y';
     }
-    callback({ x, y, movement }, type);
+    callback({ x, y, moving }, type);
   }
 };
