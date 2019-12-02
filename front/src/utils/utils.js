@@ -24,6 +24,23 @@ const Utils = {
     if (value > max) return Math.round(max);
     return Math.round(value);
   },
+  straightSprite: ({ position, movement }) => {
+    const value = {
+      x:
+        Utils.parseInt10(position.x)
+        + Utils.parseInt10(
+          movement.moving
+            * Math.cos((Math.PI / 180) * (position.direction - 90)).toFixed(4),
+        ),
+      y:
+        Utils.parseInt10(position.y)
+        + Utils.parseInt10(
+          movement.moving
+            * Math.sin((Math.PI / 180) * (position.direction - 90)).toFixed(4),
+        ),
+    };
+    return value;
+  },
 };
 
 

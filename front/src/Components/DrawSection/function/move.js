@@ -30,20 +30,7 @@ export default (movement, type) => {
       };
       break;
     default:
-      value = {
-        x:
-          Utils.parseInt10(position.x)
-          + Utils.parseInt10(
-            movement.moving
-              * Math.cos((Math.PI) * (position.direction - 90) / 180).toFixed(4),
-          ),
-        y:
-          Utils.parseInt10(position.y)
-          + Utils.parseInt10(
-            movement.moving
-              * Math.sin((Math.PI / 180) * (position.direction - 90)).toFixed(4),
-          ),
-      };
+      value = Utils.straightSprite({ position, movement });
       break;
   }
   dispatch({ type: 'MOVE', key, value });
