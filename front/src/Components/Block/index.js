@@ -71,11 +71,11 @@ export default () => {
     });
   }
   return (
-    <Svg onWheel={wheelSVG}>
+    <Svg onWheel={wheelSVG} transform="translate(60,0)">
       {isMove ? null
         : (
           <rect
-            width="500"
+            width="300"
             height="800"
             fill="rgba(0,0,0,0)"
             x="0"
@@ -92,11 +92,11 @@ export default () => {
       {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
-      {workspace.topblocks.map(block => <Group block={block} key={block.id} x={500} scroll={isMove} />)}
+      {workspace.topblocks.map(block => <Group block={block} key={block.id} x={360} scroll={isMove} />)}
       {!isMove ? null
         : (
           <rect
-            width="500"
+            width="300"
             height="800"
             fill="rgba(0,0,0,0)"
             x="0"
@@ -114,7 +114,7 @@ export default () => {
         width="20"
         height="100"
         fill={isMove ? Theme.duckOrangeColor : Theme.unactivedColor}
-        x="320"
+        x="275"
         y={scrollY}
         rx="4"
         ry="4"
