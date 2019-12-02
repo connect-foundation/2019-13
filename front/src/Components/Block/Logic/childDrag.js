@@ -1,9 +1,9 @@
 import CONSTANTS from '../constants';
 
-const mouseHandler = ({ set, block, setMoved }) => {
+const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
   const mousedown = (eventDown) => {
     setMoved(true);
-    if (eventDown.target.tagName !== 'path') {
+    if (eventDown.target.tagName !== 'path' || eventDown.button !== 0) {
       return;
     }
     eventDown.preventDefault();
@@ -51,10 +51,16 @@ const mouseHandler = ({ set, block, setMoved }) => {
       block.dragUpdate(currentRealPosition.x, currentRealPosition.y);
     };
 
-    const mouseup = () => {
+    const mouseup = (eventUp) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
+      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
+        workspaceDispatch({
+          type: 'DELETE_BLOCK',
+          id: block.id,
+        });
+      }
     };
 
     document.addEventListener('mousemove', mousemove);
