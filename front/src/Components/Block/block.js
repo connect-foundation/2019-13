@@ -35,10 +35,8 @@ const Block = class {
     this.height = 0;
     this.firstchildHeight = 24;
     this.secondchildHeight = 24;
-    this.inputElement = {
-      type: 'input',
-      value: 10,
-    };
+    this.inputElement = [];
+    this.inputWidth = [];
   }
 
   setNode = (node) => {
@@ -107,19 +105,20 @@ const Block = class {
     }
   }
 
-  changeInputWidth = (event) => {
+  changeInputWidth = (set, index) => (event) => {
     const { target } = event;
     const { length } = target.value;
     if (length > 5) {
       const { lastChild } = target.parentNode;
       lastChild.innerHTML = target.value;
-      target.parentNode.style.width = `${lastChild.clientWidth}px`;
-      target.style.width = `${lastChild.clientWidth}px`;
+      this.inputWidth[index] = lastChild.clientWidth;
     } else {
-      target.parentNode.style.width = '30px';
-      target.style.width = '30px';
+      this.inputWidth[index] = 30;
     }
-    this.inputElement.value = Number(target.value);
+    target.parentNode.style.width = `${this.inputWidth[index]}px`;
+    target.style.width = `${this.inputWidth[index]}px`;
+    this.inputElement[index].value = target.value;
+    if (set) { set(target.value); }
     this.setArgs();
   };
 
@@ -165,13 +164,8 @@ const Block = class {
     if (json.type === 'text') {
       this.args.push(create(json.type, { key: json.value }, json.value));
     } else if (json.type === 'input') {
-      this.args.push(
-        create('foreignObject', { key: 'foreign' },
-          create(json.type, { key: json.value,
-            onChange: this.changeInputWidth.bind(this),
-            value: json.value }, null),
-          create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
-      );
+      this.inputElement.push({ type: json.type, value: json.value });
+      this.args.push('input');
     }
   };
 

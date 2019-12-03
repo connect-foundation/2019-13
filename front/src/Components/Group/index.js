@@ -3,8 +3,9 @@ import PropType from 'prop-types';
 import drag from '../Block/Logic/Drag';
 import { WorkspaceContext } from '../../Context';
 import CONSTANTS from '../Block/constants';
+import Input from './input';
 
-const Group = ({ block, x }) => {
+const Group = ({ block }) => {
   // eslint-disable-next-line
   let [isMoved, setMoved] = useState(true);
   const [position, setPosition] = useState({ x: block.x, y: block.y });
@@ -17,6 +18,7 @@ const Group = ({ block, x }) => {
   const { workspaceDispatch } = useContext(WorkspaceContext);
   const [, setRender] = useState();
   const gRef = useRef();
+  let inputIdx = -1;
   useEffect(() => {
     // eslint-disable-next-line
     block.render = setRender;
@@ -35,12 +37,15 @@ const Group = ({ block, x }) => {
         });
       }}
       onMouseDown={
-          drag({ set: setPosition, block, setMoved, x, workspaceDispatch })
+          drag({ set: setPosition, block, setMoved, workspaceDispatch })
       }
       transform={`translate(${position.x},${position.y})`}
     >
       {block.path}
-      {block.args.map(args => args)}
+      {block.args.map((args) => {
+        if (args !== 'input') return args;
+        inputIdx += 1; return <Input block={block} index={inputIdx} key={block.id} />;
+      })}
       {block.firstchildElement
       && <Group block={block.firstchildElement} key={block.firstchildElement.id} />}
       {block.secondchildElement
@@ -52,7 +57,6 @@ const Group = ({ block, x }) => {
 
 Group.propTypes = {
   block: PropType.object.isRequired,
-  x: PropType.number.isRequired,
 };
 
 export default Group;
