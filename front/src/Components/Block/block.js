@@ -107,18 +107,22 @@ const Block = class {
 
   changeInputWidth = (set, index) => (event) => {
     const { target } = event;
-    const { length } = target.value;
-    if (length > 5) {
-      const { lastChild } = target.parentNode;
-      lastChild.innerHTML = target.value;
-      this.inputWidth[index] = lastChild.clientWidth;
-    } else {
+    this.inputElement[index].value = Number(target.value.replace(/[^0-9-]/g, ''));
+    if (Number.isNaN(this.inputElement[index].value)) this.inputElement[index].value = 0;
+    if (this.inputElement[index].value > Number.MAX_SAFE_INTEGER) {
+      this.inputElement[index].value = Number.MAX_SAFE_INTEGER;
+    } else if (this.inputElement[index].value < Number.MIN_SAFE_INTEGER) {
+      this.inputElement[index].value = Number.MIN_SAFE_INTEGER;
+    }
+    const { lastChild } = target.parentNode;
+    lastChild.innerHTML = this.inputElement[index].value;
+    this.inputWidth[index] = lastChild.clientWidth;
+    if (this.inputElement[index].value > -10000 && this.inputElement[index].value < 100000) {
       this.inputWidth[index] = 30;
     }
     target.parentNode.style.width = `${this.inputWidth[index]}px`;
     target.style.width = `${this.inputWidth[index]}px`;
-    this.inputElement[index].value = target.value;
-    if (set) { set(target.value); }
+    if (set) { set(this.inputElement[index].value); }
     this.setArgs();
   };
 
