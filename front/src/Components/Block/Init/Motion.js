@@ -76,7 +76,7 @@ export default [
       },
       {
         type: 'text',
-        value: '회전하기',
+        value: '° 회전하기',
       },
     ],
     style: 'single',
@@ -98,7 +98,7 @@ export default [
       },
       {
         type: 'text',
-        value: '회전하기',
+        value: '° 회전하기',
       },
     ],
     style: 'single',
