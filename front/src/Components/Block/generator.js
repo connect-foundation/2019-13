@@ -9,8 +9,7 @@ export default class {
     const code = [];
     const values = {};
     if (block.inputElement) {
-      const input = block.inputElement.value;
-      values.input = input;
+      values.input = block.inputElement.map(input => input.value);
     }
     if (block.firstchildElement) {
       const firstChild = this.blockToCode(block.firstchildElement);
