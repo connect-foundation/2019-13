@@ -24,7 +24,7 @@ export default (passport) => {
           id, email, name, picture,
         } = profile._json;
         try {
-          const user = await prisma.upsertUser({
+          const user = await prisma.upsertuser({
             where: {
               id: `G-${id}`,
             },
@@ -59,7 +59,7 @@ export default (passport) => {
           id, displayName, emails, photos,
         } = profile;
         try {
-          const user = await prisma.upsertUser({
+          const user = await prisma.upsertuser({
             where: {
               id: `F-${id}`,
             },
