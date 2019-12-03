@@ -24,7 +24,7 @@ const FunctionList = {
     return { func: once() };
   },
   control_for: (args) => {
-    const limit = args.input;
+    const limit = args.input[0];
     let isChildEnd = false;
     let i = 0;
     let j = 0;
@@ -49,33 +49,33 @@ const FunctionList = {
   },
 
   motion_move_forward: (args) => {
-    const value = args.input;
+    const value = args.input[0];
     return { func: { next: () => Move({ moving: value }) } };
   },
 
   motion_change_x: (args) => {
-    const value = args.input;
+    const value = args.input[0];
     return { func: { next: () => Move({ x: value }, 'x') } };
   },
 
   motion_change_y: (args) => {
-    const value = args.input;
+    const value = args.input[0];
     return { func: { next: () => Move({ y: value }, 'y') } };
   },
 
   motion_rotate_clock: (args) => {
-    const value = args.input;
+    const value = args.input[0];
     return { func: { next: () => Rotate(value, 'clock') } };
   },
 
   motion_rotate_anti_clock: (args) => {
-    const value = args.input;
+    const value = args.input[0];
     return { func: { next: () => Rotate(value, 'anticlock') } };
   },
 
   control_if: (args) => {
     const value = true;
-    args.input = 1;
+    args.input[0] = 1;
     return value ? FunctionList.control_for(args) : { func: { next: () => {} } };
   },
 };

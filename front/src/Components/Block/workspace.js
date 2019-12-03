@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Block from './block';
 import Dragging from './dragging';
 import ConnectionDB from './connection_db';
@@ -76,6 +77,23 @@ const Workspace = class {
 
   getAll() {
     return this;
+  }
+
+  extractCoreData() {
+    return Object.values(this.blockDB).map(b => ({
+      id: b.id,
+      type: b.type,
+      nextElement: this.getBlockId(b.nextElement),
+      firstChildElement: this.getBlockId(b.firstchildElement),
+      secondChildElement: this.getBlockId(b.secondchildElement),
+      inputElement: b.inputElement.map(input => (input.id ? input.id : input.value)),
+      x: b.x,
+      y: b.y,
+    }));
+  }
+
+  getBlockId(block) {
+    return block ? block.id : null;
   }
 };
 

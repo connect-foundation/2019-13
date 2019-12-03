@@ -38,6 +38,11 @@ const Project = () => {
     defaultSprite,
   );
 
+  const saveHandler = () => {
+    const data = { pid: 1, blocks: workspace.extractCoreData() };
+    // 추후 data를 서버로 보내야함.
+  };
+
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
@@ -53,6 +58,7 @@ const Project = () => {
                 {dummyProject.isPublic ? '전체 공개' : '비공개'}
               </button>
               <button type="button"> 초대 </button>
+              <button type="button" onClick={saveHandler}> 저장하기 </button>
             </div>
           </ProjectHeader>
           <Contents>
