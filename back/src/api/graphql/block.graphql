@@ -1,9 +1,12 @@
 type block {
   id: ID!
-  position_X: Float
-  position_Y: Float
-  order: Int!
-  project_id: ID!
-  parent_id: Int!
-  parent_condition: Boolean
+  type: String!
+  position_x: Float
+  position_y: Float
+  next_element: block
+  first_child_element: block
+  second_child_element: block
+  output_element: block
+  project: project! 
+  input_values: [input_value]!
 }

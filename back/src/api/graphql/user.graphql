@@ -3,6 +3,9 @@ type user {
   name: String!
   picture: String!
   email: String!
+  projects: [project]!
+  authes: [project_auth]!
+  likes: [like]!
 }
 
 type Query {
