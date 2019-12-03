@@ -9,3 +9,10 @@ type project {
   authes: [project_auth]!
   likes: [like]!
 }
+
+type Query {
+  projects: [project]
+}
+type Mutation {
+  createProjectAndBlocks(project_name: String!, input: [createBlockInput]!): Int!
+}

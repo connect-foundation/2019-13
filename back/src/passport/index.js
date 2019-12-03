@@ -95,7 +95,7 @@ export default (passport) => {
               id: jwtPayload.id,
             },
           });
-          if (user) return done(user);
+          if (user) return done(null, user);
           return done(null, false);
         } catch (e) {
           return done(e);

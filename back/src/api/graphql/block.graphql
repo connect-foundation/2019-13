@@ -10,3 +10,14 @@ type block {
   project: project! 
   input_values: [input_value]!
 }
+
+input createBlockInput {
+  id: ID!
+  type: String!
+  position_x: Float
+  position_y: Float
+  next_element: Int
+  first_child_element: Int
+  second_child_element: Int
+  input_value: Int
+}
