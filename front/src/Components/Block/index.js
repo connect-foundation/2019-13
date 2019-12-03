@@ -14,7 +14,7 @@ const blockModelList = new BlockModelList();
 
 export default () => {
   const [isInit, setIsInit] = useState(false);
-  const { workspace } = useContext(WorkspaceContext);
+  const { workspace, workspaceDispatch } = useContext(WorkspaceContext);
   const [, setRender] = useState(0);
   const [isMove, setMove] = useState(false);
   const [scrollY, setScrollY] = useState(20);
@@ -30,6 +30,7 @@ export default () => {
     let diff = (scrollEvent.clientY - initY);
     if (diff < 20)diff = 20;
     else if (diff > 670)diff = 670;
+    workspaceDispatch({ type: 'SCROLL_END' });
     setScrollY(diff);
   };
   const dragEndHandler = () => {
@@ -47,6 +48,7 @@ export default () => {
   const wheelSVG = (events) => {
     const newY = scrollY + events.deltaY;
     if (newY < 20 || newY > 670) return;
+    workspaceDispatch({ type: 'SCROLL_END' });
     setScrollY(newY);
   };
 

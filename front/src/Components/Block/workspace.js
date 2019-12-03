@@ -2,6 +2,7 @@ import Block from './block';
 import Dragging from './dragging';
 import ConnectionDB from './connection_db';
 import Utils from '../../utils/utils';
+import CONSTANTS from './constants';
 
 const Workspace = class {
   constructor(blockDB, topblocks, setRender) {
@@ -30,6 +31,14 @@ const Workspace = class {
     }
     Utils.arrayRemove(this.topblocks, deleteBlock);
     delete this.blockDB[usedId];
+  }
+
+  deleteBlockInModelList() {
+    console.log(this.blockDB, this.topblocks);
+    Object.values(this.blockDB).forEach((block) => {
+      if (block.x < CONSTANTS.DELETE_AREA_X) delete this.blockDB[block.id];
+    });
+    this.topblocks = this.topblocks.filter(block => block.x > CONSTANTS.DELETE_AREA_X);
   }
 
   getStartBlocks() {
