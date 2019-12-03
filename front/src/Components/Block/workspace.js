@@ -34,7 +34,6 @@ const Workspace = class {
   }
 
   deleteBlockInModelList() {
-    console.log(this.blockDB, this.topblocks);
     Object.values(this.blockDB).forEach((block) => {
       if (block.x < CONSTANTS.DELETE_AREA_X) delete this.blockDB[block.id];
     });
