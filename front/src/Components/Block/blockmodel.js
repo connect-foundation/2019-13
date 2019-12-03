@@ -104,7 +104,7 @@ const BlockModel = class {
       this.args.push(
         create(
           'foreignObject',
-          { key: 'foreign' },
+          { key: `foreign${this.args.length}` },
           create(
             json.type,
             { key: json.value, onChange: this.changeInputWidth.bind(this), value: json.value },

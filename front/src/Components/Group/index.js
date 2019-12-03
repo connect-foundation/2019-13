@@ -44,7 +44,7 @@ const Group = ({ block }) => {
       {block.path}
       {block.args.map((args) => {
         if (args !== 'input') return args;
-        inputIdx += 1; return <Input block={block} index={inputIdx} key={block.id} />;
+        inputIdx += 1; return <Input block={block} index={inputIdx} key={inputIdx} />;
       })}
       {block.firstchildElement
       && <Group block={block.firstchildElement} key={block.firstchildElement.id} />}
