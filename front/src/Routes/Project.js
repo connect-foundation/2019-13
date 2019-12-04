@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import Snackbar from '../Components/Snackbar';
 import Blockspace from '../Components/Block/index';
 import Blocks from '../Components/Block/Init';
 import Workspace from '../Components/Block/workspace';
@@ -54,11 +55,22 @@ const Project = () => {
     defaultSprite,
   );
 
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+    message: '로그인이 필요합니다.',
+    color: 'alertColor',
+  });
   const projectNameHandler = useCallback((e) => {
     setProjectName(e.target.value);
   }, []);
 
   const saveHandler = () => {
+    if (!localStorage.getItem('token')) {
+      setSnackbar({ ...snackbar, open: true });
+      return;
+    }
     createAndSave({
       variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
     });
@@ -120,6 +132,7 @@ const Project = () => {
             </div>
             <DrawSection />
           </Contents>
+          <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>
