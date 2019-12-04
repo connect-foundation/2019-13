@@ -1,23 +1,47 @@
 import { prisma } from '../../../prisma-client';
+import Utils from '../../utils/utils';
 
 export default {
   Query: {
-    projects: async () => {
+    projects: async (root, value, context) => {
+      const user = Utils.findUser(context.req);
+      if (!user) return null;
       const project = await prisma.projects();
       return project;
     },
+    findProjectById: async (root, { projectId }, context) => {
+      const user = Utils.findUser(context.req);
+      const project = await prisma.project({
+        id: projectId,
+      });
+      if (!project.blocks) project.blocks = [];
+      if (project.private) {
+        return project.owner.id === user.id ? project : null;
+      }
+      return project;
+    },
+    findProjectsByUserId: async (root, value, context) => {
+      try {
+        const user = Utils.findUser(context.req);
+        const projects = await prisma.projects({
+          where: {
+            owner: {
+              id: user.id,
+            },
+          },
+        });
+        return projects;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
   },
   Mutation: {
-    createProjectAndBlocks: async (
-      root,
-      { projectTitle, input },
-      context,
-      info,
-    ) => {
+    createProjectAndBlocks: async (root, { projectTitle, input }, context) => {
       try {
-        const { user } = context;
-        //   if (!user) return 'false';
-        console.log(user);
+        const user = Utils.findUser(context.req);
+        if (!user) return 'false';
         const project = await prisma.createProject({
           title: projectTitle,
           description: '',
@@ -25,13 +49,12 @@ export default {
           private: false,
           owner: {
             connect: {
-            // id: user.id,
-              id: 'ck3qns3z802zd0786o3oqt78k',
+              id: user.id,
             },
           },
         });
         input.forEach(async (blockData) => {
-          const block = await prisma.createBlock({
+          await prisma.createBlock({
             id: blockData.id,
             type: blockData.type,
             positionX: blockData.positionX,
@@ -39,7 +62,9 @@ export default {
             nextElementId: blockData.nextElementId,
             firstChildElementId: blockData.firstChildElementId,
             secondChildElementId: blockData.secondChildElementId,
-            inputElementId: blockData.inputElementId,
+            inputElementId: {
+              set: blockData.inputElementId,
+            },
             project: {
               connect: {
                 id: project.id,
@@ -53,63 +78,95 @@ export default {
         return 'false';
       }
     },
-    updateProjectAndBlocks: async (root, { projectId, projectTitle, input }, context, info) => {
-      const project = await prisma.updateProject({
-        where: {
+    updateProjectAndBlocks: async (
+      root,
+      { projectId, projectTitle, input },
+      context,
+    ) => {
+      const user = Utils.findUser(context.req);
+      if (!user) return false;
+      try {
+        await prisma.updateProject({
+          where: {
+            id: projectId,
+          },
+          data: {
+            title: projectTitle,
+          },
+        });
+        const blocks = await prisma.blocks({
+          where: {
+            project: {
+              id: projectId,
+            },
+          },
+        });
+        const notFoundBlock = [];
+        blocks.forEach((block) => {
+          let found = false;
+          input.forEach(async (i) => {
+            if (i.id === block.id) {
+              found = true;
+            }
+          });
+          if (!found) notFoundBlock.push(block.id);
+        });
+        await prisma.deleteManyBlocks({
+          id_in: [...notFoundBlock],
+        });
+        input.forEach(async (i) => {
+          const block = await prisma.upsertBlock({
+            where: {
+              id: i.id,
+            },
+            create: {
+              id: i.id,
+              type: i.type,
+              positionX: i.positionX,
+              positionY: i.positionY,
+              nextElementId: i.nextElementId,
+              firstChildElementId: i.firstChildElementId,
+              secondChildElementId: i.secondChildElementId,
+              inputElementId: i.inputElementId,
+            },
+            update: {
+              type: i.type,
+              positionX: i.positionX,
+              positionY: i.positionY,
+              nextElementId: i.nextElementId,
+              firstChildElementId: i.firstChildElementId,
+              secondChildElementId: i.secondChildElementId,
+              inputElementId: i.inputElementId,
+            },
+          });
+        });
+        return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
+    deleteProjectAndBlocks: async (root, { projectId }, context) => {
+      const user = Utils.findUser(context.req);
+      if (!user) return false;
+      try {
+        const project = await prisma.project({
           id: projectId,
-        },
-        data: {
-          title: projectTitle,
-        },
-      });
-      const blocks = await prisma.blocks({
-        where: {
+        });
+        if (user.id !== project.owner.id) return 'NOT AUTHORIZATION';
+        await prisma.deleteManyBlocks({
           project: {
             id: projectId,
           },
-        },
-      });
-      const notFoundBlock = [];
-      blocks.forEach((block) => {
-        let found = false;
-        input.forEach(async (i) => {
-          if (i.id === block.id) {
-            found = true;
-          }
         });
-        if (!found) notFoundBlock.push(block.id);
-      });
-      console.log(notFoundBlock);
-      await prisma.deleteManyBlocks({
-        id_in: [...notFoundBlock],
-      });
-      input.forEach(async (i) => {
-        const block = await prisma.upsertBlock({
-          where: {
-            id: i.id,
-          },
-          create: {
-            id: i.id,
-            type: i.type,
-            positionX: i.positionX,
-            positionY: i.positionY,
-            nextElementId: i.nextElementId,
-            firstChildElementId: i.firstChildElementId,
-            secondChildElementId: i.secondChildElementId,
-            inputElementId: i.inputElementId,
-          },
-          update: {
-            type: i.type,
-            positionX: i.positionX,
-            positionY: i.positionY,
-            nextElementId: i.nextElementId,
-            firstChildElementId: i.firstChildElementId,
-            secondChildElementId: i.secondChildElementId,
-            inputElementId: i.inputElementId,
-          },
+        await prisma.deleteProject({
+          id: projectId,
         });
-      });
-      return true;
+        return 'true';
+      } catch (e) {
+        console.error(e);
+        return 'false';
+      }
     },
   },
 };
