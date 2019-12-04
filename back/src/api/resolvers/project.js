@@ -1,4 +1,5 @@
 import { prisma } from '../../../prisma-client';
+import Utils from '../../utils/utils';
 
 export default {
   Query: {
@@ -37,12 +38,7 @@ export default {
     },
   },
   Mutation: {
-    createProjectAndBlocks: async (
-      root,
-      { projectTitle, input },
-      context,
-      info,
-    ) => {
+    createProjectAndBlocks: async (root, { projectTitle, input }, context) => {
       try {
         const user = Utils.findUser(context.req);
         if (!user) return 'false';
@@ -82,63 +78,74 @@ export default {
         return 'false';
       }
     },
-    updateProjectAndBlocks: async (root, { projectId, projectTitle, input }, context, info) => {
-      const project = await prisma.updateProject({
-        where: {
-          id: projectId,
-        },
-        data: {
-          title: projectTitle,
-        },
-      });
-      const blocks = await prisma.blocks({
-        where: {
-          project: {
+    updateProjectAndBlocks: async (
+      root,
+      { projectId, projectTitle, input },
+      context,
+    ) => {
+      const user = Utils.findUser(context.req);
+      if (!user) return false;
+      try {
+        await prisma.updateProject({
+          where: {
             id: projectId,
           },
-        },
-      });
-      const notFoundBlock = [];
-      blocks.forEach((block) => {
-        let found = false;
-        input.forEach(async (i) => {
-          if (i.id === block.id) {
-            found = true;
-          }
+          data: {
+            title: projectTitle,
+          },
         });
-        if (!found) notFoundBlock.push(block.id);
-      });
-      console.log(notFoundBlock);
-      await prisma.deleteManyBlocks({
-        id_in: [...notFoundBlock],
-      });
-      input.forEach(async (i) => {
-        const block = await prisma.upsertBlock({
+        const blocks = await prisma.blocks({
           where: {
-            id: i.id,
-          },
-          create: {
-            id: i.id,
-            type: i.type,
-            positionX: i.positionX,
-            positionY: i.positionY,
-            nextElementId: i.nextElementId,
-            firstChildElementId: i.firstChildElementId,
-            secondChildElementId: i.secondChildElementId,
-            inputElementId: i.inputElementId,
-          },
-          update: {
-            type: i.type,
-            positionX: i.positionX,
-            positionY: i.positionY,
-            nextElementId: i.nextElementId,
-            firstChildElementId: i.firstChildElementId,
-            secondChildElementId: i.secondChildElementId,
-            inputElementId: i.inputElementId,
+            project: {
+              id: projectId,
+            },
           },
         });
-      });
-      return true;
+        const notFoundBlock = [];
+        blocks.forEach((block) => {
+          let found = false;
+          input.forEach(async (i) => {
+            if (i.id === block.id) {
+              found = true;
+            }
+          });
+          if (!found) notFoundBlock.push(block.id);
+        });
+        await prisma.deleteManyBlocks({
+          id_in: [...notFoundBlock],
+        });
+        input.forEach(async (i) => {
+          const block = await prisma.upsertBlock({
+            where: {
+              id: i.id,
+            },
+            create: {
+              id: i.id,
+              type: i.type,
+              positionX: i.positionX,
+              positionY: i.positionY,
+              nextElementId: i.nextElementId,
+              firstChildElementId: i.firstChildElementId,
+              secondChildElementId: i.secondChildElementId,
+              inputElementId: i.inputElementId,
+            },
+            update: {
+              type: i.type,
+              positionX: i.positionX,
+              positionY: i.positionY,
+              nextElementId: i.nextElementId,
+              firstChildElementId: i.firstChildElementId,
+              secondChildElementId: i.secondChildElementId,
+              inputElementId: i.inputElementId,
+            },
+          });
+        });
+        return true;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
+    },
     },
   },
 };
