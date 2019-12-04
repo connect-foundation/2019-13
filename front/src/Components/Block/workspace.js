@@ -91,12 +91,12 @@ const Workspace = class {
     return Object.values(this.blockDB).map(b => ({
       id: b.id,
       type: b.type,
+      positionX: b.x,
+      positionY: b.y,
       nextElement: this.getBlockId(b.nextElement),
       firstChildElement: this.getBlockId(b.firstchildElement),
       secondChildElement: this.getBlockId(b.secondchildElement),
       inputElement: b.inputElement.map(input => (input.id ? input.id : input.value)),
-      x: b.x,
-      y: b.y,
     }));
   }
 
