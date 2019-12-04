@@ -12,6 +12,8 @@ type project {
 
 type Query {
   projects: [project]
+  findProjectById(projectId: String!): project
+  findProjectsByUserId: [project]!
 }
 type Mutation {
   createProjectAndBlocks(projectTitle: String!, input: [createBlockInput]!): String!

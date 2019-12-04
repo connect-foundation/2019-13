@@ -2,9 +2,38 @@ import { prisma } from '../../../prisma-client';
 
 export default {
   Query: {
-    projects: async () => {
+    projects: async (root, value, context) => {
+      const user = Utils.findUser(context.req);
+      if (!user) return null;
       const project = await prisma.projects();
       return project;
+    },
+    findProjectById: async (root, { projectId }, context) => {
+      const user = Utils.findUser(context.req);
+      const project = await prisma.project({
+        id: projectId,
+      });
+      if (!project.blocks) project.blocks = [];
+      if (project.private) {
+        return project.owner.id === user.id ? project : null;
+      }
+      return project;
+    },
+    findProjectsByUserId: async (root, value, context) => {
+      try {
+        const user = Utils.findUser(context.req);
+        const projects = await prisma.projects({
+          where: {
+            owner: {
+              id: user.id,
+            },
+          },
+        });
+        return projects;
+      } catch (e) {
+        console.error(e);
+        return false;
+      }
     },
   },
   Mutation: {
