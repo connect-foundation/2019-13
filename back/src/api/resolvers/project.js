@@ -15,9 +15,8 @@ export default {
       info,
     ) => {
       try {
-        const { user } = context;
-        //   if (!user) return 'false';
-        console.log(user);
+        const user = Utils.findUser(context.req);
+        if (!user) return 'false';
         const project = await prisma.createProject({
           title: projectTitle,
           description: '',
@@ -25,13 +24,12 @@ export default {
           private: false,
           owner: {
             connect: {
-            // id: user.id,
-              id: 'ck3qns3z802zd0786o3oqt78k',
+              id: user.id,
             },
           },
         });
         input.forEach(async (blockData) => {
-          const block = await prisma.createBlock({
+          await prisma.createBlock({
             id: blockData.id,
             type: blockData.type,
             positionX: blockData.positionX,
@@ -39,7 +37,9 @@ export default {
             nextElementId: blockData.nextElementId,
             firstChildElementId: blockData.firstChildElementId,
             secondChildElementId: blockData.secondChildElementId,
-            inputElementId: blockData.inputElementId,
+            inputElementId: {
+              set: blockData.inputElementId,
+            },
             project: {
               connect: {
                 id: project.id,
