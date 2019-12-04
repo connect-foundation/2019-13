@@ -1,4 +1,5 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useCallback } from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +10,7 @@ import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
+import { CREATE_AND_SAVE } from '../Apollo/queries/Project';
 
 const getScrollHeight = () => `${Blocks.reduce((acc, block) => acc + block.length, 0) * 100}px`;
 
@@ -28,19 +30,38 @@ defaultSprite[Utils.uid()] = {
 };
 
 const Project = () => {
+  const [projectName, setProjectName] = useState(dummyProject.projectName);
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
   );
+  const getProjectName = () => {
+    if (projectName.length < 1) {
+      setProjectName('임시이름');
+    }
+    return projectName;
+  };
+  const [createAndSave] = useMutation(CREATE_AND_SAVE,
+    {
+      onCompleted(createAndSave) {
+        const projectId = createAndSave.createProjectAndBlocks;
+        //  이후 개별 프로젝트 페이지로 리다이렉션?
+      },
+    });
 
   const [sprites, spritesDispatch] = useReducer(
     spritesReducer,
     defaultSprite,
   );
 
+  const projectNameHandler = useCallback((e) => {
+    setProjectName(e.target.value);
+  }, []);
+
   const saveHandler = () => {
-    const data = { pid: 1, blocks: workspace.extractCoreData() };
-    // 추후 data를 서버로 보내야함.
+    createAndSave({
+      variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
+    });
   };
 
   return (
@@ -49,7 +70,7 @@ const Project = () => {
         <Wrapper>
           <ProjectHeader isStared={dummyProject.star.toString()}>
             <div className="project-info">
-              <span className="project-title">{dummyProject.projectName}</span>
+              <input className="project-title" value={projectName} onChange={projectNameHandler} />
               <button type="button">
                 <FontAwesomeIcon icon={faStar} className="star-icon" />
               </button>
@@ -135,6 +156,13 @@ const ProjectHeader = styled.div`
   }
   .project-title {
     font-size: 20px;
+    min-width: 50px;
+    max-width: 200px;
+    border: none;
+    background: transparent;
+    &:focus {
+      background: white;
+    }
   }
 `;
 
