@@ -18,4 +18,5 @@ type Query {
 type Mutation {
   createProjectAndBlocks(projectTitle: String!, input: [createBlockInput]!): String!
   updateProjectAndBlocks(projectId: String!, projectTitle:String, input: [createBlockInput]): Boolean!
+  deleteProjectAndBlocks(projectId: String!): String!
 }

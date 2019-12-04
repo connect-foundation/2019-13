@@ -146,6 +146,27 @@ export default {
         return false;
       }
     },
+    deleteProjectAndBlocks: async (root, { projectId }, context) => {
+      const user = Utils.findUser(context.req);
+      if (!user) return false;
+      try {
+        const project = await prisma.project({
+          id: projectId,
+        });
+        if (user.id !== project.owner.id) return 'NOT AUTHORIZATION';
+        await prisma.deleteManyBlocks({
+          project: {
+            id: projectId,
+          },
+        });
+        await prisma.deleteProject({
+          id: projectId,
+        });
+        return 'true';
+      } catch (e) {
+        console.error(e);
+        return 'false';
+      }
     },
   },
 };
