@@ -46,7 +46,6 @@ const Project = ({ match, history }) => {
     init.reduce((pre, cur) => [...pre, ...cur], []).forEach((data) => {
       blockTypes[data.type] = data;
     });
-    // const blocksData = Object.values(Blocks);
     Blocks.forEach((blockData) => {
       const block = workspace.addBlock(blockData.id);
       const dataJSON = blockTypes[blockData.type];
