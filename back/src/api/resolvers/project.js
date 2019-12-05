@@ -35,19 +35,54 @@ export default {
       }
     },
     findProjectsByUserId: async (root, value, context) => {
+
       try {
-        const user = Utils.findUser(context.req);
-        const projects = await prisma.projects({
+        const project = await prisma.project({
+          id: projectId,
+        });
+        if (!project) return {};
+        const blocks = await prisma.blocks({
           where: {
-            owner: {
-              id: user.id,
+            project: {
+              id: project.id,
             },
           },
         });
-        return projects;
+        if (!blocks) project.blocks = [];
+        else project.blocks = blocks;
+        if (project.private) {
+          return project.owner.id === user.id ? project : {};
+        }
+        return project;
       } catch (e) {
         console.error(e);
-        return false;
+        return {};
+      }
+    },
+    findProjectsByUserId: async (root, value, context) => {
+      try {
+        const user = Utils.findUser(context.req);
+        const query = `query {
+                              projects(where:{
+                                owner:{
+                                  id : "${user.id}"
+                                }
+                              }){
+                                id
+                                title
+                                description
+                                like
+                                owner {
+                                  email
+                                  picture
+                                }
+                              }
+                            }`;
+        const projects = await prisma.$graphql(query);
+        return projects.projects;
+      } catch (e) {
+        console.error(e);
+        return [];
       }
     },
   },
@@ -101,8 +136,16 @@ export default {
       if (!user) return false;
       try {
         const project = await prisma.project({
+          id: projectId,
+        });
+        const owner = await prisma.project({
+          id: projectId,
+        }).owner();
+        if (owner.id !== user.id) return false;
+        await prisma.updateProject({
+
           where: {
-            id: projectId,
+            id: project.id,
           },
         });
         if (project.owner.id !== user.id) return false;
@@ -185,10 +228,11 @@ export default {
       const user = Utils.findUser(context.req);
       if (!user) return false;
       try {
-        const project = await prisma.project({
+        const owner = await prisma.project({
           id: projectId,
-        });
-        if (user.id !== project.owner.id) return false;
+        }).owner();
+        if (user.id !== owner.id) return false;
+
         await prisma.deleteManyBlocks({
           project: {
             id: projectId,
