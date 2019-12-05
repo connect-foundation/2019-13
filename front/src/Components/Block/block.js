@@ -33,10 +33,10 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
-    this.inputElement = {
-      type: 'input',
-      value: 10,
-    };
+    this.firstchildHeight = 24;
+    this.secondchildHeight = 24;
+    this.inputElement = [];
+    this.inputWidth = [];
   }
 
   setNode = (node) => {
@@ -44,7 +44,7 @@ const Block = class {
     this.setArgs();
   };
 
-  setArgs = (height = 24, secondHeight = 24) => {
+  setArgs = () => {
     if (this.node) {
       let positionX = CONSTANTS.PIXEL;
       let lastChild;
@@ -55,13 +55,15 @@ const Block = class {
           lastChild = node;
         }
       });
+      if (this.firstchildHeight < 24) { this.firstchildHeight = 24; }
+      if (this.secondchildHeight < 24) { this.secondchildHeight = 24; }
       this.makeStyleFromJSON(
         (lastChild.getBoundingClientRect().right
-        - this.node.getBoundingClientRect().left
+        - this.node.firstChild.getBoundingClientRect().left
         - CONSTANTS.PIXEL * 5)
         / CONSTANTS.PIXEL,
-        height / CONSTANTS.PIXEL - 2,
-        secondHeight / CONSTANTS.PIXEL - 2,
+        this.firstchildHeight / CONSTANTS.PIXEL - 2,
+        this.secondchildHeight / CONSTANTS.PIXEL - 2,
       );
       this.render(Math.random());
       this.height = this.node.firstChild.getBoundingClientRect().height;
@@ -103,19 +105,20 @@ const Block = class {
     }
   }
 
-  changeInputWidth = (event) => {
+  changeInputWidth = (set, index) => (event) => {
     const { target } = event;
     const { length } = target.value;
     if (length > 5) {
       const { lastChild } = target.parentNode;
       lastChild.innerHTML = target.value;
-      target.parentNode.style.width = `${lastChild.clientWidth}px`;
-      target.style.width = `${lastChild.clientWidth}px`;
+      this.inputWidth[index] = lastChild.clientWidth;
     } else {
-      target.parentNode.style.width = '30px';
-      target.style.width = '30px';
+      this.inputWidth[index] = 30;
     }
-    this.inputElement.value = Number(target.value);
+    target.parentNode.style.width = `${this.inputWidth[index]}px`;
+    target.style.width = `${this.inputWidth[index]}px`;
+    this.inputElement[index].value = target.value;
+    if (set) { set(target.value); }
     this.setArgs();
   };
 
@@ -161,13 +164,8 @@ const Block = class {
     if (json.type === 'text') {
       this.args.push(create(json.type, { key: json.value }, json.value));
     } else if (json.type === 'input') {
-      this.args.push(
-        create('foreignObject', { key: 'foreign' },
-          create(json.type, { key: json.value,
-            onChange: this.changeInputWidth.bind(this),
-            value: json.value }, null),
-          create('div', { key: 'hiddenText', style: { position: 'absolute', visibility: 'hidden', fontSize: '0.5rem' } }, null)),
-      );
+      this.inputElement.push({ type: json.type, value: json.value });
+      this.args.push('input');
     }
   };
 
@@ -298,7 +296,7 @@ const Block = class {
   getAvailableConnection = (isDragged = false) => {
     const availableConnection = [];
 
-    if (this.previousConnection) {
+    if (this.previousConnection && this.parentElement === null) {
       availableConnection.push(this.previousConnection);
     }
 
@@ -315,18 +313,23 @@ const Block = class {
   };
 
   setNextElementPosition = () => {
+    if (this.firstchildElement) {
+      this.setFirstChildPosition();
+      this.firstchildHeight = this.firstchildElement.node.getBoundingClientRect().height
+      - CONSTANTS.PIXEL;
+    }
     if (this.nextElement) {
       this.nextElement.y = this.y + this.height - CONSTANTS.PIXEL;
       this.nextElement.x = this.x;
       this.nextElement.setNextElementPosition();
     }
+    this.setArgs();
   };
 
   setFirstChildPosition = () => {
-    if (this.firstchildElement) {
-      this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
-      this.firstchildElement.x = this.x + CONSTANTS.CHILD_NEXT_POS_X;
-    }
+    this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
+    this.firstchildElement.x = this.x + CONSTANTS.PREVIOUS_NEXT_POS_X;
+    this.firstchildElement.setNextElementPosition();
   }
 
   setpreviousElement = (previousElement) => {
@@ -363,7 +366,6 @@ const Block = class {
         }
         conn.source.setpreviousElement(this);
         this.setNextElement(conn.source);
-        this.setNextElementPosition();
         break;
       case 'previousPosition':
         if (conn.positiontype === 'nextPosition') {
@@ -374,18 +376,15 @@ const Block = class {
           }
           this.previousElement = conn.source;
           conn.source.setNextElement(this);
-          conn.source.setNextElementPosition();
         } else if (conn.positiontype === 'firstChildPosition') {
           if (conn.source.firstchildElement) {
             const lastBlock = this.getLastBlock(true);
             conn.source.firstchildElement.setpreviousElement(lastBlock);
+            conn.source.firstchildElement.parentElement = null;
             lastBlock.setNextElement(conn.source.firstchildElement);
           }
           this.parentElement = conn.source;
           conn.source.setFirstChildElement(this);
-          conn.source.setFirstChildPosition();
-          this.setNextElementPosition();
-          conn.source.setArgs(this.node.getBoundingClientRect().height - CONSTANTS.PIXEL);
         }
         break;
       case 'outputPosition':
@@ -408,6 +407,7 @@ const Block = class {
     }
     if (this.parentElement) {
       if (this.parentElement.firstchildElement === this) {
+        this.parentElement.firstchildHeight -= this.node.getBoundingClientRect().height - CONSTANTS.PIXEL;
         this.parentElement.firstchildElement = null;
         this.parentElement = null;
       } else if (this.parentElement.secondchildElement === this) {
@@ -416,6 +416,10 @@ const Block = class {
       }
     }
   };
+
+  setAllBlockPosition = () => {
+    this.setNextElementPosition();
+  }
 };
 
 export default Block;

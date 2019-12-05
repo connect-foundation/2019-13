@@ -1,7 +1,9 @@
+/* eslint-disable class-methods-use-this */
 import Block from './block';
 import Dragging from './dragging';
 import ConnectionDB from './connection_db';
 import Utils from '../../utils/utils';
+import CONSTANTS from './constants';
 
 const Workspace = class {
   constructor(blockDB, topblocks, setRender) {
@@ -32,12 +34,18 @@ const Workspace = class {
     delete this.blockDB[usedId];
   }
 
-  getStartBlocks() {
-    const blocks = [];
-    this.topblocks.forEach((v) => {
-      if (v.type === 'event_start' && v.nextElement) blocks.push(v.nextElement);
+  deleteBlockInModelList() {
+    Object.values(this.blockDB).forEach((block) => {
+      if (block.x < CONSTANTS.DELETE_AREA_X) delete this.blockDB[block.id];
     });
-    return blocks;
+    this.topblocks = this.topblocks.filter(block => block.x > CONSTANTS.DELETE_AREA_X);
+  }
+
+  getStartBlocks() {
+    return this.topblocks.reduce((prev, cur) => {
+      if (cur.type === 'event_start' && cur.nextElement) prev.push(cur.nextElement);
+      return prev;
+    }, []);
   }
 
   addTopblock(block) {
@@ -65,6 +73,9 @@ const Workspace = class {
     if (block.parentElement || block.previousElement) {
       this.removeTopblock(block);
     }
+    this.topblocks.forEach((topblock) => {
+      if (topblock !== block) { topblock.setAllBlockPosition(); }
+    });
     this.setRender(Math.random());
   }
 
@@ -74,6 +85,23 @@ const Workspace = class {
 
   getAll() {
     return this;
+  }
+
+  extractCoreData() {
+    return Object.values(this.blockDB).map(b => ({
+      id: b.id,
+      type: b.type,
+      positionX: b.x,
+      positionY: b.y,
+      nextElementId: this.getBlockId(b.nextElement),
+      firstChildElementId: this.getBlockId(b.firstchildElement),
+      secondChildElementId: this.getBlockId(b.secondchildElement),
+      inputElementId: b.inputElement.map(input => (input.id ? input.id : input.value.toString())),
+    }));
+  }
+
+  getBlockId(block) {
+    return block ? block.id : null;
   }
 };
 

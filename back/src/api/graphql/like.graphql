@@ -1,5 +1,6 @@
-type project_auth {
+type like {
   id: ID!
   project: project!
   user: user!
+  order: Int!
 }

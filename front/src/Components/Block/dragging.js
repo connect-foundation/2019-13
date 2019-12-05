@@ -68,8 +68,6 @@ Dragging.prototype.dragEnd = function (x, y) {
   const block = this.draggedBlock;
   if (this.closetConnection) {
     this.connectBlock();
-  } else {
-    this.draggedBlock.setNextElementPosition();
   }
   this.reset();
   return block;

@@ -11,10 +11,11 @@ export default () => {
   return (
     <Stage width={CONSTANTS.CANVAS.WIDTH} height={CONSTANTS.CANVAS.HEIGHT}>
       <Layer>
-        {Object.values(sprites).map((sprite, idx) => (
+        {Object.entries(sprites).map(sprite => (
           <URLImage
-            sprite={sprite}
-            spritekey={Object.keys(sprites)[idx]}
+            key={sprite[0]}
+            sprite={sprite[1]}
+            spritekey={sprite[0]}
             spritesDispatch={spritesDispatch}
             setCurrentSprite={setCurrentSprite}
           />

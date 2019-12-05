@@ -26,4 +26,5 @@ export default {
   activeStarColor: 'yellow',
   cardBackgroundColor: 'rgba(0,0,0,0.5)',
   cardBorderColor: '#dadada',
+  alertColor: '#e4383b',
 };

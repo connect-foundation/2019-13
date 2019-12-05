@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Image } from 'react-konva';
 import Konva from 'konva';
 import PropType from 'prop-types';
@@ -17,7 +17,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
   };
   const handleDragMove = (e) => {
     spritesDispatch({
-      type: 'DRAG_END',
+      type: 'DRAG_MOVE',
       key: spritekey,
       value: {
         x: e.target.attrs.x - CANVASCONSTANTS.CANVAS.WIDTH / 2,
@@ -33,6 +33,14 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
       scaleY: 1,
       shadowOffsetX: 0,
       shadowOffsetY: 0,
+    });
+    spritesDispatch({
+      type: 'DRAG_END',
+      key: spritekey,
+      value: {
+        x: e.target.attrs.x - CANVASCONSTANTS.CANVAS.WIDTH / 2,
+        y: e.target.attrs.y - CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+      },
     });
   };
   const handleMouseDown = () => {

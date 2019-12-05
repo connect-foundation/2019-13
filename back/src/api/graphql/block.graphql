@@ -1,9 +1,22 @@
 type block {
   id: ID!
-  position_X: Float
-  position_Y: Float
-  order: Int!
-  project_id: ID!
-  parent_id: Int!
-  parent_condition: Boolean
+  type: String!
+  positionX: Float
+  positionY: Float
+  nextElementId: String
+  firstChildElementId: String
+  secondChildElementId: String
+  inputElementId: String
+  project: project! 
+}
+
+input createBlockInput {
+  id: ID!
+  type: String!
+  positionX: Float
+  positionY: Float
+  nextElementId: String
+  firstChildElementId: String
+  secondChildElementId: String
+  inputElementId: [String]
 }

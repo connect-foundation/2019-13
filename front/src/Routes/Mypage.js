@@ -1,112 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useLazyQuery } from '@apollo/react-hooks';
 import Card from '../Components/Card';
 import Spinkit from '../Components/Spinkit';
 import { getDocumentHeight, getScrollTop } from '../utils/endScroll';
+import { GET_PROJECTS } from '../Apollo/queries/Project';
 
-let projects = [
-  {
-    id: 1,
-    title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
-    userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes: 10,
-    pushLike: true,
-  },
-  {
-    id: 2,
-    title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
-    userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes: 777,
-    pushLike: true,
-  },
-  {
-    id: 3,
-    title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
-    userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes: 1000,
-    pushLike: false,
-  },
-  {
-    id: 4,
-    title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
-    userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes: 1000,
-    pushLike: true,
-  },
-  {
-    id: 5,
-    title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
-    userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes: 1,
-    pushLike: false,
-  },
-  {
-    id: 6,
-    title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
-    userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-    image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-    likes: 1000,
-    pushLike: true,
-  },
-];
-
+const projects = [];
 
 export default () => {
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [getProjects] = useLazyQuery(GET_PROJECTS, {
+    onCompleted(getProjects) {
+      setProjects(getProjects.findProjectsByUserId);
+      console.log(projects);
+    },
+  });
+
   const Wrapper = styled.div`
   `;
   const addProject = () => {
-    const appendedProject = [
-      {
-        id: 7,
-        title: 'Project1',
-        description: 'it is an apple.',
-        user: 'youngjun',
-        userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-        image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-        likes: 10,
-        pushLike: true,
-      },
-      {
-        id: 8,
-        title: 'Project1',
-        description: 'it is an apple.',
-        user: 'youngjun',
-        userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-        image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-        likes: 777,
-        pushLike: true,
-      },
-      {
-        id: 9,
-        title: 'Project1',
-        description: 'it is an apple.',
-        user: 'youngjun',
-        userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
-        image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
-        likes: 1000,
-        pushLike: false,
-      },
-    ];
-    projects = projects.concat(appendedProject);
+    // projects = projects.concat(appendedProject);
   };
 
   const handleScroll = () => {
@@ -143,7 +59,10 @@ export default () => {
     color:${props => props.theme.whiteColor};
     background-color:${selected ? props => props.theme.duckOrangeColor : props => props.theme.unactivedColor};
   `;
-
+  const removeProjects = (project) => {
+    console.log(project);
+    setProjects(projects.filter(p => p.id !== project.id));
+  };
   const CardContainer = styled.div`
     display:flex;
     justify-content:center;
@@ -155,10 +74,14 @@ export default () => {
   const renderProject = projectArray => (
     <CardContainer>
       {projectArray.map(project => (
-        <Card project={project} key={project.id} />
+        <Card project={project} key={project.id} removeProjects={removeProjects} />
       ))}
     </CardContainer>
   );
+
+  useEffect(() => {
+    getProjects();
+  }, []);
   if (loading) {
     addProject();
     setLoading(false);

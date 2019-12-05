@@ -22,6 +22,13 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
         workspace.topblocks,
         workspace.setRender,
       );
+    case 'SCROLL_END':
+      workspace.deleteBlockInModelList();
+      return new Workspace(
+        workspace.blockDB,
+        workspace.topblocks,
+        workspace.setRender,
+      );
     default:
       throw new Error('NOT FOUND TYPE');
   }
@@ -75,7 +82,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       position.direction = value % 360;
       changeSprites[key] = position;
       return changeSprites;
-    case 'DRAG_END':
+    case 'DRAG_MOVE':
     case 'MOVE':
       position.x = Utils.checkRange(
         value.x,
@@ -88,6 +95,18 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
         CANVASCONSTANTS.CANVAS.HEIGHT / 2,
       );
       changeSprites[key] = position;
+      return changeSprites;
+    case 'DRAG_END':
+      position.x = Utils.checkRange(
+        value.x,
+        -CANVASCONSTANTS.CANVAS.WIDTH / 2 + 1,
+        CANVASCONSTANTS.CANVAS.WIDTH / 2 - 1,
+      );
+      position.y = Utils.checkRange(
+        value.y,
+        -CANVASCONSTANTS.CANVAS.HEIGHT / 2 + 1,
+        CANVASCONSTANTS.CANVAS.HEIGHT / 2 - 1,
+      );
       return changeSprites;
     case 'ROTATE':
       position.direction = value.direction % 360;

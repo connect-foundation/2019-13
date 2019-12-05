@@ -1,46 +1,49 @@
 type User {
-  id: ID!  @id
+  id: ID! @id
   name: String!
   picture: String!
   email: String! @unique
-  projects: [project!]! @relation(name: "ProjectsByUser")
-  authes: [project_auth!]! @relation(name : "AuthesByUser")
+  projects: [Project]! @relation(name: "ProjectsByUser")
+  authes: [ProjectAuth]! @relation(name : "AuthesByUser")
+  likes: [Like]! @relation(name : "LikesByUser")
 }
-type project {
-  id: ID!  @id
+type Project {
+  id: ID! @id 
   title: String!
   description: String!
   like: Int!
   private: Boolean!
-  owner:User! @relation(link : TABLE, name: "ProjectsByUser")
-  blocks:[block!]! @relation(name: "BlocksByProject")
-  authes: [project_auth!]! @relation(name: "AuthesByProject")
+  owner: User! @relation(link : TABLE, name: "ProjectByUser")
+  blocks: [Block]! @relation(name: "BlocksByProject")
+  authes: [ProjectAuth]! @relation(name: "AuthesByProject")
+  likes: [Like]! @relation(name : "LikesByProject")
 }
-type project_auth{
+type ProjectAuth {
   id: ID! @id
-  project:project! @relation(link : TABLE, name:"AuthesByProject")
-  user:User! @relation(link : TABLE, name: "AuthesByUser")
+  project: Project! @relation(link : TABLE, name:"AuthesByProject")
+  user: User! @relation(link : TABLE, name: "AuthesByUser")
 }
-type block{
-  id:ID! @id
-  position_X: Float
-  position_Y: Float
+type Block {
+  id: ID! @id
+  type: String!
+  positionX: Float
+  positionY: Float
+  nextElementId: String 
+  firstChildElementId: String
+  secondChildElementId: String
+  inputElementId: [String]! @scalarList(strategy: RELATION)
+  project: Project! @relation(link : TABLE, name:"BlocksByProject")
+  inputValues: [InputValue]! @relation(link : TABLE, name:"ArgumentsByBlock")
+}
+type InputValue {
+  id: ID! @id
+  value: Float!
+  block: Block! @relation(link : TABLE, name:"ArgumentByBlock")
   order: Int!
-  project:project! @relation(link : TABLE, name:"BlocksByProject")
-  parent:block @relation(link: TABLE, name:"ParentBlock")
-  type: block_type! @relation(link: TABLE, name:"TypeByBlock")
 }
-type block_category{
-  id:ID! @id
-  text: String @unique
-  color: String
-  block_types: [block_type!]! @relation(name : "TypeByCategory")
-}
-type block_type{
-  id:ID! @id
-  name: String @unique
-  shape: String
-  content: String
-  block: [block!]! @relation(name: "TypeByBlock")
-  block_category: block_category! @relation(link: TABLE, name : "TypeByCategory")
+type Like {
+  id: ID! @id
+  project: Project! @relation(link : TABLE, name:"LikesByProject")
+  user: User! @relation(link : TABLE, name:"LikesByUser")
+  order: Int!
 }

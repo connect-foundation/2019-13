@@ -9,13 +9,11 @@ import SaveIcon from '@material-ui/icons/Save';
 import { SpritesContext } from '../../Context';
 import Utils from '../../utils/utils';
 
-const imageRegExp = /image\/(bmp|jpg|jpeg|iff|png|svg)$/i;
+const imageRegExp = /image\/(bmp|jpg|jpeg|tiff|png|svg)$/i;
 
 const useStyles = makeStyles(theme => ({
   speedDial: {
-    position: 'relative',
-    top: '30%',
-    left: '40%',
+    position: 'absolute',
     '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
       bottom: theme.spacing(2),
       right: theme.spacing(2),
@@ -26,15 +24,12 @@ const useStyles = makeStyles(theme => ({
 const uploadHandler = () => {
   document.all.uploadImage.click();
 };
-const copyHandler = () => {
-
-};
+const copyHandler = () => {};
 
 const actions = [
   { icon: <FileCopyIcon />, name: '이미지 복사', clickHandlers: [copyHandler] },
   { icon: <SaveIcon />, name: '이미지 추가', clickHandlers: [uploadHandler] },
 ];
-
 
 export default () => {
   const classes = useStyles();
@@ -82,23 +77,28 @@ export default () => {
     return func;
   };
   return (
-    <SpeedDial
-      ariaLabel="Image Block"
-      className={classes.speedDial}
-      icon={<SpeedDialIcon />}
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
-      direction={direction}
-    >
-      {actions.map(action => (
-        <SpeedDialAction
-          key={action.name}
-          icon={action.icon}
-          tooltipTitle={action.name}
-          onClick={onClickhandlerFunction([...action.clickHandlers, handleClose])}
-        />
-      ))}
+    <>
+      <SpeedDial
+        ariaLabel="Image Block"
+        className={classes.speedDial}
+        icon={<SpeedDialIcon />}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
+        direction={direction}
+      >
+        {actions.map(action => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={onClickhandlerFunction([
+              ...action.clickHandlers,
+              handleClose,
+            ])}
+          />
+        ))}
+      </SpeedDial>
       <input
         type="file"
         ref={image}
@@ -107,6 +107,6 @@ export default () => {
         style={{ display: 'none' }}
         onChange={changeHandler}
       />
-    </SpeedDial>
+    </>
   );
 };

@@ -7,10 +7,9 @@ const FunctionList = {
     let isChildEnd = false;
     let i = 0;
     let j = 0;
-    function* ONCE() {
+    function* once() {
       while (i < 1 && codes) {
         while (j < codes.length) {
-          codes[j].isPlay = true;
           isChildEnd = true;
           const cur = codes[j].func.next();
           if (cur && cur.value < codes[j].limit) {
@@ -22,20 +21,20 @@ const FunctionList = {
         yield i += isChildEnd ? 1 : 0;
       }
     }
-    return { func: ONCE() };
+    return { func: once() };
   },
   control_for: (args) => {
-    const limit = args.input;
+    const limit = args.input[0];
     let isChildEnd = false;
     let i = 0;
     let j = 0;
     const codes = args.firstChild;
     function* FOR_LOOP() {
-      while (true && codes) {
+      while (codes) {
+        if (limit <= 0) yield i += 1;
         if (i >= limit) i = 0;
         if (j === codes.length) j = 0;
         while (j < codes.length) {
-          codes[j].func.isPlay = true;
           isChildEnd = true;
           const cur = codes[j].func.next();
           if (cur && cur.value < codes[j].limit) {
@@ -51,61 +50,34 @@ const FunctionList = {
   },
 
   motion_move_forward: (args) => {
-    const value = args.input;
-    const func = { isPlay: true };
-    func.next = () => {
-      if (func.isPlay) Move({ moving: value });
-      func.isPlay = false;
-    };
-    return { func };
+    const value = args.input[0];
+    return { func: { next: () => Move({ moving: value }) } };
   },
 
   motion_change_x: (args) => {
-    const value = args.input;
-    const func = { isPlay: true };
-    func.next = () => {
-      if (func.isPlay) Move({ x: value }, 'x');
-      func.isPlay = false;
-    };
-    return { func };
+    const value = args.input[0];
+    return { func: { next: () => Move({ x: value }, 'x') } };
   },
 
   motion_change_y: (args) => {
-    const value = args.input;
-    const func = { isPlay: true };
-    func.next = () => {
-      if (func.isPlay) Move({ y: value }, 'y');
-      func.isPlay = false;
-    };
-    return { func };
+    const value = args.input[0];
+    return { func: { next: () => Move({ y: value }, 'y') } };
   },
 
   motion_rotate_clock: (args) => {
-    const value = args.input;
-    const func = { isPlay: true };
-    func.next = () => {
-      if (func.isPlay) Rotate(value, 'clock');
-      func.isPlay = false;
-    };
-    return { func };
+    const value = args.input[0];
+    return { func: { next: () => Rotate(value, 'clock') } };
   },
 
   motion_rotate_anti_clock: (args) => {
-    const value = args.input;
-    const func = { isPlay: true };
-    func.next = () => {
-      if (func.isPlay) Rotate(value, 'anticlock');
-      func.isPlay = false;
-    };
-    return { func };
+    const value = args.input[0];
+    return { func: { next: () => Rotate(value, 'anticlock') } };
   },
 
   control_if: (args) => {
     const value = true;
-    const func = {};
-    func.next = () => {};
-    args.input = 1;
-    return value ? FunctionList.control_for(args) : { func };
+    args.input[0] = 1;
+    return value ? FunctionList.control_for(args) : { func: { next: () => {} } };
   },
 };
 
