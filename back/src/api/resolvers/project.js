@@ -5,20 +5,34 @@ export default {
   Query: {
     projects: async (root, value, context) => {
       const user = Utils.findUser(context.req);
-      if (!user) return null;
+      if (!user) return {};
       const project = await prisma.projects();
       return project;
     },
     findProjectById: async (root, { projectId }, context) => {
       const user = Utils.findUser(context.req);
-      const project = await prisma.project({
-        id: projectId,
-      });
-      if (!project.blocks) project.blocks = [];
-      if (project.private) {
-        return project.owner.id === user.id ? project : null;
+      try {
+        const project = await prisma.project({
+          id: projectId,
+        });
+        if (!project) return {};
+        const blocks = await prisma.blocks({
+          where: {
+            project: {
+              id: project.id,
+            },
+          },
+        });
+        if (!blocks) project.blocks = [];
+        else project.blocks = blocks;
+        if (project.private) {
+          return project.owner.id === user.id ? project : {};
+        }
+        return project;
+      } catch (e) {
+        console.error(e);
+        return {};
       }
-      return project;
     },
     findProjectsByUserId: async (root, value, context) => {
       try {
