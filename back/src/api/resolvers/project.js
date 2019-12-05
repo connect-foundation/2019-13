@@ -100,14 +100,21 @@ export default {
       const user = Utils.findUser(context.req);
       if (!user) return false;
       try {
-        await prisma.updateProject({
+        const project = await prisma.project({
           where: {
             id: projectId,
+          },
+        });
+        if (project.owner.id !== user.id) return false;
+        await prisma.updateProject({
+          where: {
+            id: project.id,
           },
           data: {
             title: projectTitle,
           },
         });
+        if (!project) return false;
         const blocks = await prisma.blocks({
           where: {
             project: {
@@ -141,7 +148,14 @@ export default {
               nextElementId: i.nextElementId,
               firstChildElementId: i.firstChildElementId,
               secondChildElementId: i.secondChildElementId,
-              inputElementId: i.inputElementId,
+              inputElementId: {
+                set: i.inputElementId,
+              },
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
             },
             update: {
               type: i.type,
@@ -150,7 +164,14 @@ export default {
               nextElementId: i.nextElementId,
               firstChildElementId: i.firstChildElementId,
               secondChildElementId: i.secondChildElementId,
-              inputElementId: i.inputElementId,
+              inputElementId: {
+                set: i.inputElementId,
+              },
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
             },
           });
         });
@@ -167,7 +188,7 @@ export default {
         const project = await prisma.project({
           id: projectId,
         });
-        if (user.id !== project.owner.id) return 'NOT AUTHORIZATION';
+        if (user.id !== project.owner.id) return false;
         await prisma.deleteManyBlocks({
           project: {
             id: projectId,
@@ -176,10 +197,10 @@ export default {
         await prisma.deleteProject({
           id: projectId,
         });
-        return 'true';
+        return true;
       } catch (e) {
         console.error(e);
-        return 'false';
+        return false;
       }
     },
   },
