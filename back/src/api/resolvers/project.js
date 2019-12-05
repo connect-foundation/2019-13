@@ -143,13 +143,6 @@ export default {
         }).owner();
         if (owner.id !== user.id) return false;
         await prisma.updateProject({
-
-          where: {
-            id: project.id,
-          },
-        });
-        if (project.owner.id !== user.id) return false;
-        await prisma.updateProject({
           where: {
             id: project.id,
           },
