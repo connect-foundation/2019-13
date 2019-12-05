@@ -124,18 +124,18 @@ const path = {
     l 0,0 0,-${CONSTANTS.PIXEL * 3.5}`,
 
   condition: (width = 5) => `M ${CONSTANTS.PIXEL * 2}, 0
-    l 0,0 ${CONSTANTS.PIXEL * width},0
+    l 0,0 ${CONSTANTS.PIXEL * (width + 1)},0
     0,0 ${CONSTANTS.PIXEL * 2},${CONSTANTS.PIXEL * 2}
     0,0 -${CONSTANTS.PIXEL * 2},${CONSTANTS.PIXEL * 2}
-    0,0 -${CONSTANTS.PIXEL * width},0
+    0,0 -${CONSTANTS.PIXEL * (width + 1)},0
     0,0 -${CONSTANTS.PIXEL * 2},-${CONSTANTS.PIXEL * 2}
     0,0 ${CONSTANTS.PIXEL * 2},-${CONSTANTS.PIXEL * 2}`,
 
-  variable: (width = 2) => `M ${CONSTANTS.PIXEL * 3},0
+  variable: (width = 5) => `M ${CONSTANTS.PIXEL * 2.2},0
     l 0,0 ${CONSTANTS.PIXEL * width},0
-    c ${CONSTANTS.PIXEL * 4},0 ${CONSTANTS.PIXEL * 4},${CONSTANTS.PIXEL * 4} 0,${CONSTANTS.PIXEL * 4}
+    c ${CONSTANTS.PIXEL * 3},0 ${CONSTANTS.PIXEL * 3},${CONSTANTS.PIXEL * 4} 0,${CONSTANTS.PIXEL * 4}
     l 0,0 -${CONSTANTS.PIXEL * width},0
-    c -${CONSTANTS.PIXEL * 4},0 -${CONSTANTS.PIXEL * 4},-${CONSTANTS.PIXEL * 4} 0,-${CONSTANTS.PIXEL * 4}`,
+    c -${CONSTANTS.PIXEL * 3},0 -${CONSTANTS.PIXEL * 3},-${CONSTANTS.PIXEL * 4} 0,-${CONSTANTS.PIXEL * 4}`,
 };
 
 export default path;
