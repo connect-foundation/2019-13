@@ -30,7 +30,7 @@ export default () => {
               <span> 프로젝트 만들기</span>
             </Link>
             {isLoggedIn ? (
-              <Link to="/project">
+              <Link to="/mypage">
                 <span> 내 작품</span>
               </Link>
             ) : (
