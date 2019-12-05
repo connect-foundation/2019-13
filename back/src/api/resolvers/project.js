@@ -96,14 +96,22 @@ export default {
       const user = Utils.findUser(context.req);
       if (!user) return false;
       try {
+        const project = await prisma.project({
+          id: projectId,
+        });
+        const owner = await prisma.project({
+          id: projectId,
+        }).owner();
+        if (owner.id !== user.id) return false;
         await prisma.updateProject({
           where: {
-            id: projectId,
+            id: project.id,
           },
           data: {
             title: projectTitle,
           },
         });
+        if (!project) return false;
         const blocks = await prisma.blocks({
           where: {
             project: {
