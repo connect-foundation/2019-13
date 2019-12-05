@@ -3,12 +3,11 @@ type block {
   type: String!
   positionX: Float
   positionY: Float
-  nextElement: block
-  firstChildElement: block
-  secondChildElement: block
-  outputElement: block
+  nextElementId: String
+  firstChildElementId: String
+  secondChildElementId: String
+  inputElementId: String
   project: project! 
-  inputValues: [input_value]!
 }
 
 input createBlockInput {
