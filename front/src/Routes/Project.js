@@ -88,7 +88,9 @@ const Project = ({ match, history }) => {
     {
       onCompleted(createAndSave) {
         const projectId = createAndSave.createProjectAndBlocks;
-        history.push(`/project/${projectId}`);
+        if (projectId) {
+          history.push(`/project/${projectId}`);
+        }
       },
     });
   const [updateProject] = useMutation(UPDATE_BLOCK, {
