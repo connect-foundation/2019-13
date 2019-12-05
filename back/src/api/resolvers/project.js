@@ -168,10 +168,10 @@ export default {
       const user = Utils.findUser(context.req);
       if (!user) return false;
       try {
-        const project = await prisma.project({
+        const owner = await prisma.project({
           id: projectId,
-        });
-        if (user.id !== project.owner.id) return 'NOT AUTHORIZATION';
+        }).owner();
+        if (user.id !== owner.id) return false;
         await prisma.deleteManyBlocks({
           project: {
             id: projectId,
@@ -180,10 +180,10 @@ export default {
         await prisma.deleteProject({
           id: projectId,
         });
-        return 'true';
+        return true;
       } catch (e) {
         console.error(e);
-        return 'false';
+        return false;
       }
     },
   },
