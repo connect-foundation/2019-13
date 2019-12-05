@@ -13,6 +13,7 @@ export default () => {
       <Layer>
         {Object.entries(sprites).map(sprite => (
           <URLImage
+            key={sprite[0]}
             sprite={sprite[1]}
             spritekey={sprite[0]}
             spritesDispatch={spritesDispatch}
