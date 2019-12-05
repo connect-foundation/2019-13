@@ -31,6 +31,7 @@ const FunctionList = {
     const codes = args.firstChild;
     function* FOR_LOOP() {
       while (codes) {
+        if (limit <= 0) yield i += 1;
         if (i >= limit) i = 0;
         if (j === codes.length) j = 0;
         while (j < codes.length) {
