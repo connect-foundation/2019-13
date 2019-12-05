@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-boost';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000',
+  uri: process.env.REACT_APP_GRAPHQL,
   headers: localStorage.getItem('token') ? {
     authorization: `Bearer ${localStorage.getItem('token')}`,
   } : {},
