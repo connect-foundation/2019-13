@@ -5,16 +5,14 @@ import PropType from 'prop-types';
 const Input = ({ block, index }) => {
   const [value, setValue] = useState(block.inputElement[index].value);
   return (
-    <>
-      <foreignObject style={{ width: block.inputWidth[index] }}>
-        <input
-          style={{ width: block.inputWidth[index] }}
-          value={value}
-          onChange={block.changeInputWidth(setValue, index).bind(block)}
-        />
-        <HiddenArea />
-      </foreignObject>
-    </>
+    <foreignObject style={{ width: block.inputWidth[index] }}>
+      <input
+        style={{ width: block.inputWidth[index] }}
+        value={value}
+        onChange={block.changeInputWidth(setValue, index).bind(block)}
+      />
+      <HiddenArea />
+    </foreignObject>
   );
 };
 
