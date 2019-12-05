@@ -23,17 +23,27 @@ export default {
     findProjectsByUserId: async (root, value, context) => {
       try {
         const user = Utils.findUser(context.req);
-        const projects = await prisma.projects({
-          where: {
-            owner: {
-              id: user.id,
-            },
-          },
-        });
-        return projects;
+        const query = `query {
+                              projects(where:{
+                                owner:{
+                                  id : "${user.id}"
+                                }
+                              }){
+                                id
+                                title
+                                description
+                                like
+                                owner {
+                                  email
+                                  picture
+                                }
+                              }
+                            }`;
+        const projects = await prisma.$graphql(query);
+        return projects.projects;
       } catch (e) {
         console.error(e);
-        return false;
+        return [];
       }
     },
   },
