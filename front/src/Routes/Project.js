@@ -1,24 +1,26 @@
-import React, { useReducer, useState, useCallback } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useReducer, useState, useCallback, useEffect } from 'react';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import Snackbar from '../Components/Snackbar';
 import Blockspace from '../Components/Block/index';
-import Blocks from '../Components/Block/Init';
 import Workspace from '../Components/Block/workspace';
 import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
-import { CREATE_AND_SAVE } from '../Apollo/queries/Project';
+import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK } from '../Apollo/queries/Project';
+import init from '../Components/Block/Init';
 
-const getScrollHeight = () => `${Blocks.reduce((acc, block) => acc + block.length, 0) * 100}px`;
+const getScrollHeight = () => `${init}.reduce((acc, block) => acc + block.length, 0) * 100}px`;
 
 const dummyProject = {
   projectName: '첫번째 프로젝트',
   star: true,
   isPublic: true,
 };
+
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
   url: '/logo.png',
@@ -29,39 +31,130 @@ defaultSprite[Utils.uid()] = {
   reversal: false,
 };
 
-const Project = () => {
+let canSave = true;
+
+const Project = ({ match, history }) => {
+  const [projectId, setPorjectId] = useState();
   const [projectName, setProjectName] = useState(dummyProject.projectName);
+  const [ready, setReady] = useState(false);
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
   );
+  const makeBlock = (Blocks) => {
+    const blockTypes = {};
+    init.reduce((pre, cur) => [...pre, ...cur], []).forEach((data) => {
+      blockTypes[data.type] = data;
+    });
+    Blocks.forEach((blockData) => {
+      const block = workspace.addBlock(blockData.id);
+      const dataJSON = blockTypes[blockData.type];
+      dataJSON.x = blockData.positionX;
+      dataJSON.y = blockData.positionY;
+      block.x = blockData.positionX;
+      block.y = blockData.positionY;
+      block.makeFromJSON(dataJSON);
+    });
+    Blocks.forEach((blockData) => {
+      const block = workspace.getBlockById(blockData.id);
+      if (blockData.nextElementId) {
+        const nextBlock = workspace.getBlockById(blockData.nextElementId);
+        block.nextElement = nextBlock;
+        nextBlock.previousElement = block;
+      }
+      if (blockData.firstChildElementId) {
+        const firstChildBlock = workspace.getBlockById(blockData.firstChildElementId);
+        block.firstchildElement = firstChildBlock;
+        firstChildBlock.parentElement = block;
+      }
+      if (blockData.secondChildElementId) {
+        const secondChildElement = workspace.getBlockById(blockData.firstChildElementId);
+        block.secondchildElement = secondChildElement;
+        secondChildElement.parentElement = block;
+      }
+      if (blockData.inputElementId) {
+        block.inputElement = blockData.inputElementId.map(v => ({ type: 'input', value: v }));
+      }
+    });
+    Blocks.forEach((blockData) => {
+      const block = workspace.getBlockById(blockData.id);
+      if (!block.parentElement && !block.previousElement) {
+        workspace.addTopblock(block);
+      }
+    });
+    // workspace.topblocks.forEach(block => block.setAllBlockPosition());
+  };
+  const [createAndSave] = useMutation(CREATE_AND_SAVE,
+    {
+      onCompleted(createAndSave) {
+        const projectId = createAndSave.createProjectAndBlocks;
+        history.push(`/project/${projectId}`);
+      },
+    });
+  const [updateProject] = useMutation(UPDATE_BLOCK, {
+    onCompleted(updateProject) {
+      const result = updateProject.updateProjectAndBlocks;
+      canSave = true;
+    },
+  });
+  const [loadProject] = useLazyQuery(LOAD_PROJECT,
+    {
+      onCompleted(loadProject) {
+        setProjectName(loadProject.findProjectById.title);
+        makeBlock(loadProject.findProjectById.blocks);
+        setReady(true);
+      },
+    });
+  const [sprites, spritesDispatch] = useReducer(
+    spritesReducer,
+    defaultSprite,
+  );
+
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+    message: '로그인이 필요합니다.',
+    color: 'alertColor',
+  });
+
+  useEffect(() => {
+    if (match.params.name) {
+      setPorjectId(match.params.name);
+      loadProject({
+        variables: { projectId: match.params.name },
+      });
+    }
+  }, []);
+
+
   const getProjectName = () => {
     if (projectName.length < 1) {
       setProjectName('임시이름');
     }
     return projectName;
   };
-  const [createAndSave] = useMutation(CREATE_AND_SAVE,
-    {
-      onCompleted(createAndSave) {
-        const projectId = createAndSave.createProjectAndBlocks;
-        //  이후 개별 프로젝트 페이지로 리다이렉션?
-      },
-    });
-
-  const [sprites, spritesDispatch] = useReducer(
-    spritesReducer,
-    defaultSprite,
-  );
-
   const projectNameHandler = useCallback((e) => {
     setProjectName(e.target.value);
   }, []);
 
   const saveHandler = () => {
-    createAndSave({
-      variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
-    });
+    if (!localStorage.getItem('token')) {
+      setSnackbar({ ...snackbar, open: true });
+      return;
+    }
+    canSave = false;
+    if (projectId) {
+      updateProject({
+        variables: { projectId,
+          projectTitle: getProjectName(),
+          input: workspace.extractCoreData() },
+      });
+    } else {
+      createAndSave({
+        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
+      });
+    }
   };
 
   return (
@@ -120,6 +213,7 @@ const Project = () => {
             </div>
             <DrawSection />
           </Contents>
+          <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>

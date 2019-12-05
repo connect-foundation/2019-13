@@ -10,6 +10,7 @@ const LoggedInRoutes = () => (
   <>
     <Route exact path="/" component={LoginMain} />
     <Route exact path="/project" component={Project} />
+    <Route path="/Project/:name" component={Project} />
     <Route exact path="/mypage" component={Mypage} />
   </>
 );
@@ -18,6 +19,7 @@ const LoggedOutRoutes = () => (
   <>
     <Route exact path="/" component={Main} />
     <Route exact path="/project" component={Project} />
+    <Route path="/Project/:name" component={Project} />
     <Route exact path="/mypage" component={Mypage} />
   </>
 );
