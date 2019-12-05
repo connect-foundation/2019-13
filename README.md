@@ -1,6 +1,6 @@
 <img src="docs/assets/readme-banner.png">
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.4.0-blue.svg?cacheSeconds=2592000" />
   <img alt="Version" src="https://img.shields.io/node/v/react" />
   
   <br>
@@ -26,7 +26,7 @@
 <br><br>
 
 ### 얼른 더덕이랑 블록코딩하자구!
-
+### 주소는 http://theduck.cf 야!!
 ## Getting started
 ### 1. Front-end
   1. Move to `front` directory
