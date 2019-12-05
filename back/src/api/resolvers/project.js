@@ -35,6 +35,31 @@ export default {
       }
     },
     findProjectsByUserId: async (root, value, context) => {
+
+      try {
+        const project = await prisma.project({
+          id: projectId,
+        });
+        if (!project) return {};
+        const blocks = await prisma.blocks({
+          where: {
+            project: {
+              id: project.id,
+            },
+          },
+        });
+        if (!blocks) project.blocks = [];
+        else project.blocks = blocks;
+        if (project.private) {
+          return project.owner.id === user.id ? project : {};
+        }
+        return project;
+      } catch (e) {
+        console.error(e);
+        return {};
+      }
+    },
+    findProjectsByUserId: async (root, value, context) => {
       try {
         const user = Utils.findUser(context.req);
         const query = `query {
@@ -118,6 +143,13 @@ export default {
         }).owner();
         if (owner.id !== user.id) return false;
         await prisma.updateProject({
+
+          where: {
+            id: project.id,
+          },
+        });
+        if (project.owner.id !== user.id) return false;
+        await prisma.updateProject({
           where: {
             id: project.id,
           },
@@ -159,7 +191,14 @@ export default {
               nextElementId: i.nextElementId,
               firstChildElementId: i.firstChildElementId,
               secondChildElementId: i.secondChildElementId,
-              inputElementId: i.inputElementId,
+              inputElementId: {
+                set: i.inputElementId,
+              },
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
             },
             update: {
               type: i.type,
@@ -168,7 +207,14 @@ export default {
               nextElementId: i.nextElementId,
               firstChildElementId: i.firstChildElementId,
               secondChildElementId: i.secondChildElementId,
-              inputElementId: i.inputElementId,
+              inputElementId: {
+                set: i.inputElementId,
+              },
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
             },
           });
         });
@@ -186,6 +232,7 @@ export default {
           id: projectId,
         }).owner();
         if (user.id !== owner.id) return false;
+
         await prisma.deleteManyBlocks({
           project: {
             id: projectId,
