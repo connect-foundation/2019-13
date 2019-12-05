@@ -13,9 +13,7 @@ const imageRegExp = /image\/(bmp|jpg|jpeg|tiff|png|svg)$/i;
 
 const useStyles = makeStyles(theme => ({
   speedDial: {
-    position: 'relative',
-    top: '30%',
-    left: '40%',
+    position: 'absolute',
     '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
       bottom: theme.spacing(2),
       right: theme.spacing(2),
@@ -80,26 +78,26 @@ export default () => {
   };
   return (
     <>
-    <SpeedDial
-      ariaLabel="Image Block"
-      className={classes.speedDial}
-      icon={<SpeedDialIcon />}
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
-      direction={direction}
-    >
-      {actions.map(action => (
-        <SpeedDialAction
-          key={action.name}
-          icon={action.icon}
-          tooltipTitle={action.name}
+      <SpeedDial
+        ariaLabel="Image Block"
+        className={classes.speedDial}
+        icon={<SpeedDialIcon />}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
+        direction={direction}
+      >
+        {actions.map(action => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
             onClick={onClickhandlerFunction([
               ...action.clickHandlers,
               handleClose,
             ])}
-        />
-      ))}
+          />
+        ))}
       </SpeedDial>
       <input
         type="file"
