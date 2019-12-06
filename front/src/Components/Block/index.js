@@ -20,38 +20,6 @@ export default () => {
   const [scrollY, setScrollY] = useState(20);
   const [initY, setInitY] = useState(20);
 
-  const dragStartHandler = (scrollEvent) => {
-    setMove(true);
-    setInitY(scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y
-    + scrollEvent.target.ownerSVGElement.getBoundingClientRect().y);
-  };
-  const dragMoveHandler = (scrollEvent) => {
-    if (!isMove) return;
-    let diff = (scrollEvent.clientY - initY);
-    if (diff < 20)diff = 20;
-    else if (diff > 670)diff = 670;
-    workspaceDispatch({ type: 'SCROLL_END' });
-    setScrollY(diff);
-  };
-  const dragEndHandler = () => {
-    if (!isMove) return;
-    setMove(false);
-  };
-
-  const clickHandler = (scrollEvent) => {
-    let currentY = scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y;
-    if (currentY < 20)currentY = 20;
-    else if (currentY > 670)currentY = 670;
-    setScrollY(currentY);
-  };
-
-  const wheelSVG = (events) => {
-    const newY = scrollY + events.deltaY;
-    if (newY < 20 || newY > 670) return;
-    workspaceDispatch({ type: 'SCROLL_END' });
-    setScrollY(newY);
-  };
-
   if (!isInit) {
     setIsInit(true);
     workspace.setRender = setRender;
@@ -73,57 +41,11 @@ export default () => {
     });
   }
   return (
-    <Svg onWheel={wheelSVG} transform="translate(60,0)">
-      {isMove ? null
-        : (
-          <rect
-            width="300"
-            height="800"
-            fill="rgba(0,0,0,0)"
-            x="0"
-            y="0"
-            rx="4"
-            ry="4"
-            onMouseUp={dragEndHandler}
-            onMouseMove={dragMoveHandler}
-            onMouseLeave={dragEndHandler}
-            onClick={clickHandler}
-          />
-        )
-      }
+    <Svg transform="translate(60,0)">
       {[...blockModelList.getBlockDB().values()].map(block => (
         <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
       {workspace.topblocks.map(block => <Group block={block} key={block.id} scroll={isMove} />)}
-      {!isMove ? null
-        : (
-          <rect
-            width="300"
-            height="800"
-            fill="rgba(0,0,0,0)"
-            x="0"
-            y="0"
-            rx="4"
-            ry="4"
-            onMouseUp={dragEndHandler}
-            onMouseMove={dragMoveHandler}
-            onMouseLeave={dragEndHandler}
-            onClick={clickHandler}
-          />
-        )}
-
-      <rect
-        width="20"
-        height="100"
-        fill={isMove ? Theme.duckOrangeColor : Theme.unactivedColor}
-        x="275"
-        y={scrollY}
-        rx="4"
-        ry="4"
-        onMouseDown={dragStartHandler}
-        onMouseUp={dragEndHandler}
-        onMouseMove={dragMoveHandler}
-      />
     </Svg>
   );
 };
