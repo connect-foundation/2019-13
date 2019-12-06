@@ -22,13 +22,6 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
         workspace.topblocks,
         workspace.setRender,
       );
-    case 'SCROLL_END':
-      workspace.deleteBlockInModelList();
-      return new Workspace(
-        workspace.blockDB,
-        workspace.topblocks,
-        workspace.setRender,
-      );
     default:
       throw new Error('NOT FOUND TYPE');
   }
