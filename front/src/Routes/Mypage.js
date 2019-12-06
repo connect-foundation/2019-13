@@ -15,7 +15,6 @@ export default () => {
   const [getProjects] = useLazyQuery(GET_PROJECTS, {
     onCompleted(getProjects) {
       setProjects(getProjects.findProjectsByUserId);
-      console.log(projects);
     },
   });
 
@@ -60,7 +59,6 @@ export default () => {
     background-color:${selected ? props => props.theme.duckOrangeColor : props => props.theme.unactivedColor};
   `;
   const removeProjects = (project) => {
-    console.log(project);
     setProjects(projects.filter(p => p.id !== project.id));
   };
   const CardContainer = styled.div`

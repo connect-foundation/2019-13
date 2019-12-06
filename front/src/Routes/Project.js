@@ -88,7 +88,7 @@ const Project = ({ match, history }) => {
     {
       onCompleted(createAndSave) {
         const projectId = createAndSave.createProjectAndBlocks;
-        if (projectId) {
+        if (projectId !== 'false') {
           history.push(`/project/${projectId}`);
         }
       },
@@ -102,9 +102,13 @@ const Project = ({ match, history }) => {
   const [loadProject] = useLazyQuery(LOAD_PROJECT,
     {
       onCompleted(loadProject) {
-        setProjectName(loadProject.findProjectById.title);
-        makeBlock(loadProject.findProjectById.blocks);
-        setReady(true);
+        if (!loadProject.findProjectById) {
+          history.push('/project');
+        } else {
+          setProjectName(loadProject.findProjectById.title);
+          makeBlock(loadProject.findProjectById.blocks);
+          setReady(true);
+        }
       },
     });
   const [sprites, spritesDispatch] = useReducer(

@@ -19,8 +19,8 @@ const projects = [
   {
     id: 1,
     title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
+    description: '더미 입니다.',
+    user: '더미',
     userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
     image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
     likes: 10,
@@ -29,8 +29,8 @@ const projects = [
   {
     id: 2,
     title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
+    description: '더미 입니다.',
+    user: '더미',
     userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
     image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
     likes: 777,
@@ -39,8 +39,8 @@ const projects = [
   {
     id: 3,
     title: 'Project1',
-    description: 'it is an apple.',
-    user: 'youngjun',
+    description: '더미 입니다.',
+    user: '더미',
     userImg: 'https://lh4.googleusercontent.com/-3Yn5JggL7kM/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3reRrjZD6DtgOvM1Aq2jxUrpe6kkrg/photo.jpg',
     image: 'https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg',
     likes: 1000,
