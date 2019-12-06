@@ -35,7 +35,6 @@ export default {
       }
     },
     findProjectsByUserId: async (root, value, context) => {
-
       try {
         const project = await prisma.project({
           id: projectId,
