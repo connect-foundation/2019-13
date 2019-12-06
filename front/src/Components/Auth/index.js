@@ -63,12 +63,6 @@ export default () => {
         // onFailure={responseGoogle}
         cookiePolicy="single_host_origin"
       />
-      <FaceBookLogin
-        appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
-        fields="name,email,picture"
-        callback={responseFacebook}
-        icon="fa-facebook"
-      />
     </>
   );
 };
