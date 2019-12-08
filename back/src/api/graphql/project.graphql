@@ -8,6 +8,8 @@ type project {
   blocks: [block]!
   authes: [project_auth]!
   likes: [like]!
+  isLiked: Boolean!
+  likeCount: Int!
 }
 
 type Query {
