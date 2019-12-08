@@ -172,9 +172,16 @@ export default {
       const user = Utils.findUser(context.req);
       if (!user) return false;
       try {
+        const isProject = await prisma.$exists.project({
+          id: projectId,
+        });
+
+        if (!isProject) return true;
+
         const owner = await prisma.project({
           id: projectId,
         }).owner();
+
         if (user.id !== owner.id) return false;
 
         await prisma.deleteManyBlocks({
@@ -182,6 +189,13 @@ export default {
             id: projectId,
           },
         });
+
+        await prisma.deleteManyLikes({
+          project: {
+            id: projectId,
+          },
+        });
+
         await prisma.deleteProject({
           id: projectId,
         });
