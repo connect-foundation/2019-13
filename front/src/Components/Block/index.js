@@ -67,7 +67,17 @@ export default () => {
           styleIdx,
         });
         idx += 1;
-        y += (json.style === 'double' ? 100 : 50);
+        switch (json.style) {
+          case 'double':
+            y += 100;
+            break;
+          case 'variable':
+          case 'condition':
+            y += 35;
+            break;
+          default:
+            y += 50;
+        }
         blockModelList.addBlock(blockModel);
       });
     });
