@@ -45,5 +45,4 @@ type Like {
   id: ID! @id
   project: Project! @relation(link : TABLE, name:"LikesByProject")
   user: User! @relation(link : TABLE, name:"LikesByUser")
-  order: Int!
 }
