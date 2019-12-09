@@ -1,5 +1,6 @@
 import { prisma } from '../../../prisma-client';
 import Utils from '../../utils/utils';
+import Upload from '../../objectstorage/upload';
 
 export default {
   Query: {
@@ -28,8 +29,9 @@ export default {
     findProjectsByUserId: async (root, value, context) => {
       try {
         const user = Utils.findUser(context.req);
-        // console.log(user);
-        const projects = await prisma.projects({ where: { owner: { id: user.id } } });
+        const projects = await prisma.projects({
+          where: { owner: { id: user.id } },
+        });
         return projects;
       } catch (e) {
         console.error(e);
@@ -38,7 +40,11 @@ export default {
     },
   },
   Mutation: {
-    createProjectAndBlocks: async (root, { projectTitle, input }, context) => {
+    createProjectAndBlocks: async (
+      root,
+      { projectTitle, input, images },
+      context,
+    ) => {
       try {
         const user = Utils.findUser(context.req);
         if (!user) return 'false';
@@ -72,6 +78,26 @@ export default {
             },
           });
         });
+        images.forEach(async (image) => {
+          let url;
+          if (image.url.slice(0, 10) === 'data:image') {
+            const storageResult = await Upload(image.url, image.name || 'image.png');
+            url = storageResult.Location;
+          } else url = image.url;
+          await prisma.createImage({
+            url,
+            name: image.name,
+            positionX: image.x,
+            positionY: image.y,
+            size: image.size,
+            direction: image.direction,
+            project: {
+              connect: {
+                id: project.id,
+              },
+            },
+          });
+        });
         return project.id;
       } catch (e) {
         console.error(e);
@@ -89,9 +115,11 @@ export default {
         const project = await prisma.project({
           id: projectId,
         });
-        const owner = await prisma.project({
-          id: projectId,
-        }).owner();
+        const owner = await prisma
+          .project({
+            id: projectId,
+          })
+          .owner();
         if (owner.id !== user.id) return false;
         await prisma.updateProject({
           where: {
@@ -178,9 +206,11 @@ export default {
 
         if (!isProject) return true;
 
-        const owner = await prisma.project({
-          id: projectId,
-        }).owner();
+        const owner = await prisma
+          .project({
+            id: projectId,
+          })
+          .owner();
 
         if (user.id !== owner.id) return false;
 
