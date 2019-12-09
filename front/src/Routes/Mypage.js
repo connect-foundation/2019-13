@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import Card from '../Components/Card';
 import Spinkit from '../Components/Spinkit';
 import { getDocumentHeight, getScrollTop } from '../utils/endScroll';
 import { GET_PROJECTS } from '../Apollo/queries/Project';
 
-export default () => {
+export default ({ history }) => {
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -18,7 +18,6 @@ export default () => {
   const addProject = () => {
     // projects = projects.concat(appendedProject);
   };
-
   const handleScroll = () => {
     if (loading) return;
     if (getScrollTop() + 1 < getDocumentHeight() - window.innerHeight) return;
@@ -41,6 +40,8 @@ export default () => {
       ))}
     </CardContainer>
   );
+
+  if (!localStorage.getItem('token')) history.goBack();
 
   useEffect(() => {
     getProjects();
