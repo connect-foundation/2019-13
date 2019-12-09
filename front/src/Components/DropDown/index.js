@@ -9,6 +9,7 @@ const DropDown = ({ type = null }) => {
   const logOutHandler = () => {
     removeLocalStorageItem(['token', 'userImage']);
     setLoggedIn(false);
+    window.location.href = '/';
   };
 
   const dropDownData = {

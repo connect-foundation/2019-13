@@ -15,21 +15,21 @@ export default {
         const project = await prisma.project({
           id: projectId,
         });
-        if (!project) return {};
+        if (!project) return null;
         if (project.private) {
           const owner = await prisma.project({ id: projectId }).owner();
-          return (user && owner.id === user.id) ? project : {};
+          return (user && owner.id === user.id) ? project : null;
         }
         return project;
       } catch (e) {
         console.error(e);
-        return {};
+        return null;
       }
     },
     findProjectsByUserId: async (root, value, context) => {
       try {
         const user = Utils.findUser(context.req);
-        // console.log(user);
+        if (!user) return [];
         const projects = await prisma.projects({ where: { owner: { id: user.id } } });
         return projects;
       } catch (e) {
