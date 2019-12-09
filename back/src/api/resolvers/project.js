@@ -18,7 +18,6 @@ export default {
         if (!project) return null;
         if (project.private) {
           const owner = await prisma.project({ id: projectId }).owner();
-          return (user && owner.id === user.id) ? project : {};
           return (user && owner.id === user.id) ? project : null;
         }
         return project;
