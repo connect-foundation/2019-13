@@ -3,6 +3,7 @@
     "@babel/core": "^7.7.2",
     "@babel/node": "^7.7.0",
     "@babel/preset-env": "^7.7.1",
+    "aws-sdk": "2.348.0",
     "babel-eslint": "^10.0.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
