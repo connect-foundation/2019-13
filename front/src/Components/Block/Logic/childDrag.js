@@ -24,6 +24,10 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
     if (block.parentElement) {
       startPosition.y = node.parentNode.firstChild.getBoundingClientRect().height
       - node.getBoundingClientRect().height - CONSTANTS.BLOCK_TAIL_HEIGHT;
+    } else if (block.outputElement) {
+      if (block.outputElement.style === 'double' || block.outputElement.style === 'triple') {
+        startPosition.y = CONSTANTS.PIXEL + 1;
+      }
     }
 
     set({ x: startPosition.x, y: startPosition.y });

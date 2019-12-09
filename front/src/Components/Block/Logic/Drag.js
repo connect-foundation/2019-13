@@ -2,7 +2,7 @@ import childDrag from './childDrag';
 import CONSTANTS from '../constants';
 
 const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
-  if (block.parentElement || block.previousElement) {
+  if (block.parentElement || block.previousElement || block.outputElement) {
     const mousedownChild = childDrag({ set, block, setMoved, workspaceDispatch });
     return mousedownChild;
   }
