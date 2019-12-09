@@ -1,25 +1,15 @@
-import React, { useReducer, useState, useCallback, useEffect } from 'react';
-import { useMutation, useLazyQuery } from '@apollo/react-hooks';
+import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
-import Snackbar from '../Components/Snackbar';
 import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
+import ProjectHeader from '../Components/projectHeader';
 import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
-import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import init from '../Components/Block/Init';
 
 const getScrollHeight = () => `${init}.reduce((acc, block) => acc + block.length, 0) * 100}px`;
-
-const dummyProject = {
-  projectName: '첫번째 프로젝트',
-  star: true,
-  isPublic: true,
-};
 
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
@@ -31,185 +21,22 @@ defaultSprite[Utils.uid()] = {
   reversal: false,
 };
 
-let canSave = true;
-
-const Project = ({ match, history }) => {
-  const [projectId, setPorjectId] = useState();
-  const [projectName, setProjectName] = useState(dummyProject.projectName);
-  const [ready, setReady] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
+const Project = (props) => {
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
   );
-  const makeBlock = (Blocks) => {
-    const blockTypes = {};
-    init.reduce((pre, cur) => [...pre, ...cur], []).forEach((data) => {
-      blockTypes[data.type] = data;
-    });
-    Blocks.forEach((blockData) => {
-      const block = workspace.addBlock(blockData.id);
-      const dataJSON = blockTypes[blockData.type];
-      dataJSON.x = blockData.positionX;
-      dataJSON.y = blockData.positionY;
-      block.x = blockData.positionX;
-      block.y = blockData.positionY;
-      block.makeFromJSON(dataJSON);
-    });
-    Blocks.forEach((blockData) => {
-      const block = workspace.getBlockById(blockData.id);
-      if (blockData.nextElementId) {
-        const nextBlock = workspace.getBlockById(blockData.nextElementId);
-        block.nextElement = nextBlock;
-        nextBlock.previousElement = block;
-      }
-      if (blockData.firstChildElementId) {
-        const firstChildBlock = workspace.getBlockById(blockData.firstChildElementId);
-        block.firstchildElement = firstChildBlock;
-        firstChildBlock.parentElement = block;
-      }
-      if (blockData.secondChildElementId) {
-        const secondChildElement = workspace.getBlockById(blockData.firstChildElementId);
-        block.secondchildElement = secondChildElement;
-        secondChildElement.parentElement = block;
-      }
-      if (blockData.inputElementId) {
-        block.inputElement = blockData.inputElementId.map(v => ({ type: 'input', value: v }));
-      }
-    });
-    Blocks.forEach((blockData) => {
-      const block = workspace.getBlockById(blockData.id);
-      if (!block.parentElement && !block.previousElement) {
-        workspace.addTopblock(block);
-      }
-    });
-    // workspace.topblocks.forEach(block => block.setAllBlockPosition());
-  };
-  const [createAndSave] = useMutation(CREATE_AND_SAVE,
-    {
-      onCompleted(createAndSave) {
-        const projectId = createAndSave.createProjectAndBlocks;
-        if (projectId !== 'false') {
-          history.push(`/project/${projectId}`);
-        }
-      },
-    });
-  const [updateProject] = useMutation(UPDATE_BLOCK, {
-    onCompleted(updateProject) {
-      const result = updateProject.updateProjectAndBlocks;
-      canSave = true;
-    },
-  });
-  const [toggleLike] = useMutation(TOGGLE_LIKE, {
-    onCompleted(toggleLike) {
-      if (toggleLike.toggleLike) {
-        setIsLiked(!isLiked);
-      }
-    },
-  });
-  const [toggleAuth] = useMutation(TOGGLE_AUTH, {
-    onCompleted(res) {
-      if (res.toggleAuth) setIsPrivate(!isPrivate);
-    },
-  });
-  const [loadProject] = useLazyQuery(LOAD_PROJECT,
-    {
-      onCompleted(res) {
-        if (!res.findProjectById) {
-          history.push('/project');
-        } else {
-          setProjectName(res.findProjectById.title);
-          setIsLiked(res.findProjectById.isLiked);
-          setIsPrivate(res.findProjectById.private);
-          makeBlock(res.findProjectById.blocks);
-          setReady(true);
-        }
-      },
-    });
+  const [isReady, setReady] = useState(false);
   const [sprites, spritesDispatch] = useReducer(
     spritesReducer,
     defaultSprite,
   );
 
-  const [snackbar, setSnackbar] = React.useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    message: '로그인이 필요합니다.',
-    color: 'alertColor',
-  });
-
-  useEffect(() => {
-    if (match.params.name) {
-      setPorjectId(match.params.name);
-      loadProject({
-        variables: { projectId: match.params.name },
-      });
-    }
-  }, []);
-
-  const likeHandler = () => {
-    if (projectId) {
-      toggleLike({
-        variables: { projectId },
-      });
-    }
-  };
-
-  const getProjectName = () => {
-    if (projectName.length < 1) {
-      setProjectName('임시이름');
-    }
-    return projectName;
-  };
-  const projectNameHandler = useCallback((e) => {
-    setProjectName(e.target.value);
-  }, []);
-  const authHandler = () => {
-    if (projectId) {
-      toggleAuth({
-        variables: { projectId },
-      });
-    }
-  };
-  const saveHandler = () => {
-    if (!localStorage.getItem('token')) {
-      setSnackbar({ ...snackbar, open: true });
-      return;
-    }
-    canSave = false;
-    if (projectId) {
-      updateProject({
-        variables: { projectId,
-          projectTitle: getProjectName(),
-          input: workspace.extractCoreData() },
-      });
-    } else {
-      createAndSave({
-        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
-      });
-    }
-  };
-
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
         <Wrapper>
-          <ProjectHeader isLiked={isLiked}>
-            <div className="project-info">
-              <input className="project-title" value={projectName} onChange={projectNameHandler} />
-              <button type="button" onClick={likeHandler}>
-                <FontAwesomeIcon icon={faStar} className="star-icon" />
-              </button>
-
-              <button type="button" onClick={authHandler}>
-                {isPrivate ? '비공개' : '전체 공개'}
-              </button>
-              <button type="button"> 초대 </button>
-              <button type="button" onClick={saveHandler}> 저장하기 </button>
-            </div>
-          </ProjectHeader>
+          <ProjectHeader props={props} setReady={setReady} />
           <Contents>
             <Blockspace />
             <div className="Contents__Column block-types">
@@ -248,7 +75,6 @@ const Project = ({ match, history }) => {
             </div>
             <DrawSection />
           </Contents>
-          <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>
@@ -259,40 +85,6 @@ const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
   height: 89vh;
   overflow: hidden;
-`;
-
-const ProjectHeader = styled.div`
-  width: fit-content;
-  height: 50px;
-  position: relative;
-  padding: 12px 20px;
-  .project-info {
-    display: flex;
-    align-items: center;
-    & > * {
-      margin-right: 12px;
-    }
-    button {
-      background: white;
-      border: 1px solid ${props => props.theme.mainBorderColor};
-      border-radius: 5px;
-      height: 30px;
-      padding: 0px 8px;
-    }
-    .star-icon {
-      color: ${props => (props.isLiked === true ? props.theme.eventsColor : 'grey')};
-    }
-  }
-  .project-title {
-    font-size: 20px;
-    min-width: 50px;
-    max-width: 200px;
-    border: none;
-    background: transparent;
-    &:focus {
-      background: white;
-    }
-  }
 `;
 
 const Contents = styled.div`
