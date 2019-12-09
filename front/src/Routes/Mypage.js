@@ -4,7 +4,7 @@ import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import Card from '../Components/Card';
 import Spinkit from '../Components/Spinkit';
 import { getDocumentHeight, getScrollTop } from '../utils/endScroll';
-import { GET_PROJECTS, DELETE_PROJECT } from '../Apollo/queries/Project';
+import { GET_PROJECTS } from '../Apollo/queries/Project';
 
 export default () => {
   const [selected, setSelected] = useState(0);
@@ -13,13 +13,6 @@ export default () => {
   const [getProjects] = useLazyQuery(GET_PROJECTS, {
     onCompleted(res) {
       setProjects(res.findProjectsByUserId);
-    },
-  });
-  const [deleteProject] = useMutation(DELETE_PROJECT, {
-    onCompleted(res) {
-      if (!res.deleteProjectAndBlocks) {
-        getProjects();
-      }
     },
   });
   const addProject = () => {
@@ -35,9 +28,6 @@ export default () => {
   window.addEventListener('scroll', handleScroll);
 
   const removeProjects = (project) => {
-    deleteProject({
-      variables: { projectId: project.id },
-    });
     setProjects(projects.filter(p => p.id !== project.id));
   };
 
