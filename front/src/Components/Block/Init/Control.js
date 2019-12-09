@@ -30,7 +30,7 @@ export default [
       },
       {
         type: 'input',
-        value: '3 > 0',
+        value: '1',
       },
       {
         type: 'text',
