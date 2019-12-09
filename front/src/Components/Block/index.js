@@ -133,6 +133,12 @@ const Svg = styled.svg`
   position: absolute;
   width: 70%;
   height: 84%;
+  g {
+    cursor: grab;
+    &:active {
+      cursor: grabbing;
+    }
+  }
   text {
     font-size: 12px;
     fill: white;
