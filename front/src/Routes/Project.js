@@ -10,7 +10,7 @@ import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
-import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE } from '../Apollo/queries/Project';
+import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import init from '../Components/Block/Init';
 
 const getScrollHeight = () => `${init}.reduce((acc, block) => acc + block.length, 0) * 100}px`;
@@ -38,6 +38,7 @@ const Project = ({ match, history }) => {
   const [projectName, setProjectName] = useState(dummyProject.projectName);
   const [ready, setReady] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
@@ -89,7 +90,7 @@ const Project = ({ match, history }) => {
     {
       onCompleted(createAndSave) {
         const projectId = createAndSave.createProjectAndBlocks;
-        if (projectId) {
+        if (projectId !== 'false') {
           history.push(`/project/${projectId}`);
         }
       },
@@ -107,13 +108,23 @@ const Project = ({ match, history }) => {
       }
     },
   });
+  const [toggleAuth] = useMutation(TOGGLE_AUTH, {
+    onCompleted(res) {
+      if (res.toggleAuth) setIsPrivate(!isPrivate);
+    },
+  });
   const [loadProject] = useLazyQuery(LOAD_PROJECT,
     {
-      onCompleted(loadProject) {
-        setProjectName(loadProject.findProjectById.title);
-        setIsLiked(loadProject.findProjectById.isLiked);
-        makeBlock(loadProject.findProjectById.blocks);
-        setReady(true);
+      onCompleted(res) {
+        if (!res.findProjectById) {
+          history.push('/project');
+        } else {
+          setProjectName(res.findProjectById.title);
+          setIsLiked(res.findProjectById.isLiked);
+          setIsPrivate(res.findProjectById.private);
+          makeBlock(res.findProjectById.blocks);
+          setReady(true);
+        }
       },
     });
   const [sprites, spritesDispatch] = useReducer(
@@ -155,7 +166,13 @@ const Project = ({ match, history }) => {
   const projectNameHandler = useCallback((e) => {
     setProjectName(e.target.value);
   }, []);
-
+  const authHandler = () => {
+    if (projectId) {
+      toggleAuth({
+        variables: { projectId },
+      });
+    }
+  };
   const saveHandler = () => {
     if (!localStorage.getItem('token')) {
       setSnackbar({ ...snackbar, open: true });
@@ -186,8 +203,8 @@ const Project = ({ match, history }) => {
                 <FontAwesomeIcon icon={faStar} className="star-icon" />
               </button>
 
-              <button type="button">
-                {dummyProject.isPublic ? '전체 공개' : '비공개'}
+              <button type="button" onClick={authHandler}>
+                {isPrivate ? '비공개' : '전체 공개'}
               </button>
               <button type="button"> 초대 </button>
               <button type="button" onClick={saveHandler}> 저장하기 </button>
