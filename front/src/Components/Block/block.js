@@ -37,6 +37,11 @@ const Block = class {
     this.secondchildHeight = 24;
     this.inputElement = [];
     this.inputWidth = [];
+    this.inputConnection = null;
+    this.outputConnection = null;
+    this.outputElement = null;
+    this.value = null;
+    this.inputX = [];
   }
 
   setNode = (node) => {
@@ -47,21 +52,27 @@ const Block = class {
   setArgs = () => {
     if (this.node) {
       let positionX = CONSTANTS.PIXEL;
+      this.inputX = [];
       let lastChild;
+      this.render(Math.random());
       this.node.childNodes.forEach((node) => {
-        if (node.tagName !== 'path' && node.tagName !== 'g') {
+        if ((node.tagName !== 'path' && node.tagName !== 'g')
+        || (node.tagName === 'g' && node.id === this.inputElement.reduce((acc, cur) => { if (cur.id === node.id) acc.push(cur.id); return acc; }, [])[0])) {
           this.setArgsPosition(node, positionX);
+          if (node.tagName === 'foreignObject' || node.tagName === 'g') { this.inputX.push(positionX); }
           positionX += node.getBoundingClientRect().width;
           lastChild = node;
         }
       });
       if (this.firstchildHeight < 24) { this.firstchildHeight = 24; }
       if (this.secondchildHeight < 24) { this.secondchildHeight = 24; }
+      let { right } = lastChild.getBoundingClientRect();
+      const { left } = this.node.firstChild.getBoundingClientRect();
+      if (lastChild.tagName === 'foreignObject') {
+        right = left + Number(lastChild.getAttribute('x')) + lastChild.getBoundingClientRect().width;
+      }
       this.makeStyleFromJSON(
-        (lastChild.getBoundingClientRect().right
-        - this.node.firstChild.getBoundingClientRect().left
-        - CONSTANTS.PIXEL * 5)
-        / CONSTANTS.PIXEL,
+        (right - left - CONSTANTS.PIXEL * 5) / CONSTANTS.PIXEL,
         this.firstchildHeight / CONSTANTS.PIXEL - 2,
         this.secondchildHeight / CONSTANTS.PIXEL - 2,
       );
@@ -72,10 +83,14 @@ const Block = class {
   };
 
   setArgsPosition = (node, positionX) => {
-    if (node.tagName !== 'foreignObject') {
-      node.setAttribute('transform', `translate(${positionX},23)`);
-    } else {
-      node.setAttribute('transform', `translate(${positionX + 3},8)`);
+    if (node.tagName === 'g') {
+      node.setAttribute('transform', `translate(${positionX},${this.style === 'condition' || this.style === 'variable' ? 0 : CONSTANTS.PIXEL + 1})`);
+    } else if (node.tagName !== 'foreignObject') {
+      node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
+        ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
+    } else if (node.tagName === 'foreignObject') {
+      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX - 1 : positionX + 5}`);
+      node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
     }
   };
 
@@ -103,22 +118,47 @@ const Block = class {
       );
       this.firstchildConnection.setPositions();
     }
+
+    if (this.inputConnection) {
+      this.inputConnection = [];
+      this.inputX.forEach((x) => {
+        const connection = new Connection(
+          CONSTANTS.INPUT_CONNECITON,
+          this, 'inputPosition',
+        );
+        connection.setPositions(x);
+        this.inputConnection.push(connection);
+      });
+    }
+
+    if (this.outputConnection) {
+      this.outputConnection = new Connection(
+        CONSTANTS.OUTPUT_CONNECTION,
+        this, 'outputPosition',
+      );
+      this.outputConnection.setPositions();
+    }
   }
 
   changeInputWidth = (set, index) => (event) => {
     const { target } = event;
-    const { length } = target.value;
-    if (length > 5) {
-      const { lastChild } = target.parentNode;
-      lastChild.innerHTML = target.value;
-      this.inputWidth[index] = lastChild.clientWidth;
-    } else {
+    this.inputElement[index].value = Number(target.value.replace(/[^0-9-]/g, ''));
+    if (Number.isNaN(this.inputElement[index].value)) this.inputElement[index].value = 0;
+    if (this.inputElement[index].value > Number.MAX_SAFE_INTEGER) {
+      this.inputElement[index].value = Number.MAX_SAFE_INTEGER;
+    } else if (this.inputElement[index].value < Number.MIN_SAFE_INTEGER) {
+      this.inputElement[index].value = Number.MIN_SAFE_INTEGER;
+    }
+    const { lastChild } = target.parentNode;
+    lastChild.innerHTML = this.inputElement[index].value;
+    this.inputWidth[index] = lastChild.clientWidth;
+    if (this.inputElement[index].value > -10000 && this.inputElement[index].value < 100000) {
       this.inputWidth[index] = 30;
     }
     target.parentNode.style.width = `${this.inputWidth[index]}px`;
     target.style.width = `${this.inputWidth[index]}px`;
-    this.inputElement[index].value = target.value;
-    if (set) { set(target.value); }
+    if (set) { set(this.inputElement[index].value); }
+    this.arithmeticOrCompare();
     this.setArgs();
   };
 
@@ -155,6 +195,14 @@ const Block = class {
       this.firstchildConnection = true;
     }
 
+    if (json.inputConnection) {
+      this.inputConnection = true;
+    }
+
+    if (json.outputConnection) {
+      this.outputConnection = true;
+    }
+
     if (!this.workspace.getBlockById(this.id)) {
       this.workspace.blockDB[this.id] = this;
     }
@@ -170,6 +218,7 @@ const Block = class {
   };
 
   makeStyleFromJSON = (width, height, secondHeight) => {
+    if (width < 0) return;
     switch (this.style) {
       case 'single':
         this.path = create(
@@ -291,6 +340,12 @@ const Block = class {
     if (this.secondchildElement) {
       this.secondchildElement.setDrag(isDragged);
     }
+
+    this.inputElement.forEach((input) => {
+      if (input.type === 'block') {
+        this.workspace.getBlockById(input.id).setDrag(isDragged);
+      }
+    });
   };
 
   getAvailableConnection = (isDragged = false) => {
@@ -309,10 +364,27 @@ const Block = class {
       availableConnection.push(this.firstchildConnection);
     }
 
+    if (this.inputConnection && !isDragged) {
+      this.inputConnection.forEach((connection) => {
+        availableConnection.push(connection);
+      });
+    }
+
+    if (this.outputConnection && (this.outputElement === null)) {
+      availableConnection.push(this.outputConnection);
+    }
+
     return availableConnection;
   };
 
   setNextElementPosition = () => {
+    this.inputElement.forEach((input, idx) => {
+      if (input.type === 'block') {
+        this.workspace.getBlockById(input.id).x = this.x + this.inputX[idx];
+        if (this.style === 'condition' || this.style === 'variable') { this.workspace.getBlockById(input.id).y = this.y; } else { this.workspace.getBlockById(input.id).y = this.y + CONSTANTS.PIXEL + 1; }
+        this.workspace.getBlockById(input.id).setNextElementPosition();
+      }
+    });
     if (this.firstchildElement) {
       this.setFirstChildPosition();
       this.firstchildHeight = this.firstchildElement.node.getBoundingClientRect().height
@@ -388,12 +460,26 @@ const Block = class {
         }
         break;
       case 'outputPosition':
-        break;
-      case 'inputPosition':
-        break;
+      { const inputElement = conn.source.inputElement[conn.source.inputConnection.indexOf(conn)];
+        if (inputElement.type === 'block') {
+          const connectedBlock = this.workspace.getBlockById(inputElement.id);
+          connectedBlock.disconnectBlock();
+          connectedBlock.x += 5;
+          connectedBlock.y += 5;
+          this.workspace.addTopblock(connectedBlock);
+        }
+        if (conn.source.inputConnection.indexOf(conn)) {
+          conn.source.args[conn.source.args.lastIndexOf('input')] = 'block';
+        } else {
+          conn.source.args[conn.source.args.indexOf('input')] = 'block';
+        }
+        inputElement.type = 'block';
+        inputElement.id = this.id;
+        inputElement.value = this.value;
+        this.outputElement = conn.source;
+        this.outputElement.arithmeticOrCompare();
+        break; }
       case 'firstChildPosition':
-        break;
-      case 'secondChildPosition':
         break;
       default:
         throw new Error('잘못된 커넥션 타입입니다.');
@@ -415,10 +501,92 @@ const Block = class {
         this.parentElement = null;
       }
     }
+    if (this.outputElement) {
+      this.outputElement.inputElement.forEach((input, idx) => {
+        if (input.id === this.id) {
+          input.id = null;
+          input.value = 0;
+          input.type = 'input';
+          if (idx) {
+            this.outputElement.args[this.outputElement.args.lastIndexOf('block')] = 'input';
+          } else {
+            this.outputElement.args[this.outputElement.args.indexOf('block')] = 'input';
+          }
+        }
+      });
+      this.outputElement.arithmeticOrCompare(false);
+      this.outputElement = null;
+    }
   };
 
   setAllBlockPosition = () => {
     this.setNextElementPosition();
+  }
+
+  arithmetic = (doRender) => {
+    let value;
+    switch (this.type) {
+      case 'operator_plus':
+        value = Number(this.inputElement[0].value) + Number(this.inputElement[1].value);
+        break;
+      case 'operator_minus':
+        value = Number(this.inputElement[0].value) - Number(this.inputElement[1].value);
+        break;
+      case 'operator_multiply':
+        value = Number(this.inputElement[0].value) * Number(this.inputElement[1].value);
+        break;
+      case 'operator_division':
+        value = Number(this.inputElement[0].value) / Number(this.inputElement[1].value);
+        if (Number.isNaN(value)) value = 0;
+        else if (value === Infinity) value = 0;
+        break;
+      default:
+        break;
+    }
+    this.value = value;
+    if (this.outputElement) {
+      this.callOutputElement(doRender);
+    }
+  }
+
+  compare = (doRender) => {
+    let value;
+    switch (this.type) {
+      case 'operator_gt':
+        value = Number(this.inputElement[0].value) > Number(this.inputElement[1].value);
+        break;
+      case 'operator_lt':
+        value = Number(this.inputElement[0].value) < Number(this.inputElement[1].value);
+        break;
+      case 'operator_eq':
+        value = Number(this.inputElement[0].value) === Number(this.inputElement[1].value);
+        break;
+      case 'operator_ne':
+        value = Number(this.inputElement[0].value) !== Number(this.inputElement[1].value);
+        break;
+      default:
+        break;
+    }
+    this.value = value;
+    if (this.outputElement) {
+      this.callOutputElement(doRender);
+    }
+  }
+
+  callOutputElement = (doRender) => {
+    this.outputElement.inputElement.forEach((input) => {
+      if (input.id === this.id) {
+        input.value = this.value;
+      }
+    });
+    if (this.outputElement.type.substring(0, 8) === 'operator') {
+      this.outputElement.arithmeticOrCompare();
+    }
+    if (doRender) { this.outputElement.setArgs(); }
+  }
+
+  arithmeticOrCompare = (doRender = true) => {
+    if (this.style === 'variable') { this.arithmetic(doRender); } else if (this.style === 'condition') { this.compare(doRender); }
   }
 };
 

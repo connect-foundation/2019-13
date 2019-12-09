@@ -1,17 +1,10 @@
 import React from 'react';
 import Path from './Path';
 import Utils from '../../utils/utils';
-import Constants from './constants';
+import CONSTANTS from './constants';
 
 const create = React.createElement;
-const setArgsPosition = (childnode, positionX) => {
-  if (childnode.tagName !== 'foreignObject') {
-    childnode.setAttribute('transform', `translate(${positionX},23)`);
-  } else {
-    childnode.setAttribute('transform', `translate(${positionX + 3},8)`);
-  }
-  return childnode;
-};
+
 const BlockModel = class {
   constructor(usedId) {
     this.id = usedId;
@@ -36,25 +29,34 @@ const BlockModel = class {
 
   setArgs() {
     if (this.node) {
-      let positionX = Constants.PIXEL;
+      let positionX = CONSTANTS.PIXEL;
       let lastChild;
       this.node.childNodes.forEach((node) => {
         if (node.tagName !== 'path' && node.tagName !== 'g') {
-          setArgsPosition(node, positionX);
+          this.setArgsPosition(node, positionX);
           positionX += node.getBoundingClientRect().width;
           lastChild = node;
         }
       });
-      this.makeStyleFromJSON(
-        (lastChild.getBoundingClientRect().right
-          - this.node.getBoundingClientRect().left
-          - Constants.PIXEL * 5)
-          / Constants.PIXEL,
-      );
+      let { right } = lastChild.getBoundingClientRect();
+      const { left } = this.node.firstChild.getBoundingClientRect();
+      if (lastChild.tagName === 'foreignObject') {
+        right = left + Number(lastChild.getAttribute('x')) + lastChild.getBoundingClientRect().width;
+      }
+      this.makeStyleFromJSON((right - left - CONSTANTS.PIXEL * 5) / CONSTANTS.PIXEL);
       this.render(Math.random());
     }
   }
 
+  setArgsPosition(node, positionX) {
+    if (node.tagName !== 'foreignObject') {
+      node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
+        ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
+    } else if (node.tagName === 'foreignObject') {
+      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX - 1 : positionX + 5}`);
+      node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
+    }
+  }
 
   changeInputWidth(event) {
     const { target } = event;
@@ -104,7 +106,7 @@ const BlockModel = class {
       this.args.push(
         create(
           'foreignObject',
-          { key: 'foreign' },
+          { key: `foreign${this.args.length}` },
           create(
             json.type,
             { key: json.value, onChange: this.changeInputWidth.bind(this), value: json.value },
