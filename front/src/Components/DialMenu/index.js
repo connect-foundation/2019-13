@@ -57,6 +57,8 @@ export default () => {
       const reader = new FileReader();
       reader.onload = (event) => {
         const value = {
+          name: file.name,
+          type: file.type,
           url: event.target.result,
           size: 100,
           direction: 90,

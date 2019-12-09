@@ -23,8 +23,8 @@ export const DELETE_PROJECT = gql`
 `;
 
 export const CREATE_AND_SAVE = gql`
-  mutation createProjectAndBlocks($projectTitle: String!, $input: [createBlockInput]! ) {
-    createProjectAndBlocks(projectTitle: $projectTitle, input: $input)
+  mutation createProjectAndBlocks($projectTitle: String!, $input: [createBlockInput]!, $images: [Upload]! ) {
+    createProjectAndBlocks(projectTitle: $projectTitle, input: $input, images: $images)
   }
 `;
 

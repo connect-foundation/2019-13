@@ -23,6 +23,7 @@ const dummyProject = {
 
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
+  name: 'logo.png',
   url: '/logo.png',
   size: 100,
   direction: 90,
@@ -170,7 +171,7 @@ const Project = ({ match, history }) => {
       });
     } else {
       createAndSave({
-        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
+        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData(), images: Object.values(sprites) },
       });
     }
   };
