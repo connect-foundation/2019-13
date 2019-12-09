@@ -80,10 +80,13 @@ export default {
         });
         images.forEach(async (image) => {
           let url;
-          if (image.url.slice(0, 10) === 'data:image') {
-            const storageResult = await Upload(image.url, image.name || 'image.png');
+          if (image.file) {
+            const {
+              filename, createReadStream,
+            } = await image.file;
+            const storageResult = await Upload(createReadStream, filename);
             url = storageResult.Location;
-          } else url = image.url;
+          } else { url = image.url; }
           await prisma.createImage({
             url,
             name: image.name,

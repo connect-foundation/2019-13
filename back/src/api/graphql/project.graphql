@@ -1,3 +1,4 @@
+scalar Upload
 type project {
   id: ID!
   title: String!
@@ -10,6 +11,7 @@ type project {
   likes: [like]!
   isLiked: Boolean!
   likeCount: Int!
+  images: [Image]!
 }
 
 type Query {
