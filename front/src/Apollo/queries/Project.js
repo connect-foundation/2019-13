@@ -5,7 +5,8 @@ export const GET_PROJECTS = gql`
     findProjectsByUserId {
       id,
       title,
-      like,
+      isLiked,
+      likeCount,
       description,
       owner {
         email,
@@ -39,7 +40,7 @@ export const LOAD_PROJECT = gql`
       id,
       title,
       description,
-      like,
+      isLiked,
       private,
       blocks{
         id,
@@ -51,5 +52,11 @@ export const LOAD_PROJECT = gql`
         positionY,
       },
     }
+  }
+`;
+
+export const TOGGLE_LIKE = gql`
+  mutation toggleLike($projectId: String!) {
+    toggleLike(projectId: $projectId) 
   }
 `;

@@ -1,18 +1,32 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { useState } from 'react';
 import Proptype from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
-import { DELETE_PROJECT } from '../../Apollo/queries/Project';
+import { DELETE_PROJECT, TOGGLE_LIKE } from '../../Apollo/queries/Project';
 
 
 const Card = ({ project, removeProjects }) => {
+  const [isLiked, setIsLiked] = useState(project.isLiked);
+  const [likeCount, setLikeCount] = useState(project.likeCount);
   const [deleteProject] = useMutation(DELETE_PROJECT, {
     onCompleted(deleteProject) {
       removeProjects(project);
-      console.log(deleteProject);
     },
   });
+  const [toggleLike] = useMutation(TOGGLE_LIKE, {
+    onCompleted(toggleLike) {
+      if (toggleLike.toggleLike) {
+        setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+        setIsLiked(!isLiked);
+      }
+    },
+  });
+  const likeHandler = () => {
+    toggleLike({
+      variables: { projectId: project.id },
+    });
+  };
   const deleteHandler = () => {
     deleteProject({
       variables: { projectId: project.id },
@@ -34,12 +48,12 @@ const Card = ({ project, removeProjects }) => {
           <UserName>{project.owner ? project.owner.email : 'test'}</UserName>
         </ProfileWrapper>
         <div>
-          <StarWrapper project={project}>
+          <StarWrapper project={project} isLiked={isLiked} onClick={likeHandler}>
             <StarSVG>
               <StarPath points={points} project={project} />
             </StarSVG>
             <StarText project={project}>
-              {project.like}
+              {likeCount}
             </StarText>
           </StarWrapper>
           <button type="button" onClick={deleteHandler}> 삭제 </button>
@@ -94,7 +108,7 @@ const InfoContainer = styled.div`
 
 const StarWrapper = styled.div`
   display: flex;
-  background-color: ${props => (props.project.pushLike
+  background-color: ${props => (props.isLiked
     ? props.theme.activeButtonColor
     : props.theme.unactivedColor)};
   border-radius: 5px;

@@ -10,7 +10,7 @@ import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
-import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK } from '../Apollo/queries/Project';
+import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE } from '../Apollo/queries/Project';
 import init from '../Components/Block/Init';
 
 const getScrollHeight = () => `${init}.reduce((acc, block) => acc + block.length, 0) * 100}px`;
@@ -37,6 +37,7 @@ const Project = ({ match, history }) => {
   const [projectId, setPorjectId] = useState();
   const [projectName, setProjectName] = useState(dummyProject.projectName);
   const [ready, setReady] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
     new Workspace(),
@@ -99,10 +100,18 @@ const Project = ({ match, history }) => {
       canSave = true;
     },
   });
+  const [toggleLike] = useMutation(TOGGLE_LIKE, {
+    onCompleted(toggleLike) {
+      if (toggleLike.toggleLike) {
+        setIsLiked(!isLiked);
+      }
+    },
+  });
   const [loadProject] = useLazyQuery(LOAD_PROJECT,
     {
       onCompleted(loadProject) {
         setProjectName(loadProject.findProjectById.title);
+        setIsLiked(loadProject.findProjectById.isLiked);
         makeBlock(loadProject.findProjectById.blocks);
         setReady(true);
       },
@@ -129,6 +138,13 @@ const Project = ({ match, history }) => {
     }
   }, []);
 
+  const likeHandler = () => {
+    if (projectId) {
+      toggleLike({
+        variables: { projectId },
+      });
+    }
+  };
 
   const getProjectName = () => {
     if (projectName.length < 1) {
@@ -163,10 +179,10 @@ const Project = ({ match, history }) => {
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
         <Wrapper>
-          <ProjectHeader isStared={dummyProject.star.toString()}>
+          <ProjectHeader isLiked={isLiked}>
             <div className="project-info">
               <input className="project-title" value={projectName} onChange={projectNameHandler} />
-              <button type="button">
+              <button type="button" onClick={likeHandler}>
                 <FontAwesomeIcon icon={faStar} className="star-icon" />
               </button>
 
@@ -247,7 +263,7 @@ const ProjectHeader = styled.div`
       padding: 0px 8px;
     }
     .star-icon {
-      color: ${props => (props.isStared === 'true' ? props.theme.eventsColor : 'grey')};
+      color: ${props => (props.isLiked === true ? props.theme.eventsColor : 'grey')};
     }
   }
   .project-title {
