@@ -12,7 +12,6 @@ export const GET_PROJECTS = gql`
         email,
         picture,
       },
-      
     }
   }
 `;

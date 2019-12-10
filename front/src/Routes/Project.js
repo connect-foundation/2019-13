@@ -115,7 +115,6 @@ const Project = ({ match, history }) => {
   const [loadProject] = useLazyQuery(LOAD_PROJECT,
     {
       onCompleted(loadProject) {
-        console.log(loadProject.findProjectById);
         spritesDispatch({ type: 'LOAD_PROJECT', images: loadProject.findProjectById.images });
         setProjectName(loadProject.findProjectById.title);
         setIsLiked(loadProject.findProjectById.isLiked);

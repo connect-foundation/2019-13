@@ -95,7 +95,6 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
         CANVASCONSTANTS.CANVAS.HEIGHT / 2,
       );
       changeSprites[key] = position;
-      console.log(changeSprites);
       return changeSprites;
     case 'DRAG_END':
       position.x = Utils.checkRange(

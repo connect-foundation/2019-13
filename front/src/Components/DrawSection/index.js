@@ -65,7 +65,6 @@ export default () => {
       position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],
     });
   }, [sprites]);
-  console.log(currentSprite.position);
   return (
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
       <DrawSectionWrapper className="Contents__Column">
