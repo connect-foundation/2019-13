@@ -34,14 +34,14 @@ const BlockModel = class {
       this.node.childNodes.forEach((node) => {
         if (node.tagName !== 'path' && node.tagName !== 'g') {
           this.setArgsPosition(node, positionX);
-          positionX += node.getBoundingClientRect().width;
+          if (node.tagName === 'foreignObject') { positionX += CONSTANTS.DEFAULT_INPUT_WIDTH + CONSTANTS.PIXEL; } else { positionX += node.getBoundingClientRect().width; }
           lastChild = node;
         }
       });
       let { right } = lastChild.getBoundingClientRect();
       const { left } = this.node.firstChild.getBoundingClientRect();
       if (lastChild.tagName === 'foreignObject') {
-        right = left + Number(lastChild.getAttribute('x')) + lastChild.getBoundingClientRect().width;
+        right = left + Number(lastChild.getAttribute('x')) + CONSTANTS.DEFAULT_INPUT_WIDTH;
       }
       this.makeStyleFromJSON((right - left - CONSTANTS.PIXEL * 5) / CONSTANTS.PIXEL);
       this.render(Math.random());
@@ -53,7 +53,7 @@ const BlockModel = class {
       node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
         ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
     } else if (node.tagName === 'foreignObject') {
-      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX - 1 : positionX + 5}`);
+      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
       node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
     }
   }
