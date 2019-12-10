@@ -12,6 +12,7 @@ export const GET_PROJECTS = gql`
         email,
         picture,
       },
+      
     }
   }
 `;
@@ -51,6 +52,15 @@ export const LOAD_PROJECT = gql`
         positionX,
         positionY,
       },
+      images{
+        id,
+        name,
+        url,
+        positionX,
+        positionY,
+        size,
+        direction
+      }
     }
   }
 `;

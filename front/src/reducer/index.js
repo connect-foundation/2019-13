@@ -34,7 +34,7 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
   }
 };
 
-export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
+export const spritesReducer = (sprites, { type, coordinate, key, value, images }) => {
   const changeSprites = { ...sprites };
   const position = sprites[key];
   let eventValue = null;
@@ -95,6 +95,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
         CANVASCONSTANTS.CANVAS.HEIGHT / 2,
       );
       changeSprites[key] = position;
+      console.log(changeSprites);
       return changeSprites;
     case 'DRAG_END':
       position.x = Utils.checkRange(
@@ -122,6 +123,13 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
     case 'ADD_IMAGE':
       changeSprites[key] = value;
       return changeSprites;
+    case 'LOAD_PROJECT':
+      return images.reduce((prev, curr) => {
+        // eslint-disable-next-line no-param-reassign
+        prev[curr.id] = { ...curr, x: curr.positionX, y: curr.positionY };
+        return prev;
+      }, {});
+      // changeSprites[key] = value;
     default:
       throw new Error('NOT FOUND TYPE');
   }

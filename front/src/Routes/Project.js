@@ -86,6 +86,10 @@ const Project = ({ match, history }) => {
     });
     // workspace.topblocks.forEach(block => block.setAllBlockPosition());
   };
+  const [sprites, spritesDispatch] = useReducer(
+    spritesReducer,
+    defaultSprite,
+  );
   const [createAndSave] = useMutation(CREATE_AND_SAVE,
     {
       onCompleted(createAndSave) {
@@ -111,18 +115,17 @@ const Project = ({ match, history }) => {
   const [loadProject] = useLazyQuery(LOAD_PROJECT,
     {
       onCompleted(loadProject) {
+        console.log(loadProject.findProjectById);
+        spritesDispatch({ type: 'LOAD_PROJECT', images: loadProject.findProjectById.images });
         setProjectName(loadProject.findProjectById.title);
         setIsLiked(loadProject.findProjectById.isLiked);
         makeBlock(loadProject.findProjectById.blocks);
         setReady(true);
       },
     });
-  const [sprites, spritesDispatch] = useReducer(
-    spritesReducer,
-    defaultSprite,
-  );
 
-  const [snackbar, setSnackbar] = React.useState({
+
+  const [snackbar, setSnackbar] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
