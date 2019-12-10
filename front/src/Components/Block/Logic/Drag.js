@@ -1,5 +1,6 @@
 import childDrag from './childDrag';
 import CONSTANTS from '../constants';
+import makeTargetPath from './makeTargetPath';
 
 const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
   if (block.parentElement || block.previousElement || block.outputElement) {
@@ -8,17 +9,19 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
   }
   const mousedown = (eventDown) => {
     setMoved(true);
-    if (eventDown.target.tagName !== 'path' || eventDown.button !== 0) {
+    if (eventDown.button !== 0) {
       return;
     }
+    let { target } = eventDown;
+    target = makeTargetPath(target);
     eventDown.preventDefault();
     eventDown.stopPropagation();
 
     const startPosition = { x: 0, y: 0 };
-    startPosition.x = eventDown.target.getBoundingClientRect().x
-    - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
-    startPosition.y = eventDown.target.getBoundingClientRect().y
-    - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
+    startPosition.x = target.getBoundingClientRect().x
+    - target.ownerSVGElement.getBoundingClientRect().x;
+    startPosition.y = target.getBoundingClientRect().y
+    - target.ownerSVGElement.getBoundingClientRect().y;
 
     set({
       x: startPosition.x,
@@ -47,6 +50,9 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
       document.removeEventListener('mouseup', mouseup);
       if (startPosition.x === currentPosition.x && startPosition.y === currentPosition.y) {
         block.workspace.dragging.reset();
+        if (eventUp.target.tagName === 'INPUT') {
+          eventUp.target.select();
+        }
         return;
       }
       block.dragEnd(currentPosition.x, currentPosition.y);
