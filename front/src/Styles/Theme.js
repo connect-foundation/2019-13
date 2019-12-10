@@ -3,6 +3,7 @@ export default {
   headerColor: '#2176C5',
   projectBgColor: '#F2FAFF',
   mainBorderColor: '#d8d8d8',
+  mainBorder: '1px solid #d8d8d8',
   motionColor: '#5c98fe',
   motionStrokeColor: '#4289eb',
   eventsColor: '#f2d402',

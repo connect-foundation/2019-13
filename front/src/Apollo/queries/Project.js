@@ -40,6 +40,11 @@ export const LOAD_PROJECT = gql`
       id,
       title,
       description,
+      likeCount,
+      owner {
+        email,
+        picture,
+      },
       isLiked,
       private,
       blocks{
@@ -60,7 +65,7 @@ export const LOAD_PROJECT = gql`
         size,
         direction,
         realName
-      }
+      },
     }
   }
 `;
