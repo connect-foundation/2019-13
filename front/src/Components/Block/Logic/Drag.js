@@ -55,8 +55,12 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
         }
         return;
       }
+      if (currentPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
+        currentPosition.x = CONSTANTS.DELETE_AREA_X + 1;
+        set({ x: currentPosition.x, y: currentPosition.y });
+      }
       block.dragEnd(currentPosition.x, currentPosition.y);
-      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
+      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
         workspaceDispatch({
           type: 'DELETE_BLOCK',
           id: block.id,
