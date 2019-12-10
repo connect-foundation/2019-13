@@ -120,7 +120,6 @@ export default () => {
 };
 
 const DrawSectionWrapper = styled.div`
-  min-width: 400px;
   .draw-section__row {
     & > div {
       width: 100%;
