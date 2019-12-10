@@ -10,9 +10,10 @@ const GroupModel = ({ block, scrollY }) => {
   const [, setRender] = useState();
   const gRef = useRef();
   useEffect(() => {
+    // eslint-disable-next-line
     block.render = setRender;
     block.setNode(gRef.current);
-  }, []);
+  }, [block]);
   return (
     <g
       ref={gRef}

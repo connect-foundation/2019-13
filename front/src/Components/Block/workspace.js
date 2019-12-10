@@ -30,6 +30,7 @@ const Workspace = class {
     if (deleteBlock.secondChildElement) {
       this.deleteBlock(deleteBlock.secondChildElement.id);
     }
+    deleteBlock.inputElement.forEach((input) => { if (input.type === 'block') this.deleteBlock(input.id); });
     Utils.arrayRemove(this.topblocks, deleteBlock);
     delete this.blockDB[usedId];
   }
@@ -70,11 +71,13 @@ const Workspace = class {
 
   dragEnd() {
     const block = this.dragging.dragEnd();
-    if (block.parentElement || block.previousElement) {
+    if (block.parentElement || block.previousElement || block.outputElement) {
       this.removeTopblock(block);
     }
     this.topblocks.forEach((topblock) => {
-      if (topblock !== block) { topblock.setAllBlockPosition(); }
+      if (topblock !== block) {
+        topblock.setAllBlockPosition(true);
+      }
     });
     this.setRender(Math.random());
   }

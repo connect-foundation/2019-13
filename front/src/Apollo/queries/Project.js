@@ -70,3 +70,9 @@ export const TOGGLE_LIKE = gql`
     toggleLike(projectId: $projectId) 
   }
 `;
+
+export const TOGGLE_AUTH = gql`
+  mutation toggleAuth($projectId: String!) {
+    toggleAuth(projectId: $projectId) 
+  }
+`;

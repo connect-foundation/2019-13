@@ -64,7 +64,6 @@
   <tr>
     <td align="center"><a href="https://github.com/munsulim/"><img src="https://avatars2.githubusercontent.com/u/38244766?s=400&v=4" width="75px;" alt="He is front master"/><br /><sub><b>Munsu Lim</b></sub></a><br /><a href="https://github.com/connect-foundation/2019-13/commits/dev?author=munsulim" title="Code">💻</a> </td>
     <td align="center"><a href="https://github.com/kkw01234"><img src="https://avatars0.githubusercontent.com/u/44748071?s=400&v=4" width="75px;" alt="Kunwook Kim"/><br /><sub><b>Kunwook Kim</b></sub></a><br /><a href="https://github.com/connect-foundation/2019-13/commits/dev?author=kkw01234" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/kimjouny"><img src="https://avatars1.githubusercontent.com/u/28224755?s=400&u=4ddde97c2ec117973e00b3d434761ef1539af3b8&v=4" width="75px;" alt="Kimjouny"/><br /><sub><b>Youngjun Kim</b></sub></a><br /><a href="https://github.com/connect-foundation/2019-13/commits/dev?author=kimjouny" title="Code">💻</a> </td>
     <td align="center"><a href="https://github.com/NBJ1995"><img src="https://avatars1.githubusercontent.com/u/37498859?s=400&v=4" width="75px;" alt="Jinkwan Yoo"/><br /><sub><b>Jinkwan Yoo</b></sub></a><br /><a href="https://github.com/connect-foundation/2019-13/commits/dev?author=NBJ1995" title="Code">💻</a></td>
   </tr>
   </table>

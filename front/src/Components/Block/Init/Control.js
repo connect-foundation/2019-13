@@ -17,6 +17,7 @@ export default [
     nextConnection: true,
     previousConnection: true,
     firstchildConnection: true,
+    inputConnection: true,
     color: color.controlColor,
     stroke_color: color.controlStrokeColor,
   },
@@ -29,7 +30,7 @@ export default [
       },
       {
         type: 'input',
-        value: '3 > 0',
+        value: '1',
       },
       {
         type: 'text',
@@ -40,6 +41,7 @@ export default [
     nextConnection: true,
     previousConnection: true,
     firstchildConnection: true,
+    inputConnection: true,
     color: color.controlColor,
     stroke_color: color.controlStrokeColor,
   },
