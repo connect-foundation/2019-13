@@ -1,19 +1,22 @@
 import CONSTANTS from '../constants';
+import makeTargetPath from './makeTargetPath';
 
 const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
   const mousedown = (eventDown) => {
     setMoved(true);
-    if (eventDown.target.tagName !== 'path' || eventDown.button !== 0) {
+    if (eventDown.button !== 0) {
       return;
     }
+    let { target } = eventDown;
+    target = makeTargetPath(target);
     eventDown.preventDefault();
     eventDown.stopPropagation();
 
     const startRealPosition = { x: 0, y: 0 };
-    startRealPosition.x = eventDown.target.getBoundingClientRect().x
-    - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
-    startRealPosition.y = eventDown.target.getBoundingClientRect().y
-    - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
+    startRealPosition.x = target.getBoundingClientRect().x
+    - target.ownerSVGElement.getBoundingClientRect().x;
+    startRealPosition.y = target.getBoundingClientRect().y
+    - target.ownerSVGElement.getBoundingClientRect().y;
 
     const startPosition = { x: 0, y: 0 };
     const { node } = block;
@@ -58,6 +61,9 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
     const mouseup = (eventUp) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
+      if (eventUp.target.tagName === 'INPUT') {
+        eventUp.target.select();
+      }
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
       if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
         workspaceDispatch({
