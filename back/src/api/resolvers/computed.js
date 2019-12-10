@@ -5,6 +5,7 @@ export default {
   project: {
     owner: ({ id }) => prisma.project({ id }).owner(),
     blocks: ({ id }) => prisma.project({ id }).blocks(),
+    images: ({ id }) => prisma.project({ id }).images(),
     isLiked: async (root, value, context) => {
       const { id } = root;
       const user = utils.findUser(context.req);

@@ -23,14 +23,14 @@ export const DELETE_PROJECT = gql`
 `;
 
 export const CREATE_AND_SAVE = gql`
-  mutation createProjectAndBlocks($projectTitle: String!, $input: [createBlockInput]! ) {
-    createProjectAndBlocks(projectTitle: $projectTitle, input: $input)
+  mutation createProjectAndBlocks($projectTitle: String!, $input: [createBlockInput]!, $images: [Upload]! ) {
+    createProjectAndBlocks(projectTitle: $projectTitle, input: $input, images: $images)
   }
 `;
 
 export const UPDATE_BLOCK = gql`
-  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $input: [createBlockInput]!) {
-    updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, input: $input)
+  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $input: [createBlockInput]! $images: [Upload]!) {
+    updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, input: $input, images: $images)
   }
 `;
 
@@ -51,6 +51,16 @@ export const LOAD_PROJECT = gql`
         positionX,
         positionY,
       },
+      images{
+        id,
+        name,
+        url,
+        positionX,
+        positionY,
+        size,
+        direction,
+        realName
+      }
     }
   }
 `;

@@ -13,12 +13,14 @@ const getScrollHeight = () => `${init}.reduce((acc, block) => acc + block.length
 
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
+  name: 'logo.png',
   url: '/logo.png',
   size: 100,
   direction: 90,
   x: 0,
   y: 0,
   reversal: false,
+  realName: '/logo.png',
 };
 
 const Project = (props) => {
@@ -31,7 +33,6 @@ const Project = (props) => {
     spritesReducer,
     defaultSprite,
   );
-
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>

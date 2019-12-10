@@ -1,5 +1,7 @@
 import { prisma } from '../../../prisma-client';
 import Utils from '../../utils/utils';
+import Upload from '../../objectstorage/upload';
+import Delete from '../../objectstorage/delete';
 
 export default {
   Query: {
@@ -39,7 +41,11 @@ export default {
     },
   },
   Mutation: {
-    createProjectAndBlocks: async (root, { projectTitle, input }, context) => {
+    createProjectAndBlocks: async (
+      root,
+      { projectTitle, input, images },
+      context,
+    ) => {
       try {
         const user = Utils.findUser(context.req);
         if (!user) return 'false';
@@ -73,6 +79,35 @@ export default {
             },
           });
         });
+        images.forEach(async (image) => {
+          let url;
+          let realName;
+          if (image.file) {
+            const {
+              filename, createReadStream,
+            } = await image.file;
+            realName = new Date().getTime() + project.id + filename;
+            const storageResult = await Upload(createReadStream, realName);
+            url = storageResult.Location;
+          } else {
+            url = image.url;
+            realName = image.url;
+          }
+          await prisma.createImage({
+            url,
+            name: image.name,
+            realName,
+            positionX: image.x,
+            positionY: image.y,
+            size: image.size,
+            direction: image.direction,
+            project: {
+              connect: {
+                id: project.id,
+              },
+            },
+          });
+        });
         return project.id;
       } catch (e) {
         console.error(e);
@@ -81,7 +116,9 @@ export default {
     },
     updateProjectAndBlocks: async (
       root,
-      { projectId, projectTitle, input },
+      {
+        projectId, projectTitle, input, images,
+      },
       context,
     ) => {
       const user = Utils.findUser(context.req);
@@ -90,9 +127,11 @@ export default {
         const project = await prisma.project({
           id: projectId,
         });
-        const owner = await prisma.project({
-          id: projectId,
-        }).owner();
+        const owner = await prisma
+          .project({
+            id: projectId,
+          })
+          .owner();
         if (owner.id !== user.id) return false;
         await prisma.updateProject({
           where: {
@@ -163,6 +202,73 @@ export default {
             },
           });
         });
+        const prevImages = await prisma.images({
+          where: {
+            project: {
+              id: project.id,
+            },
+          },
+        });
+        const imageSet = new Set();
+        images.forEach((image) => {
+          if (!image.id) return;
+          prevImages.forEach((prevImage) => {
+            if (image.id === prevImage.id) {
+              imageSet.add(prevImage.id);
+            }
+          });
+        });
+
+        prevImages.forEach(async (prevImage) => {
+          if (!(imageSet.has(prevImage.id))) {
+            await Delete(prevImage.realName);
+            await prisma.deleteImage({
+              id: prevImage.id,
+            });
+          }
+        });
+
+        images.forEach(async (image) => {
+          let {
+            id, positionX, positionY, size, direction, name, realName, url, file,
+          } = image;
+          if (file) {
+            const {
+              filename, createReadStream,
+            } = await file;
+            realName = new Date().getTime() + project.id + filename;
+            const resultStorage = await Upload(createReadStream, realName);
+            url = resultStorage.Location;
+          }
+          await prisma.upsertImage({
+            where: {
+              id,
+            },
+            update: {
+              positionX,
+              positionY,
+              size,
+              direction,
+              name,
+            },
+            create: {
+              id,
+              positionX,
+              positionY,
+              size,
+              direction,
+              name,
+              url,
+              realName,
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
+            },
+          });
+        });
+
         return true;
       } catch (e) {
         console.error(e);
@@ -179,9 +285,11 @@ export default {
 
         if (!isProject) return true;
 
-        const owner = await prisma.project({
-          id: projectId,
-        }).owner();
+        const owner = await prisma
+          .project({
+            id: projectId,
+          })
+          .owner();
 
         if (user.id !== owner.id) return false;
 
@@ -196,7 +304,21 @@ export default {
             id: projectId,
           },
         });
-
+        const images = await prisma.images({
+          where: {
+            project: {
+              id: projectId,
+            },
+          },
+        });
+        images.forEach(async (image) => {
+          await Delete(image.realName);
+        });
+        await prisma.deleteManyImages({
+          project: {
+            id: projectId,
+          },
+        });
         await prisma.deleteProject({
           id: projectId,
         });

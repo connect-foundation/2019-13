@@ -17,6 +17,7 @@ type Project {
   blocks: [Block]! @relation(name: "BlocksByProject")
   authes: [ProjectAuth]! @relation(name: "AuthesByProject")
   likes: [Like]! @relation(name : "LikesByProject")
+  images: [Image]! @relation(name : "ImagesByProject")
 }
 type ProjectAuth {
   id: ID! @id
@@ -45,4 +46,15 @@ type Like {
   id: ID! @id
   project: Project! @relation(link : TABLE, name:"LikesByProject")
   user: User! @relation(link : TABLE, name:"LikesByUser")
+}
+type Image {
+  id: ID! @id
+  name: String!
+  project: Project! @relation(link : TABLE, name:"ImagesByProject")
+  url: String!
+  realName: String!
+  positionX: Float!
+  positionY: Float!
+  size: Int!
+  direction: Int!
 }

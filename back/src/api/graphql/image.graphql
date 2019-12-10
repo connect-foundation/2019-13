@@ -1,0 +1,10 @@
+type Image {
+  id: ID!
+  name: String!
+  url: String!
+  positionX: Float!
+  positionY: Float!
+  size: Int!
+  direction: Int!
+  realName: String!
+}

@@ -1,3 +1,4 @@
+scalar Upload
 type project {
   id: ID!
   title: String!
@@ -10,6 +11,7 @@ type project {
   likes: [like]!
   isLiked: Boolean!
   likeCount: Int!
+  images: [Image]!
 }
 
 type Query {
@@ -18,7 +20,7 @@ type Query {
   findProjectsByUserId: [project]!
 }
 type Mutation {
-  createProjectAndBlocks(projectTitle: String!, input: [createBlockInput]!): String!
-  updateProjectAndBlocks(projectId: String!, projectTitle:String!, input: [createBlockInput]): Boolean!
+  createProjectAndBlocks(projectTitle: String!, input: [createBlockInput]!, images: [Upload]!): String!
+  updateProjectAndBlocks(projectId: String!, projectTitle:String!, input: [createBlockInput], images: [Upload]!): Boolean!
   deleteProjectAndBlocks(projectId: String!): Boolean!
 }

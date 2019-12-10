@@ -45,8 +45,8 @@ const stopHandler = () => {
 export default () => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const [currentSprite, setCurrentSprite] = useState({
-    key: key || Object.keys(sprites)[0],
-    position: position || { ...sprites[Object.keys(sprites)[0]] },
+    key: Object.keys(sprites)[0],
+    position: Object.values(sprites)[0],
   });
   const { workspace } = useContext(WorkspaceContext);
   dispatch = spritesDispatch;
@@ -60,7 +60,10 @@ export default () => {
     });
   };
   useEffect(() => {
-    setCurrentSprite({ key, position: sprites[key] });
+    setCurrentSprite({
+      key: key && sprites[key] ? key : Object.keys(sprites)[0],
+      position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],
+    });
   }, [sprites]);
   return (
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
