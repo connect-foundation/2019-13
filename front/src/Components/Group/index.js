@@ -38,7 +38,7 @@ const Group = ({ block }) => {
     // eslint-disable-next-line
     block.render = setRender;
     block.setNode(gRef.current);
-  }, []);
+  }, [block]);
   if (block.previousElement || block.parentElement || block.outputElement) isMoved = true;
   return (
     <g
