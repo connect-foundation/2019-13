@@ -210,7 +210,6 @@ export default {
           },
         });
         const imageSet = new Set();
-        // set.
         images.forEach((image) => {
           if (!image.id) return;
           prevImages.forEach((prevImage) => {
@@ -312,10 +311,8 @@ export default {
             },
           },
         });
-        console.log(images);
         images.forEach(async (image) => {
-          const result = await Delete(image.realName);
-          console.log(result);
+          await Delete(image.realName);
         });
         await prisma.deleteManyImages({
           project: {

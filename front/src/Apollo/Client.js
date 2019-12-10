@@ -1,4 +1,3 @@
-// import ApolloClient from 'apollo-boost';
 import { ApolloClient } from 'apollo-client';
 import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
