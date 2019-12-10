@@ -47,7 +47,6 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite, theme 
     });
   };
   const handleMouseDown = () => {
-    console.log(spritekey, sprite);
     setCurrentSprite({ key: spritekey, position: sprite });
   };
   return (

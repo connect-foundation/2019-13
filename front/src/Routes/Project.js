@@ -30,6 +30,7 @@ defaultSprite[Utils.uid()] = {
   x: 0,
   y: 0,
   reversal: false,
+  realName: '/logo.png',
 };
 
 let canSave = true;
@@ -169,7 +170,8 @@ const Project = ({ match, history }) => {
       updateProject({
         variables: { projectId,
           projectTitle: getProjectName(),
-          input: workspace.extractCoreData() },
+          input: workspace.extractCoreData(),
+          images: Object.entries(sprites).map(sprite => ({ ...sprite[1], positionX: sprite[1].x, positionY: sprite[1].y, id: sprite[0] })) },
       });
     } else {
       createAndSave({

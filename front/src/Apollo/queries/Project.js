@@ -29,8 +29,8 @@ export const CREATE_AND_SAVE = gql`
 `;
 
 export const UPDATE_BLOCK = gql`
-  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $input: [createBlockInput]!) {
-    updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, input: $input)
+  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $input: [createBlockInput]! $images: [Upload]!) {
+    updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, input: $input, images: $images)
   }
 `;
 
@@ -58,7 +58,8 @@ export const LOAD_PROJECT = gql`
         positionX,
         positionY,
         size,
-        direction
+        direction,
+        realName
       }
     }
   }

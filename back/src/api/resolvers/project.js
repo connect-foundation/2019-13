@@ -116,7 +116,9 @@ export default {
     },
     updateProjectAndBlocks: async (
       root,
-      { projectId, projectTitle, input },
+      {
+        projectId, projectTitle, input, images,
+      },
       context,
     ) => {
       const user = Utils.findUser(context.req);
@@ -192,6 +194,73 @@ export default {
               inputElementId: {
                 set: i.inputElementId,
               },
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
+            },
+          });
+        });
+        const prevImages = await prisma.images({
+          where: {
+            project: {
+              id: project.id,
+            },
+          },
+        });
+        const imageSet = new Set();
+        // set.
+        images.forEach((image) => {
+          if (!image.id) return;
+          prevImages.forEach((prevImage) => {
+            if (image.id === prevImage.id) {
+              imageSet.add(prevImage.id);
+            }
+          });
+        });
+
+        prevImages.forEach(async (prevImage) => {
+          if (!(imageSet.has(prevImage.id))) {
+            await Delete(prevImage.realName);
+            await prisma.deleteImage({
+              id: prevImage.id,
+            });
+          }
+        });
+
+        images.forEach(async (image) => {
+          let {
+            id, positionX, positionY, size, direction, name, realName, url, file,
+          } = image;
+          if (file) {
+            const {
+              filename, createReadStream,
+            } = await file;
+            realName = new Date().getTime() + project.id + filename;
+            const resultStorage = await Upload(createReadStream, realName);
+            url = resultStorage.Location;
+          }
+          await prisma.upsertImage({
+            where: {
+              id,
+            },
+            update: {
+              positionX,
+              positionY,
+              size,
+              direction,
+              name,
+            },
+            create: {
+              id,
+              positionX,
+              positionY,
+              size,
+              direction,
+              name,
+              url,
+              realName,
               project: {
                 connect: {
                   id: project.id,

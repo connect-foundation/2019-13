@@ -6,4 +6,5 @@ type Image {
   positionY: Float!
   size: Int!
   direction: Int!
+  realName: String!
 }

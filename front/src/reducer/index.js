@@ -128,7 +128,6 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
         prev[curr.id] = { ...curr, x: curr.positionX, y: curr.positionY };
         return prev;
       }, {});
-      // changeSprites[key] = value;
     default:
       throw new Error('NOT FOUND TYPE');
   }
