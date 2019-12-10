@@ -7,7 +7,7 @@ export default {
   Query: {
     projects: async (root, value, context) => {
       const user = Utils.findUser(context.req);
-      if (!user) throw new Error('not Authorization');
+      if (!user) throw new Error('Not Authorization');
       const project = await prisma.projects();
       return project;
     },
