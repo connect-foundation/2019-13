@@ -52,6 +52,7 @@ type Image {
   name: String!
   project: Project! @relation(link : TABLE, name:"ImagesByProject")
   url: String!
+  realName: String!
   positionX: Float!
   positionY: Float!
   size: Int!

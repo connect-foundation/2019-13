@@ -1,6 +1,7 @@
 import { prisma } from '../../../prisma-client';
 import Utils from '../../utils/utils';
 import Upload from '../../objectstorage/upload';
+import Delete from '../../objectstorage/delete';
 
 export default {
   Query: {
@@ -80,16 +81,22 @@ export default {
         });
         images.forEach(async (image) => {
           let url;
+          let realName;
           if (image.file) {
             const {
               filename, createReadStream,
             } = await image.file;
-            const storageResult = await Upload(createReadStream, filename);
+            realName = new Date().getTime() + project.id + filename;
+            const storageResult = await Upload(createReadStream, realName);
             url = storageResult.Location;
-          } else { url = image.url; }
+          } else {
+            url = image.url;
+            realName = image.url;
+          }
           await prisma.createImage({
             url,
             name: image.name,
+            realName,
             positionX: image.x,
             positionY: image.y,
             size: image.size,
@@ -193,6 +200,7 @@ export default {
             },
           });
         });
+
         return true;
       } catch (e) {
         console.error(e);
@@ -228,7 +236,23 @@ export default {
             id: projectId,
           },
         });
-
+        const images = await prisma.images({
+          where: {
+            project: {
+              id: projectId,
+            },
+          },
+        });
+        console.log(images);
+        images.forEach(async (image) => {
+          const result = await Delete(image.realName);
+          console.log(result);
+        });
+        await prisma.deleteManyImages({
+          project: {
+            id: projectId,
+          },
+        });
         await prisma.deleteProject({
           id: projectId,
         });
