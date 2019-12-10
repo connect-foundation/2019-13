@@ -5,6 +5,7 @@ import LoginMain from '../Routes/LoginMain';
 import Main from '../Routes/Main';
 import Project from '../Routes/Project';
 import Mypage from '../Routes/Mypage';
+import Details from '../Routes/Details';
 
 const LoggedInRoutes = () => (
   <>
@@ -12,6 +13,7 @@ const LoggedInRoutes = () => (
     <Route exact path="/project" component={Project} />
     <Route path="/Project/:name" component={Project} />
     <Route exact path="/mypage" component={Mypage} />
+    <Route exact path="/details/:name" component={Details} />
   </>
 );
 
@@ -21,6 +23,7 @@ const LoggedOutRoutes = () => (
     <Route exact path="/project" component={Project} />
     <Route path="/Project/:name" component={Project} />
     <Route exact path="/mypage" component={Mypage} />
+    <Route exact path="/details/:name" component={Details} />
   </>
 );
 
