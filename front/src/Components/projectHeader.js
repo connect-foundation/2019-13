@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
-import { WorkspaceContext } from '../Context';
+import { WorkspaceContext, SpritesContext } from '../Context';
 import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import init from './Block/Init';
 import Snackbar from './Snackbar';
@@ -14,6 +14,7 @@ export default ({ props, setReady }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
   const [canSave, setCanSave] = useState(true);
+  const { sprites, spritesDispatch } = useContext(SpritesContext);
   const { workspace } = useContext(WorkspaceContext);
   const [snackbar, setSnackbar] = React.useState({
     open: false,
@@ -105,6 +106,7 @@ export default ({ props, setReady }) => {
         if (!res.findProjectById) {
           props.history.goBack();
         } else {
+          spritesDispatch({ type: 'LOAD_PROJECT', images: res.findProjectById.images });
           setProjectName(res.findProjectById.title);
           setIsLiked(res.findProjectById.isLiked);
           setIsPrivate(res.findProjectById.private);
@@ -162,11 +164,12 @@ export default ({ props, setReady }) => {
       updateProject({
         variables: { projectId,
           projectTitle: getProjectName(),
-          input: workspace.extractCoreData() },
+          input: workspace.extractCoreData(),
+          images: Object.entries(sprites).map(sprite => ({ ...sprite[1], positionX: sprite[1].x, positionY: sprite[1].y, id: sprite[0] })) },
       });
     } else {
       createAndSave({
-        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData() },
+        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData(), images: Object.values(sprites) },
       });
     }
   };
