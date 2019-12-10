@@ -7,7 +7,7 @@ export default {
   Query: {
     projects: async (root, value, context) => {
       const user = Utils.findUser(context.req);
-      if (!user) return {};
+      if (!user) throw new Error('not Authorization');
       const project = await prisma.projects();
       return project;
     },
@@ -17,7 +17,7 @@ export default {
         const project = await prisma.project({
           id: projectId,
         });
-        if (!project) return null;
+        if (!project) throw new Error('Not Found Project');
         if (project.private) {
           const owner = await prisma.project({ id: projectId }).owner();
           return (user && owner.id === user.id) ? project : null;
@@ -25,18 +25,16 @@ export default {
         return project;
       } catch (e) {
         console.error(e);
-        return null;
       }
     },
     findProjectsByUserId: async (root, value, context) => {
       try {
         const user = Utils.findUser(context.req);
-        if (!user) return [];
+        if (!user) throw new Error('Not Authorization');
         const projects = await prisma.projects({ where: { owner: { id: user.id } } });
         return projects;
       } catch (e) {
         console.error(e);
-        return [];
       }
     },
   },
@@ -48,7 +46,7 @@ export default {
     ) => {
       try {
         const user = Utils.findUser(context.req);
-        if (!user) return 'false';
+        if (!user) throw new Error('Not Authorization');
         const project = await prisma.createProject({
           title: projectTitle,
           description: '',
@@ -111,7 +109,6 @@ export default {
         return project.id;
       } catch (e) {
         console.error(e);
-        return 'false';
       }
     },
     updateProjectAndBlocks: async (
