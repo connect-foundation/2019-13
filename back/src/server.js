@@ -30,4 +30,4 @@ server.express.use((req, res, next) => {
 });
 
 server.express.use('/auth', authRouter);
-server.start({ port: PORT }, () => console.log(`Server is running on port ${PORT}!`));
+server.start({ port: PORT, debug: false }, () => console.log(`Server is running on port ${PORT}!`));
