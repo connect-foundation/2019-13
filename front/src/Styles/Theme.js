@@ -28,5 +28,5 @@ export default {
   cardBackgroundColor: 'rgba(0,0,0,0.5)',
   cardBorderColor: '#dadada',
   alertColor: '#e4383b',
-  shadowColor: '#7a502d',
+  shadowColor: '#d8b598',
 };

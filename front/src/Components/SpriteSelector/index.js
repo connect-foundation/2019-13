@@ -25,6 +25,6 @@ const SpriteContainer = styled.div`
   border: 1px solid black;
   border-radius: 10px;
   max-width: 100%;
-  min-height: 33.5vh;
+  min-height: 29.5vh;
   background-color: #e9f1fc;
 `;

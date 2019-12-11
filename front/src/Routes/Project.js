@@ -84,8 +84,7 @@ const Project = (props) => {
 
 const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
-  width : 100vw;
-  height: 80vh;
+  height: 89vh;
   overflow: x;
 `;
 
@@ -141,27 +140,7 @@ const Contents = styled.div`
       }
     }
   }
-  .setting {
-    padding: 20px;
-    margin-top: 5px;
-  }
-  .setting__row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 10px;
-    div {
-      width: 50px;
-      text-align: center;
-    }
-    input {
-      width: 60px;
-      padding: 5px;
-      border-radius: 15px;
-      text-align: center;
-      border: 1px solid black;
-    }
-  }
+  
 `;
 
 const TypesButton = styled.div`

@@ -82,6 +82,10 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
       position.direction = value % 360;
       changeSprites[key] = position;
       return changeSprites;
+    case 'CHANGE_NAME':
+      position.name = value;
+      changeSprites[key] = position;
+      return changeSprites;
     case 'DRAG_MOVE':
     case 'MOVE':
       position.x = Utils.checkRange(
@@ -121,6 +125,9 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
       return changeSprites;
     case 'ADD_IMAGE':
       changeSprites[key] = value;
+      return changeSprites;
+    case 'DELETE_IMAGE':
+      delete changeSprites[key];
       return changeSprites;
     case 'LOAD_PROJECT':
       return images.reduce((prev, curr) => {
