@@ -1,6 +1,6 @@
 export default {
   CANVAS: {
-    WIDTH: 600,
-    HEIGHT: 400,
+    WIDTH: 480,
+    HEIGHT: 360,
   },
 };

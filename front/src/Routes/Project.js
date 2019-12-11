@@ -84,8 +84,9 @@ const Project = (props) => {
 
 const Wrapper = styled.div`
   background: ${props => props.theme.projectBgColor};
-  height: 89vh;
-  overflow: hidden;
+  width : 100vw;
+  height: 80vh;
+  overflow: x;
 `;
 
 const Contents = styled.div`
@@ -94,21 +95,21 @@ const Contents = styled.div`
     display: flex;
     flex-direction: column;
     padding: 0px 5px;
-    width: fit-content;
+    /* width: ; */
     background-color: white;
     border-top: 1px solid ${props => props.theme.mainBorderColor};
     border-bottom: 1px solid ${props => props.theme.mainBorderColor};
-    height: 85vh;
+    height: 86vh;
   }
   .block-lists {
     display:flex;
     flex-direction:row-reverse;
     min-width: 300px;
     overflow:hidden;
-    height:800px;
     padding:10px;
     border: 1px solid ${props => props.theme.mainBorderColor};
     background-color: ${props => props.theme.lightGreyColor};
+    height:86vh;
   }
   .block-space {
     min-width: 500px;
@@ -117,7 +118,8 @@ const Contents = styled.div`
     border-radius: 0px 5px 5px 0px;
     margin-right: 10px;
     background-color: white;
-    width: 70vw;
+    width: 48vw;
+    height : 86vh;
   }
 
   .controller {
