@@ -67,7 +67,7 @@ const Project = (props) => {
               </TypesButton>
               <TypesButton className="block-types__button" btype="myblocks">
                 <div />
-                <span> 나만의 블록 </span>
+                <span> 나의 블록 </span>
               </TypesButton>
             </div>
             <div className="Contents__Column block-lists" />
