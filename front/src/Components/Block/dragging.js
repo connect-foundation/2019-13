@@ -34,20 +34,20 @@ const Dragging = class {
   };
 
   updateDrag = (movedX, movedY) => {
-    const maxRadious = 25;
-    let bestRadious = maxRadious;
+    const maxRadius = 25;
+    let bestRadius = maxRadius;
     this.x = movedX;
     this.y = movedY;
     this.updateBlockPosition();
     this.availableConnection.forEach((conn) => {
-      const result = this.connectionDB.findClosetConnection(conn, bestRadious);
-      if (result.connection && result.radius < bestRadious) {
-        bestRadious = result.radius;
+      const result = this.connectionDB.findClosetConnection(conn, bestRadius);
+      if (result.connection && result.radius < bestRadius) {
+        bestRadius = result.radius;
         this.closetConnection = result.connection;
         this.localConnection = conn;
       }
     });
-    if (bestRadious === maxRadious) {
+    if (bestRadius === maxRadius) {
       this.closetConnection = null;
       this.localConnection = null;
     }
