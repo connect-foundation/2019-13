@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 const Utils = {
   uid: () => {
     const soup = '!#$%()*+,-./:;=?@[]^_`{|}~'
@@ -41,6 +43,7 @@ const Utils = {
     };
     return value;
   },
+  getSeoulTime: worldTime => moment.tz(worldTime, 'Asia/Seoul').format('YYYY 년 MM 월 DD 일 HH:mm'),
 };
 
 

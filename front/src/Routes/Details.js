@@ -5,13 +5,24 @@ import { faStar, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import { WorkspaceContext } from '../Context';
-import { LOAD_PROJECT, TOGGLE_LIKE } from '../Apollo/queries/Project';
+import { LOAD_PROJECT, TOGGLE_LIKE, ME } from '../Apollo/queries/Project';
+import Comments from '../Components/Comment/Comments';
+
 
 export default ({ match, history }) => {
+  const [user, setUser] = useState();
   const [project, setProject] = useState();
   const [isLiked, setIsLiked] = useState();
   const [likeCount, setLikeCount] = useState();
   const [ready, setReady] = useState(false);
+  const [me] = useLazyQuery(ME, {
+    onCompleted(res) {
+      if (res.me) {
+        setUser(res.me);
+      }
+    },
+  });
+
   const [loadProject] = useLazyQuery(LOAD_PROJECT, {
     onCompleted(res) {
       if (!res.findProjectById) {
@@ -24,17 +35,31 @@ export default ({ match, history }) => {
       }
     },
   });
-  const [toggleLike] = useMutation(TOGGLE_LIKE);
+  const [toggleLike] = useMutation(TOGGLE_LIKE, {
+    onCompleted(res) {
+      if (res.toggleLike) {
+        isLiked ? setLikeCount(likeCount - 1) : setLikeCount(likeCount + 1);
+        setIsLiked(!isLiked);
+      }
+    },
+  });
+
   useEffect(() => {
     if (match.params.name) {
+      me();
       loadProject({
         variables: { projectId: match.params.name },
       });
     }
   }, []);
 
-  const likeHandler = () => {
 
+  const likeHandler = () => {
+    if (localStorage.getItem('token')) {
+      toggleLike({
+        variables: { projectId: project.id },
+      });
+    }
   };
 
   if (!ready) return <span>loading...</span>;
@@ -73,9 +98,7 @@ export default ({ match, history }) => {
         </div>
         <div>{project.description}</div>
       </ProjectWrapper>
-      <CommentWrapper>
-        <div>댓글 0개</div>
-      </CommentWrapper>
+      <Comments project={project} user={user} />
     </Wrapper>
   );
 };
@@ -142,8 +165,7 @@ const ProjectWrapper = styled.div`
           font-weight: bold;
           padding: 10px;
           border-radius: 5px;
-        }
-        
+        } 
       }
       #projectCount {
         margin-top: 10px;
@@ -152,8 +174,4 @@ const ProjectWrapper = styled.div`
         }
       }
     }
-`;
-
-const CommentWrapper = styled.div`
-  margin-top: 50px;
 `;

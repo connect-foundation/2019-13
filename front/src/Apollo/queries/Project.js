@@ -1,4 +1,13 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
+
+export const ME = gql`
+  query me {
+    me {
+      email,
+      picture,
+    }
+  }
+`;
 
 export const GET_PROJECTS = gql`
   query findProjectsByUserId {
@@ -66,6 +75,16 @@ export const LOAD_PROJECT = gql`
         direction,
         realName
       },
+      comments {
+        id,
+        user {
+           email,
+           picture,
+        }
+        createdAt,
+        text,
+      },
+      commentCount
     }
   }
 `;

@@ -316,6 +316,11 @@ export default {
             id: projectId,
           },
         });
+        await prisma.deleteManyComments({
+          project: {
+            id: projectId,
+          },
+        });
         await prisma.deleteProject({
           id: projectId,
         });
