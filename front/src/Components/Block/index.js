@@ -25,6 +25,7 @@ const Blocks = ({ clickedButton }) => {
     if (scrollY !== yArray[parseInt(clickedButton, 10)]) {
       previousClickedButton = clickedButton;
       setScrollY(yArray[parseInt(clickedButton, 10)]);
+      workspaceDispatch({ type: 'SCROLL_END' });
     }
   }
   const dragStartHandler = (scrollEvent) => {
@@ -52,8 +53,10 @@ const Blocks = ({ clickedButton }) => {
     setScrollY(currentY);
   };
 
-  const wheelSVG = (events) => {
-    let newY = scrollY + events.deltaY;
+  const wheelSVG = (event) => {
+    if (event.clientX > CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH
+      || event.clientX < CONSTANTS.BUTTON_AREA_WIDTH) return;
+    let newY = scrollY + event.deltaY;
     if (newY < CONSTANTS.SCROLL_MINIMUM)newY = CONSTANTS.SCROLL_MINIMUM;
     else if (newY > CONSTANTS.SCROLL_MAXIMUM)newY = CONSTANTS.SCROLL_MAXIMUM;
     workspaceDispatch({ type: 'SCROLL_END' });
