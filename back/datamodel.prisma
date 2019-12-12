@@ -6,6 +6,7 @@ type User {
   projects: [Project]! @relation(name: "ProjectsByUser")
   authes: [ProjectAuth]! @relation(name : "AuthesByUser")
   likes: [Like]! @relation(name : "LikesByUser")
+  comments: [Comment]! @relation(name : "CommentByUser")
 }
 type Project {
   id: ID! @id 
@@ -17,6 +18,7 @@ type Project {
   blocks: [Block]! @relation(name: "BlocksByProject")
   authes: [ProjectAuth]! @relation(name: "AuthesByProject")
   likes: [Like]! @relation(name : "LikesByProject")
+  comments: [Comment]! @relation(name : "CommentByProject")
   images: [Image]! @relation(name : "ImagesByProject")
 }
 type ProjectAuth {
@@ -57,4 +59,12 @@ type Image {
   positionY: Float!
   size: Int!
   direction: Int!
+}
+type Comment {
+  id: ID! @id
+  text: String!
+  project: Project! @relation(link : TABLE, name:"CommentByProject")
+  user: User! @relation(link : TABLE, name:"CommentByUser")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
