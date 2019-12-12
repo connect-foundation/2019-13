@@ -75,6 +75,16 @@ export const LOAD_PROJECT = gql`
         direction,
         realName
       },
+      comments {
+        id,
+        user {
+           email,
+           picture,
+        }
+        createdAt,
+        text,
+      },
+      commentCount
     }
   }
 `;
