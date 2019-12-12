@@ -1,5 +1,14 @@
 import { gql } from 'apollo-boost';
 
+export const ME = gql`
+  query me {
+    me {
+      email,
+      picture,
+    }
+  }
+`;
+
 export const GET_PROJECTS = gql`
   query findProjectsByUserId {
     findProjectsByUserId {
