@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import PropType from 'prop-types';
 import styled from 'styled-components';
 import { WorkspaceContext } from '../../Context';
 import Group from '../Group';
@@ -10,16 +11,22 @@ import init from './Init';
 import Theme from '../../Styles/Theme';
 
 const blockModelList = new BlockModelList();
+const yArray = [];
+let previousClickedButton = 0;
 
-
-export default () => {
+const Blocks = ({ clickedButton }) => {
   const [isInit, setIsInit] = useState(false);
   const { workspace, workspaceDispatch } = useContext(WorkspaceContext);
   const [, setRender] = useState(0);
   const [isMove, setMove] = useState(false);
-  const [scrollY, setScrollY] = useState(20);
-  const [initY, setInitY] = useState(20);
-
+  const [scrollY, setScrollY] = useState(CONSTANTS.SCROLL_MINIMUM);
+  const [initY, setInitY] = useState(CONSTANTS.SCROLL_MINIMUM);
+  if (yArray.length > 0 && previousClickedButton !== clickedButton) {
+    if (scrollY !== yArray[parseInt(clickedButton, 10)]) {
+      previousClickedButton = clickedButton;
+      setScrollY(yArray[parseInt(clickedButton, 10)]);
+    }
+  }
   const dragStartHandler = (scrollEvent) => {
     setMove(true);
     setInitY(scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y
@@ -28,8 +35,8 @@ export default () => {
   const dragMoveHandler = (scrollEvent) => {
     if (!isMove) return;
     let diff = (scrollEvent.clientY - initY);
-    if (diff < 20)diff = 20;
-    else if (diff > 670)diff = 670;
+    if (diff < CONSTANTS.SCROLL_MINIMUM)diff = CONSTANTS.SCROLL_MINIMUM;
+    else if (diff > CONSTANTS.SCROLL_MAXIMUM)diff = CONSTANTS.SCROLL_MAXIMUM;
     workspaceDispatch({ type: 'SCROLL_END' });
     setScrollY(diff);
   };
@@ -40,14 +47,15 @@ export default () => {
 
   const clickHandler = (scrollEvent) => {
     let currentY = scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y;
-    if (currentY < 20)currentY = 20;
-    else if (currentY > 670)currentY = 670;
+    if (currentY < CONSTANTS.SCROLL_MINIMUM)currentY = CONSTANTS.SCROLL_MINIMUM;
+    else if (currentY > CONSTANTS.SCROLL_MAXIMUM)currentY = CONSTANTS.SCROLL_MAXIMUM;
     setScrollY(currentY);
   };
 
   const wheelSVG = (events) => {
-    const newY = scrollY + events.deltaY;
-    if (newY < 20 || newY > 670) return;
+    let newY = scrollY + events.deltaY;
+    if (newY < CONSTANTS.SCROLL_MINIMUM)newY = CONSTANTS.SCROLL_MINIMUM;
+    else if (newY > CONSTANTS.SCROLL_MAXIMUM)newY = CONSTANTS.SCROLL_MAXIMUM;
     workspaceDispatch({ type: 'SCROLL_END' });
     setScrollY(newY);
   };
@@ -58,6 +66,7 @@ export default () => {
     let idx = 0;
     let { y } = CONSTANTS.DEFAULT_POSITION;
     init.forEach((blocks, allIdx) => {
+      yArray.push(y - 3);
       blocks.forEach((json, styleIdx) => {
         const blockModel = new BlockModel(idx).makeFromJSON({
           ...json,
@@ -83,7 +92,7 @@ export default () => {
     });
   }
   return (
-    <Svg onWheel={wheelSVG} transform="translate(60,0)">
+    <Svg onWheel={wheelSVG} transform={`translate(${CONSTANTS.BUTTON_AREA_WIDTH},0)`}>
       {isMove ? null
         : (
           <rect
@@ -138,6 +147,9 @@ export default () => {
   );
 };
 
+Blocks.propTypes = {
+  clickedButton: PropType.number.isRequired,
+};
 
 const Svg = styled.svg`
   position: absolute;
@@ -165,10 +177,12 @@ const Svg = styled.svg`
       text-align: center;
       border: none;
       padding: 0;
-      font-size: 0.5rem;
+      font-size: 8px;
       &:focus {
         outline: none;
       }
     }
   }
 `;
+
+export default Blocks;

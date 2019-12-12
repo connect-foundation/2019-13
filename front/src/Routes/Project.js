@@ -7,9 +7,6 @@ import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
-import init from '../Components/Block/Init';
-
-const getScrollHeight = () => `${init}.reduce((acc, block) => acc + block.length, 0) * 100}px`;
 
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
@@ -33,47 +30,46 @@ const Project = (props) => {
     spritesReducer,
     defaultSprite,
   );
+  const [clickedButton, setClickedButton] = useState(0);
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
         <Wrapper>
           <ProjectHeader props={props} setReady={setReady} />
           <Contents>
-            <Blockspace />
+            <Blockspace clickedButton={clickedButton} />
             <div className="Contents__Column block-types">
-              <TypesButton className="block-types__button" btype="motion">
+              <TypesButton className="block-types__button" btype="motion" onClick={() => { setClickedButton(0 + Math.random()); }}>
                 <div />
                 <span> 동작 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="events">
+              <TypesButton className="block-types__button" btype="events" onClick={() => { setClickedButton(1 + Math.random()); }}>
                 <div />
                 <span> 이벤트 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="control">
+              <TypesButton className="block-types__button" btype="control" onClick={() => { setClickedButton(2 + Math.random()); }}>
                 <div />
                 <span> 제어 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="sensing">
-                <div />
-                <span> 감지 </span>
-              </TypesButton>
-              <TypesButton className="block-types__button" btype="operators">
+              <TypesButton className="block-types__button" btype="operators" onClick={() => { setClickedButton(3 + Math.random()); }}>
                 <div />
                 <span> 연산 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="variables">
+              <TypesButton className="block-types__button" btype="sensing" onClick={() => { }}>
+                <div />
+                <span> 감지 </span>
+              </TypesButton>
+              <TypesButton className="block-types__button" btype="variables" onClick={() => { }}>
                 <div />
                 <span> 변수 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="myblocks">
+              <TypesButton className="block-types__button" btype="myblocks" onClick={() => { }}>
                 <div />
                 <span> 나의 블록 </span>
               </TypesButton>
             </div>
             <div className="Contents__Column block-lists" />
-            <div className="Contents__Column block-space">
-              <div>블록 코딩</div>
-            </div>
+            <div className="Contents__Column block-space" />
             <DrawSection />
           </Contents>
         </Wrapper>
