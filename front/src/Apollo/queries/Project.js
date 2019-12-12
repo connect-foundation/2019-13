@@ -9,6 +9,12 @@ export const ME = gql`
   }
 `;
 
+export const ADD_VIEW = gql`
+  mutation addView($projectId: String!) {
+   addView(projectId: $projectId)
+  }
+`;
+
 export const GET_PROJECTS = gql`
   query findProjectsByUserId {
     findProjectsByUserId {
@@ -75,16 +81,7 @@ export const LOAD_PROJECT = gql`
         direction,
         realName
       },
-      comments {
-        id,
-        user {
-           email,
-           picture,
-        }
-        createdAt,
-        text,
-      },
-      commentCount
+      views,
     }
   }
 `;

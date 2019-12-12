@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faSignInAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import { WorkspaceContext } from '../Context';
-import { LOAD_PROJECT, TOGGLE_LIKE, ME } from '../Apollo/queries/Project';
+import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../Apollo/queries/Project';
 import Comments from '../Components/Comment/Comments';
+import { setLocalStorageItem } from '../utils/storage';
+import DetailCanvas from '../Components/detailCanvas';
 
+
+const VIEW_DELAY = 3600000;
 
 export default ({ match, history }) => {
   const [user, setUser] = useState();
   const [project, setProject] = useState();
   const [isLiked, setIsLiked] = useState();
+  const [addView] = useMutation(ADD_VIEW);
   const [likeCount, setLikeCount] = useState();
   const [ready, setReady] = useState(false);
   const [me] = useLazyQuery(ME, {
@@ -46,10 +51,23 @@ export default ({ match, history }) => {
 
   useEffect(() => {
     if (match.params.name) {
+      const projectId = match.params.name;
       me();
       loadProject({
-        variables: { projectId: match.params.name },
+        variables: { projectId },
       });
+
+      const old = localStorage.getItem(projectId);
+      const now = new Date().getTime();
+
+      if (!old || old + VIEW_DELAY < now) {
+        addView({
+          variables: { projectId },
+        });
+        setLocalStorageItem([
+          { key: projectId, value: now },
+        ]);
+      }
     }
   }, []);
 
@@ -88,6 +106,10 @@ export default ({ match, history }) => {
                 </button>
               </Link>
               <div id="projectCount">
+                <button type="button" id="views">
+                  <FontAwesomeIcon icon={faEye} className="faEye-icon" />
+                  <span>{project.views}</span>
+                </button>
                 <button type="button" onClick={likeHandler}>
                   <FontAwesomeIcon icon={faStar} className="star-icon" />
                   <span>{likeCount}</span>
@@ -171,6 +193,13 @@ const ProjectWrapper = styled.div`
         margin-top: 10px;
         button {
           background: none;
+        }
+        .star-icon{
+          color: ${props => (props.isLiked === true ? props.theme.eventsColor : 'grey')};
+        }
+        display: flex;
+        #views{
+          cursor: default;
         }
       }
     }
