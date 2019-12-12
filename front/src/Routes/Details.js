@@ -85,8 +85,10 @@ export default ({ match, history }) => {
   return (
     <Wrapper>
       <ProjectWrapper project={project} isLiked={isLiked}>
-        <div className="canvas">canvas</div>
-        <div className="controller">controll</div>
+        <div className="canvas">
+          <DetailCanvas blocks={project.blocks} />
+        </div>
+        {/* <div className="controller">controll</div> */}
         <div className="projectInfo">
           <div>
             <div id="userImg" />
@@ -140,7 +142,7 @@ const ProjectWrapper = styled.div`
         border-bottom: ${props => props.theme.mainBorder};
     }
     .canvas {
-        height:478px;
+        height:fit-content;
     }
     .controller {
         height: 30px;
