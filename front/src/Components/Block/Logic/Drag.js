@@ -16,6 +16,7 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
     target = makeTargetPath(target);
     eventDown.preventDefault();
     eventDown.stopPropagation();
+    if (target === null) return;
 
     const startPosition = { x: 0, y: 0 };
     startPosition.x = target.getBoundingClientRect().x
