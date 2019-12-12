@@ -36,10 +36,14 @@ const Workspace = class {
   }
 
   deleteBlockInModelList() {
-    Object.values(this.blockDB).forEach((block) => {
-      if (block.x < CONSTANTS.DELETE_AREA_X) delete this.blockDB[block.id];
-    });
-    this.topblocks = this.topblocks.filter(block => block.x > CONSTANTS.DELETE_AREA_X);
+    let { length } = this.topblocks;
+    for (let i = 0; i < length; i += 1) {
+      if (this.topblocks[i].x < CONSTANTS.DELETE_AREA_X) {
+        this.deleteBlock(this.topblocks[i].id);
+        i -= 1;
+        length -= 1;
+      }
+    }
   }
 
   getStartBlocks() {
