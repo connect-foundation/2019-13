@@ -1,9 +1,9 @@
 import React from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
+import MaterialSnackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 
-export default ({ snackbar, setSnackbar }) => {
+const Snackbar = ({ snackbar, setSnackbar }) => {
   const { vertical, horizontal, open, message, color } = snackbar;
   const handleClose = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -25,7 +25,7 @@ export default ({ snackbar, setSnackbar }) => {
   );
 };
 
-const CustomSnackbar = styled(Snackbar)`
+const CustomSnackbar = styled(MaterialSnackbar)`
   & > div {
     background-color: ${props => props.theme[props.color]};
   }
@@ -33,3 +33,4 @@ const CustomSnackbar = styled(Snackbar)`
     cursor: pointer;
   }
 `;
+export default Snackbar;
