@@ -1,18 +1,4 @@
 scalar Upload
-type project {
-  id: ID!
-  title: String!
-  description: String!
-  like: Int!
-  private: Boolean!
-  owner: user!
-  blocks: [block]!
-  authes: [project_auth]!
-  likes: [like]!
-  isLiked: Boolean!
-  likeCount: Int!
-  images: [Image]!
-}
 
 type Query {
   projects: [project]

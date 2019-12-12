@@ -1,5 +1,0 @@
-type like {
-  id: ID!
-  project: project!
-  user: user!
-}
