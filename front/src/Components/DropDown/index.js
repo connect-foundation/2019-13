@@ -7,7 +7,9 @@ import { removeLocalStorageItem } from '../../utils/storage';
 const DropDown = ({ type = null }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
   const logOutHandler = () => {
-    removeLocalStorageItem(['token', 'userImage']);
+    for (let i = 0; i < localStorage.length; i++) {
+      localStorage.removeItem(localStorage.key(i));
+    }
     setLoggedIn(false);
     window.location.href = '/';
   };
