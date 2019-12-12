@@ -18,6 +18,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
     "konva": "^4.0.18",
+    "moment-timezone": "^0.5.27",
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
