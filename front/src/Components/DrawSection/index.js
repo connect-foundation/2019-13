@@ -8,13 +8,14 @@ import SpriteSelector from '../SpriteSelector';
 import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
 import Generator from '../Block/generator';
 import Snackbar from '../Snackbar';
+import Utils from '../../utils/utils';
 
 let key;
 let position;
 let dispatch;
 let interval;
 let isPlay = false;
-export const getPosition = () => ({ key, position, dispatch });
+const getPosition = () => ({ key, position, dispatch });
 const playHandler = (workspace) => {
   if (!isPlay) {
     const generator = new Generator();
@@ -73,6 +74,7 @@ export default () => {
     });
   };
   useEffect(() => {
+    Utils.setPostion(getPosition);
     setCurrentSprite({
       key: key && sprites[key] ? key : Object.keys(sprites)[0],
       position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],

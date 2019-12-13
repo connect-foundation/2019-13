@@ -1,4 +1,3 @@
-import { getPosition } from '../index';
 import Utils from '../../../utils/utils';
 /**
  * @param {Object} movement '{x, y} 좌표' or '{moving}(type undefined시)'
@@ -6,7 +5,7 @@ import Utils from '../../../utils/utils';
  */
 export default (movement, type) => {
   if (!type && !movement.moving) throw new Error('타입을 다시 입력해주세요');
-  const { key, position, dispatch } = getPosition();
+  const { key, position, dispatch } = Utils.getPosition();
   let value;
   switch (type) {
     case 'x':

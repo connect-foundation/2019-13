@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { DELETE_PROJECT, TOGGLE_LIKE } from '../../Apollo/queries/Project';
 
 
-const Card = ({ project, removeProjects }) => {
+const Card = ({ project, removeProjects, history }) => {
   const [isLiked, setIsLiked] = useState(project.isLiked);
   const [likeCount, setLikeCount] = useState(project.likeCount);
   const [deleteProject] = useMutation(DELETE_PROJECT, {
@@ -32,10 +32,13 @@ const Card = ({ project, removeProjects }) => {
       variables: { projectId: project.id },
     });
   };
+  const editBlock = () => {
+    history.push(`/project/${project.id}`);
+  };
   const points = '9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78';
   return (
     <CardContainer>
-      <Link to={`/project/${project.id}`}>
+      <Link to={`/details/${project.id}`}>
         <DetailContainer>
           <ProjectTitle>{project.title}</ProjectTitle>
           <ProjectDescription>{project.description}</ProjectDescription>
@@ -56,6 +59,7 @@ const Card = ({ project, removeProjects }) => {
               {likeCount}
             </StarText>
           </StarWrapper>
+          <button type="button" onClick={editBlock}> 변경 </button>
           <button type="button" onClick={deleteHandler}> 삭제 </button>
         </div>
       </InfoContainer>
@@ -159,6 +163,9 @@ const DetailContainer = styled.div`
   opacity: 0;
   &:hover {
     opacity: 1;
+  }
+  .editBlock {
+    width: fit-content;
   }
 `;
 
