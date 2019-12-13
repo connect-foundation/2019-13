@@ -15,6 +15,22 @@ export const ADD_VIEW = gql`
   }
 `;
 
+export const GET_PROJECTS_BY_VIEWS = gql`
+  query projects {
+    projects {
+      id,
+      title,
+      isLiked,
+      likeCount,
+      description,
+      owner {
+        email,
+        picture,
+      },
+    }
+  }
+`;
+
 export const GET_PROJECTS = gql`
   query findProjectsByUserId {
     findProjectsByUserId {
