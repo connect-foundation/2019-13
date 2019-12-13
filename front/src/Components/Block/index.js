@@ -117,6 +117,35 @@ const Blocks = ({ clickedButton }) => {
         <GroupBlock block={block} key={block.id} scrollY={scrollY} />
       ))}
       {workspace.topblocks.map(block => <Group block={block} key={block.id} scroll={isMove} />)}
+      {!isMove ? null
+        : (
+          <rect
+            width="300"
+            height="800"
+            fill="rgba(0,0,0,0)"
+            x="0"
+            y="0"
+            rx="4"
+            ry="4"
+            onMouseUp={dragEndHandler}
+            onMouseMove={dragMoveHandler}
+            onMouseLeave={dragEndHandler}
+            onClick={clickHandler}
+          />
+        )}
+
+      <rect
+        width="20"
+        height="100"
+        fill={isMove ? Theme.duckOrangeColor : Theme.unactivedColor}
+        x="275"
+        y={scrollY}
+        rx="4"
+        ry="4"
+        onMouseDown={dragStartHandler}
+        onMouseUp={dragEndHandler}
+        onMouseMove={dragMoveHandler}
+      />
     </Svg>
   );
 };
