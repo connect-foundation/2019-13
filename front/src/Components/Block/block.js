@@ -179,6 +179,7 @@ const Block = class {
     json.args.forEach((arg) => {
       this.makeArgsFromJSON(arg);
     });
+    this.arithmeticOrCompare(false);
 
     this.style = json.style;
     this.makeStyleFromJSON();
