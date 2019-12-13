@@ -75,7 +75,7 @@ const FunctionList = {
   },
 
   control_if: (args) => {
-    const value = true;
+    const value = args.input[0];
     args.input[0] = 1;
     return value ? FunctionList.control_for(args) : { func: { next: () => {} } };
   },
