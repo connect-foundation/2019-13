@@ -50,7 +50,7 @@ export default {
         const project = await prisma.createProject({
           title: projectTitle,
           description: '',
-          like: 0,
+          views: 0,
           private: false,
           owner: {
             connect: {
