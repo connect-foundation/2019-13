@@ -6,9 +6,13 @@ import Delete from '../../objectstorage/delete';
 export default {
   Query: {
     projects: async (root, value, context) => {
-      const user = Utils.findUser(context.req);
-      if (!user) throw new Error('Not Authorization');
-      const project = await prisma.projects();
+      // const user = Utils.findUser(context.req);
+      // if (!user) throw new Error('Not Authorization');
+      const project = await prisma.projects({
+        where: { private: false },
+        orderBy: 'views_DESC',
+        first: 10,
+      });
       return project;
     },
     findProjectById: async (root, { projectId }, context) => {
