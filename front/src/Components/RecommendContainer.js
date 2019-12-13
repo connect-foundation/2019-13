@@ -30,5 +30,6 @@ const RecommendContainer = styled.div`
 const CardContainer = styled.div`
   display:flex;
   justify-content:center;
+  flex-wrap: wrap;
   padding:40px 0px;
 `;
