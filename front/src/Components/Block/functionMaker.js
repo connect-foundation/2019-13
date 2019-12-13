@@ -32,18 +32,20 @@ const FunctionList = {
     function* FOR_LOOP() {
       while (codes) {
         if (limit <= 0) yield i += 1;
-        if (i >= limit) i = 0;
-        if (j === codes.length) j = 0;
-        while (j < codes.length) {
-          isChildEnd = true;
-          const cur = codes[j].func.next();
-          if (cur && cur.value < codes[j].limit) {
-            isChildEnd = false;
-            break;
+        else {
+          if (i >= limit) i = 0;
+          if (j === codes.length) j = 0;
+          while (j < codes.length) {
+            isChildEnd = true;
+            const cur = codes[j].func.next();
+            if (cur && cur.value < codes[j].limit) {
+              isChildEnd = false;
+              break;
+            }
+            j += 1;
           }
-          j += 1;
+          yield i += isChildEnd ? 1 : 0;
         }
-        yield i += isChildEnd ? 1 : 0;
       }
     }
     return { func: FOR_LOOP(), limit };
