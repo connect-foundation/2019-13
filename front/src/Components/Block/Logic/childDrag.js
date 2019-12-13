@@ -1,19 +1,25 @@
 import CONSTANTS from '../constants';
+import makeTargetPath from './makeTargetPath';
 
 const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
   const mousedown = (eventDown) => {
     setMoved(true);
-    if (eventDown.target.tagName !== 'path' || eventDown.button !== 0) {
+    if (eventDown.button !== 0) {
       return;
     }
+    let { target } = eventDown;
+    if (target.tagName === 'INPUT') {
+      target.select();
+    }
+    target = makeTargetPath(target);
     eventDown.preventDefault();
     eventDown.stopPropagation();
 
     const startRealPosition = { x: 0, y: 0 };
-    startRealPosition.x = eventDown.target.getBoundingClientRect().x
-    - eventDown.target.ownerSVGElement.getBoundingClientRect().x;
-    startRealPosition.y = eventDown.target.getBoundingClientRect().y
-    - eventDown.target.ownerSVGElement.getBoundingClientRect().y;
+    startRealPosition.x = target.getBoundingClientRect().x
+    - target.ownerSVGElement.getBoundingClientRect().x;
+    startRealPosition.y = target.getBoundingClientRect().y
+    - target.ownerSVGElement.getBoundingClientRect().y;
 
     const startPosition = { x: 0, y: 0 };
     const { node } = block;
@@ -24,6 +30,10 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
     if (block.parentElement) {
       startPosition.y = node.parentNode.firstChild.getBoundingClientRect().height
       - node.getBoundingClientRect().height - CONSTANTS.BLOCK_TAIL_HEIGHT;
+    } else if (block.outputElement) {
+      if (block.outputElement.style === 'double' || block.outputElement.style === 'triple') {
+        startPosition.y = CONSTANTS.PIXEL + 1;
+      }
     }
 
     set({ x: startPosition.x, y: startPosition.y });
@@ -54,6 +64,10 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
     const mouseup = (eventUp) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
+      if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
+        currentRealPosition.x = CONSTANTS.DELETE_AREA_X + 1;
+      }
+      block.dragUpdate(currentRealPosition.x, currentRealPosition.y);
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
       if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
         workspaceDispatch({

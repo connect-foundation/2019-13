@@ -1,18 +1,18 @@
 import init from '../Init';
+import makeTargetPath from './makeTargetPath';
 
 export default ({ workspaceDispatch, allIdx, styleIdx }) => {
   const onMouseEnter = (event) => {
-    if (event.target.tagName !== 'path') {
-      return;
-    }
+    let { target } = event;
+    target = makeTargetPath(target);
     event.preventDefault();
     event.stopPropagation();
 
     const blockParams = init[allIdx][styleIdx];
-    blockParams.x = event.target.getBoundingClientRect().x
-    - event.target.ownerSVGElement.getBoundingClientRect().x;
-    blockParams.y = event.target.getBoundingClientRect().y
-    - event.target.ownerSVGElement.getBoundingClientRect().y;
+    blockParams.x = target.getBoundingClientRect().x
+    - target.ownerSVGElement.getBoundingClientRect().x;
+    blockParams.y = target.getBoundingClientRect().y
+    - target.ownerSVGElement.getBoundingClientRect().y;
     workspaceDispatch({
       type: 'ADD_BLOCK',
       blockParams,

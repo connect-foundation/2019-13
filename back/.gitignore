@@ -10,3 +10,4 @@ Thumbs.db
 *.log
 package-lock.json
 prisma.yml
+yarn.lock

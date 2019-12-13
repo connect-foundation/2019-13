@@ -22,12 +22,19 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
         workspace.topblocks,
         workspace.setRender,
       );
+    case 'SCROLL_END':
+      workspace.deleteBlockInModelList();
+      return new Workspace(
+        workspace.blockDB,
+        workspace.topblocks,
+        workspace.setRender,
+      );
     default:
       throw new Error('NOT FOUND TYPE');
   }
 };
 
-export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
+export const spritesReducer = (sprites, { type, coordinate, key, value, images }) => {
   const changeSprites = { ...sprites };
   const position = sprites[key];
   let eventValue = null;
@@ -75,6 +82,10 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
       position.direction = value % 360;
       changeSprites[key] = position;
       return changeSprites;
+    case 'CHANGE_NAME':
+      position.name = value;
+      changeSprites[key] = position;
+      return changeSprites;
     case 'DRAG_MOVE':
     case 'MOVE':
       position.x = Utils.checkRange(
@@ -115,6 +126,15 @@ export const spritesReducer = (sprites, { type, coordinate, key, value }) => {
     case 'ADD_IMAGE':
       changeSprites[key] = value;
       return changeSprites;
+    case 'DELETE_IMAGE':
+      delete changeSprites[key];
+      return changeSprites;
+    case 'LOAD_PROJECT':
+      return images.reduce((prev, curr) => {
+        // eslint-disable-next-line no-param-reassign
+        prev[curr.id] = { ...curr, x: curr.positionX, y: curr.positionY };
+        return prev;
+      }, {});
     default:
       throw new Error('NOT FOUND TYPE');
   }

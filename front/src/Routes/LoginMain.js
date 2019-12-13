@@ -1,22 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
+import Carousel from '../Components/Carousel';
+import RecommendContainer from '../Components/RecommendContainer';
 
 const Wrapper = styled.div`
 
 `;
-const Title = styled.div`
-  font-size:30px;
-  padding:40px;
-`;
 
-const Cont = styled.div`
-  padding : 40px;
-`;
 
 const loginMain = () => (
   <Wrapper>
-    <Title>인기가 많다구</Title>
-    <Cont />
+    <Carousel />
+    <RecommendContainer />
   </Wrapper>
 );
 

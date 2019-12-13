@@ -1,15 +1,3 @@
-type block {
-  id: ID!
-  type: String!
-  positionX: Float
-  positionY: Float
-  nextElementId: String
-  firstChildElementId: String
-  secondChildElementId: String
-  inputElementId: String
-  project: project! 
-}
-
 input createBlockInput {
   id: ID!
   type: String!

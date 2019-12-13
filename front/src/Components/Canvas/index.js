@@ -5,11 +5,11 @@ import URLImage from '../URLImage';
 import CONSTANTS from './constants';
 
 
-export default () => {
+export default ({ WIDTH, HEIGHT }) => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const { setCurrentSprite } = useContext(CurrentSpriteContext);
   return (
-    <Stage width={CONSTANTS.CANVAS.WIDTH} height={CONSTANTS.CANVAS.HEIGHT}>
+    <Stage width={WIDTH || CONSTANTS.CANVAS.WIDTH} height={HEIGHT || CONSTANTS.CANVAS.HEIGHT}>
       <Layer>
         {Object.entries(sprites).map(sprite => (
           <URLImage

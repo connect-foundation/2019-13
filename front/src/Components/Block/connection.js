@@ -21,12 +21,14 @@ const Connection = function (type, source, positiontype) {
   this.isSelected = false;
 };
 
-Connection.prototype.setPositions = function () {
+Connection.prototype.setPositions = function (inputX) {
   this.positionSetting = {
     previousPosition: { x: CONSTANTS.PREVIOUS_NEXT_POS_X, y: CONSTANTS.PIXEL },
     nextPosition: { x: CONSTANTS.PREVIOUS_NEXT_POS_X, y: this.source.height },
     firstChildPosition: { x: CONSTANTS.CHILD_NEXT_POS_X,
       y: CONSTANTS.BLOCK_HEAD_HEIGHT + CONSTANTS.PIXEL },
+    inputPosition: { x: inputX, y: CONSTANTS.SMALL_BLOCK_HEIGHT / 2 },
+    outputPosition: { x: 0, y: CONSTANTS.SMALL_BLOCK_HEIGHT / 2 },
   };
   this.setDiff();
 };

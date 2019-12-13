@@ -4,8 +4,9 @@ import Konva from 'konva';
 import PropType from 'prop-types';
 import useImage from '../../custom_hooks/useImage';
 import CANVASCONSTANTS from '../Canvas/constants';
+import Theme from '../../Styles/Theme';
 
-const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
+const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite, theme }) => {
   const [image] = useImage(sprite);
   const handleDragStart = (e) => {
     e.target.setAttrs({
@@ -13,6 +14,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
         x: 15,
         y: 15,
       },
+      shadowColor: Theme.shadowColor,
     });
   };
   const handleDragMove = (e) => {
@@ -33,6 +35,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
       scaleY: 1,
       shadowOffsetX: 0,
       shadowOffsetY: 0,
+
     });
     spritesDispatch({
       type: 'DRAG_END',

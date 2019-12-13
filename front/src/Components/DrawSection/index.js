@@ -7,13 +7,15 @@ import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
 import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
 import Generator from '../Block/generator';
+import Snackbar from '../Snackbar';
+import Utils from '../../utils/utils';
 
 let key;
 let position;
 let dispatch;
 let interval;
 let isPlay = false;
-export const getPosition = () => ({ key, position, dispatch });
+const getPosition = () => ({ key, position, dispatch });
 const playHandler = (workspace) => {
   if (!isPlay) {
     const generator = new Generator();
@@ -43,15 +45,27 @@ const stopHandler = () => {
 };
 
 export default () => {
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+    message: '이미지를 업로드 해주세요',
+  });
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const [currentSprite, setCurrentSprite] = useState({
-    key: key || Object.keys(sprites)[0],
-    position: position || { ...sprites[Object.keys(sprites)[0]] },
+    key: Object.keys(sprites)[0],
+    position: Object.values(sprites)[0],
   });
   const { workspace } = useContext(WorkspaceContext);
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
   const checkPositionHandler = ({ type, coordinate }, event) => {
+    if (!currentSprite.position) {
+      setSnackbar({
+        ...snackbar, open: true,
+      });
+      return;
+    }
     spritesDispatch({
       type,
       coordinate,
@@ -60,7 +74,11 @@ export default () => {
     });
   };
   useEffect(() => {
-    setCurrentSprite({ key, position: sprites[key] });
+    Utils.setPostion(getPosition);
+    setCurrentSprite({
+      key: key && sprites[key] ? key : Object.keys(sprites)[0],
+      position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],
+    });
   }, [sprites]);
   return (
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
@@ -74,10 +92,19 @@ export default () => {
         </div>
         <div className="draw-section__row">
           <div className="setting">
+            <div className="setting__name">
+              <div> 이름 </div>
+              <input
+                value={currentSprite.position ? currentSprite.position.name : '입력'}
+                onChange={checkPositionHandler.bind(null, {
+                  type: 'CHANGE_NAME',
+                })}
+              />
+            </div>
             <div className="setting__row">
               <div> X </div>
               <input
-                value={currentSprite.position.x}
+                value={currentSprite.position ? currentSprite.position.x : 0}
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_POSITION',
                   coordinate: 'x',
@@ -85,7 +112,7 @@ export default () => {
               />
               <div> Y</div>
               <input
-                value={currentSprite.position.y}
+                value={currentSprite.position ? currentSprite.position.y : 0}
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_POSITION',
                   coordinate: 'y',
@@ -95,14 +122,14 @@ export default () => {
             <div className="setting__row">
               <div> 크기 </div>
               <input
-                value={currentSprite.position.size}
+                value={currentSprite.position ? currentSprite.position.size : 0}
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_SIZE',
                 })}
               />
-              <div> 회전 </div>
+              <div> 방향 </div>
               <input
-                value={currentSprite.position.direction}
+                value={currentSprite.position ? currentSprite.position.direction : 0}
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_DIRECTION',
                 })}
@@ -112,12 +139,12 @@ export default () => {
           </div>
         </div>
       </DrawSectionWrapper>
+      <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
     </CurrentSpriteContext.Provider>
   );
 };
 
 const DrawSectionWrapper = styled.div`
-  min-width: 400px;
   .draw-section__row {
     & > div {
       width: 100%;
@@ -125,6 +152,44 @@ const DrawSectionWrapper = styled.div`
       background-color: white;
       border-radius: 5px;
       border: 1px solid ${props => props.theme.mainBorderColor};
+    }
+  }
+  .setting {
+    padding: 20px;
+    margin-top: 5px;
+  }
+  .setting__row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+    div {
+      width: 50px;
+      text-align: center;
+    }
+    input {
+      width: 60px;
+      padding: 5px;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid #aaaaaa;
+    }
+  }
+  .setting__name {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 10px;
+    div {
+      width: 50px;
+      text-align: center;
+    }
+    input {
+      width: 280px;
+      padding: 5px;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid #aaaaaa;
     }
   }
 `;
