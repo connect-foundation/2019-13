@@ -36,7 +36,7 @@ export default ({ history }) => {
   const renderProject = projectArray => (
     <CardContainer>
       {projectArray.map(project => (
-        <Card project={project} key={project.id} removeProjects={removeProjects} history={history} />
+        <Card project={project} key={project.id} removeProjects={removeProjects} history={history} me />
       ))}
     </CardContainer>
   );
