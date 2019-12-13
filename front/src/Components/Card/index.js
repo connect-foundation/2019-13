@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { DELETE_PROJECT, TOGGLE_LIKE } from '../../Apollo/queries/Project';
 
 
-const Card = ({ project, removeProjects, history }) => {
+const Card = ({ project, removeProjects, history, me }) => {
   const [isLiked, setIsLiked] = useState(project.isLiked);
   const [likeCount, setLikeCount] = useState(project.likeCount);
   const [deleteProject] = useMutation(DELETE_PROJECT, {
@@ -59,8 +59,16 @@ const Card = ({ project, removeProjects, history }) => {
               {likeCount}
             </StarText>
           </StarWrapper>
-          <button type="button" onClick={editBlock}> 변경 </button>
-          <button type="button" onClick={deleteHandler}> 삭제 </button>
+          {me
+            ? (
+              <>
+                <button type="button" onClick={editBlock}> 변경 </button>
+                <button type="button" onClick={deleteHandler}> 삭제 </button>
+              </>
+            )
+            : (<></>)
+          }
+
         </div>
       </InfoContainer>
     </CardContainer>
