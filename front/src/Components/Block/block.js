@@ -220,6 +220,7 @@ const Block = class {
     } else {
       this.inputElement.push({ type: json.type, value: json.value });
       this.args.push(json.type);
+      if (json.type === 'dropdown') { this.inputWidth[this.inputElement.length - 1] = CONSTANTS.DEFAULT_DROPDOWN_WIDTH; }
     }
   };
 
