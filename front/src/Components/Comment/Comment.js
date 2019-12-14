@@ -95,6 +95,9 @@ const Wrapper = styled.div`
       }
       margin-left: 20px;
       width: 90%;
+      h3 {
+        white-space:pre-wrap;
+      }
       h4 {
         font-size: 12px;
         color: gray;
