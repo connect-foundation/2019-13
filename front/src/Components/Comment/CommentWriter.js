@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { CREAT_COMMENT } from '../../Apollo/queries/Comment';
 
 export default ({ projectId, updateComments }) => {
-  const [text, setText] = useState();
+  const [text, setText] = useState('');
   const [createComment] = useMutation(CREAT_COMMENT, {
     onCompleted(res) {
       if (res.createComment) {
