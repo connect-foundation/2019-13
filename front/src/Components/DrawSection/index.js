@@ -6,42 +6,21 @@ import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
 import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
-import Generator from '../Block/generator';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
+import { start, stop } from '../../utils/playBlocks';
 
 let key;
 let position;
 let dispatch;
-let interval;
-let isPlay = false;
+
 const getPosition = () => ({ key, position, dispatch });
 const playHandler = (workspace) => {
-  if (!isPlay) {
-    const generator = new Generator();
-    const codes = generator.workspaceToCode(workspace.getStartBlocks());
-    isPlay = true;
-    interval = setInterval(() => {
-      let isEnd = true;
-      codes.forEach((code) => {
-        const res = code.func.next();
-        if (res && !res.done) {
-          isEnd = false;
-        }
-      });
-      if (isEnd) {
-        clearInterval(interval);
-        isPlay = false;
-      }
-    }, 1000 / 30);
-  }
+  start(workspace, true);
 };
 
 const stopHandler = () => {
-  if (interval) {
-    clearInterval(interval);
-    isPlay = false;
-  }
+  stop();
 };
 
 export default () => {
