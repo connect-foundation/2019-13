@@ -59,7 +59,13 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
       if (currentPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
         currentPosition.x = CONSTANTS.DELETE_AREA_X + 1;
         set({ x: currentPosition.x, y: currentPosition.y });
+      } else if (target.getBoundingClientRect().right
+      > target.ownerSVGElement.getBoundingClientRect().right) {
+        currentPosition.x = startPosition.x;
+        currentPosition.y = startPosition.y;
+        set({ x: currentPosition.x, y: currentPosition.y });
       }
+      block.dragUpdate(currentPosition.x, currentPosition.y);
       block.dragEnd(currentPosition.x, currentPosition.y);
       if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
         workspaceDispatch({

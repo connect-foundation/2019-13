@@ -66,6 +66,11 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
       document.removeEventListener('mouseup', mouseup);
       if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
         currentRealPosition.x = CONSTANTS.DELETE_AREA_X + 1;
+      } else if (target.getBoundingClientRect().right
+      > target.ownerSVGElement.getBoundingClientRect().right) {
+        currentRealPosition.x = startRealPosition.x;
+        currentRealPosition.y = startRealPosition.y;
+        set({ x: currentRealPosition.x, y: currentRealPosition.y });
       }
       block.dragUpdate(currentRealPosition.x, currentRealPosition.y);
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
