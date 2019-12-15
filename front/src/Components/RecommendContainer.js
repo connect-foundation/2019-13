@@ -7,16 +7,19 @@ import { GET_PROJECTS_BY_VIEWS } from '../Apollo/queries/Project';
 
 export default () => {
   const { loading, error, data } = useQuery(GET_PROJECTS_BY_VIEWS);
-  if (loading) return <span>loading...</span>;
+  if (loading) return <></>;
   return (
-    <RecommendContainer>
-      <h2>이런것도 추천한다구</h2>
-      <CardContainer>
-        {data.projects.map(project => (
-          <Card project={project} key={project.id} me={false} />
-        ))}
-      </CardContainer>
-    </RecommendContainer>
+    data ? (
+      <RecommendContainer>
+        <h2>이런것도 추천한다구</h2>
+        <CardContainer>
+          {data.projects.map(project => (
+            <Card project={project} key={project.id} me={false} />
+          ))}
+        </CardContainer>
+      </RecommendContainer>
+    )
+      : (<> </>)
   );
 };
 
