@@ -7,6 +7,7 @@ import { WorkspaceContext, SpritesContext } from '../Context/index';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
+import KeyListener from '../utils/keyListener';
 
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
@@ -72,6 +73,7 @@ const Project = (props) => {
             <div className="Contents__Column block-space" />
             <DrawSection />
           </Contents>
+          <KeyListener />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>
