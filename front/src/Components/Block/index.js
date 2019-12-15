@@ -46,13 +46,6 @@ const Blocks = ({ clickedButton }) => {
     setMove(false);
   };
 
-  const clickHandler = (scrollEvent) => {
-    let currentY = scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y;
-    if (currentY < CONSTANTS.SCROLL_MINIMUM)currentY = CONSTANTS.SCROLL_MINIMUM;
-    else if (currentY > CONSTANTS.SCROLL_MAXIMUM)currentY = CONSTANTS.SCROLL_MAXIMUM;
-    setScrollY(currentY);
-  };
-
   const wheelSVG = (event) => {
     if (event.clientX > CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH
       || event.clientX < CONSTANTS.BUTTON_AREA_WIDTH) return;
@@ -109,7 +102,6 @@ const Blocks = ({ clickedButton }) => {
             onMouseUp={dragEndHandler}
             onMouseMove={dragMoveHandler}
             onMouseLeave={dragEndHandler}
-            onClick={clickHandler}
           />
         )
       }
@@ -130,7 +122,6 @@ const Blocks = ({ clickedButton }) => {
             onMouseUp={dragEndHandler}
             onMouseMove={dragMoveHandler}
             onMouseLeave={dragEndHandler}
-            onClick={clickHandler}
           />
         )}
 
@@ -156,8 +147,9 @@ Blocks.propTypes = {
 
 const Svg = styled.svg`
   position: absolute;
-  width: 70%;
-  height: 84%;
+  min-width: 800px;
+  width: calc(300px + 48vw);
+  height: 86vh;
   g {
     cursor: grab;
     &:active {
