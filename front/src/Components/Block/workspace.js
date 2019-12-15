@@ -12,6 +12,15 @@ const Workspace = class {
     this.dragging = new Dragging(this.connectionDB);
     this.topblocks = topblocks || [];
     this.setRender = setRender || null;
+    this.keyDown = Object.create(null);
+  }
+
+  setKeyDown(keyNum, condition) {
+    this.keyDown[keyNum] = condition;
+  }
+
+  resetKey() {
+    this.keyDown = Object.create(null);
   }
 
   addBlock(usedId) {
@@ -51,6 +60,13 @@ const Workspace = class {
       if (cur.type === 'event_start' && cur.nextElement) prev.push(cur.nextElement);
       return prev;
     }, []);
+  }
+
+  getEventBlocks() {
+    return this.topblocks.reduce((prev, cur) => {
+      if (cur.type === 'event_key_pressed' && cur.nextElement) prev[cur.value] = cur.nextElement;
+      return prev;
+    }, {});
   }
 
   addTopblock(block) {
