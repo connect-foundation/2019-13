@@ -162,6 +162,12 @@ const Block = class {
     this.setArgs();
   };
 
+  changeDropdownWidth = set => (event) => {
+    const { target } = event;
+    this.value = Number(target.value);
+    set(target.value);
+  }
+
   makeFromJSON = (json) => {
     this.type = json.type;
     this.color = json.color;
@@ -183,6 +189,7 @@ const Block = class {
 
     this.style = json.style;
     this.makeStyleFromJSON();
+    this.arithmeticOrCompare(false);
 
     if (json.previousConnection) {
       this.previousConnection = true;
@@ -212,9 +219,13 @@ const Block = class {
   makeArgsFromJSON = (json) => {
     if (json.type === 'text') {
       this.args.push(create(json.type, { key: json.value }, json.value));
-    } else if (json.type === 'input') {
+    } else {
       this.inputElement.push({ type: json.type, value: json.value });
-      this.args.push('input');
+      this.args.push(json.type);
+      if (json.type === 'dropdown') {
+        this.inputWidth[this.inputElement.length - 1] = CONSTANTS.DEFAULT_DROPDOWN_WIDTH;
+        this.value = CONSTANTS.DROPDOWN_INIT_VALUE;
+      }
     }
   };
 

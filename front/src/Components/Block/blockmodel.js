@@ -34,7 +34,7 @@ const BlockModel = class {
       this.node.childNodes.forEach((node) => {
         if (node.tagName !== 'path' && node.tagName !== 'g') {
           this.setArgsPosition(node, positionX);
-          if (node.tagName === 'foreignObject') { positionX += CONSTANTS.DEFAULT_INPUT_WIDTH + CONSTANTS.PIXEL; } else { positionX += node.getBoundingClientRect().width; }
+          if (node.tagName === 'foreignObject') { if (this.style !== 'event') { positionX += CONSTANTS.DEFAULT_INPUT_WIDTH + CONSTANTS.PIXEL; } else positionX += CONSTANTS.DEFAULT_INPUT_WIDTH + CONSTANTS.PIXEL + 10; } else { positionX += node.getBoundingClientRect().width; }
           lastChild = node;
         }
       });
@@ -126,6 +126,8 @@ const BlockModel = class {
           ),
         ),
       );
+    } else {
+      this.args.push(json.type);
     }
   }
 

@@ -14,4 +14,21 @@ export default [
     color: color.eventsColor,
     stroke_color: color.eventsStrokeColor,
   },
+  {
+    type: 'event_key_pressed',
+    args: [
+      {
+        type: 'dropdown',
+        value: 0,
+      },
+      {
+        type: 'text',
+        value: '키가 입력되었을 때',
+      },
+    ],
+    style: 'event',
+    nextConnection: true,
+    color: color.eventsColor,
+    stroke_color: color.eventsStrokeColor,
+  },
 ];
