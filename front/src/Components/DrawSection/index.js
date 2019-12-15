@@ -9,13 +9,15 @@ import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Co
 import Generator from '../Block/generator';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
+import Collision from './function/collision';
 
 let key;
 let position;
 let dispatch;
+let allsprites;
 let interval;
 let isPlay = false;
-const getPosition = () => ({ key, position, dispatch });
+const getPosition = () => ({ key, position, dispatch, allsprites });
 const playHandler = (workspace) => {
   if (!isPlay) {
     const generator = new Generator();
@@ -57,6 +59,7 @@ export default () => {
     position: Object.values(sprites)[0],
   });
   const { workspace } = useContext(WorkspaceContext);
+  allsprites = sprites;
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
   const checkPositionHandler = ({ type, coordinate }, event) => {
