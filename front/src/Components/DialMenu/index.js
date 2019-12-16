@@ -59,11 +59,12 @@ export default () => {
         const loadImage = new Image();
         loadImage.src = reader.result;
         loadImage.onload = () => {
+          const size = Utils.checkImageSize({ width: loadImage.width, height: loadImage.height });
           const value = {
             name: file.name,
             type: file.type,
             url: event.target.result,
-            size: 100,
+            size,
             direction: 90,
             width: loadImage.width,
             height: loadImage.height,
