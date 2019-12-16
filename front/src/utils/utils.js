@@ -51,6 +51,11 @@ const Utils = {
   getPosition: () => position(),
   getSeoulTime: worldTime => moment.tz(worldTime, 'Asia/Seoul').format('YYYY 년 MM 월 DD 일 HH:mm'),
   radian: degree => Math.PI * degree / 180,
+  checkImageSize: ({ width, height }) => {
+    const result = Utils.parseInt10(15000
+    / Math.sqrt(width * width + height * height)) || 0;
+    return result < 100 ? result : 100;
+  },
 };
 
 
