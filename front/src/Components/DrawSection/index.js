@@ -15,7 +15,6 @@ let position;
 let dispatch;
 
 let allsprites;
-
 const getPosition = () => ({ key, position, dispatch, allsprites });
 
 const playHandler = () => {
