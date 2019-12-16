@@ -6,10 +6,17 @@ import { SpritesContext } from '../../Context';
 
 export default () => {
   const { sprites } = useContext(SpritesContext);
+  const spriteSelectorItems = Object.entries(sprites);
   return (
     <SpriteContainer>
-      {Object.entries(sprites).map(sprite => (
-        <SpriteSelectorItem sprite={sprite[1]} key={sprite[0]} spritekey={sprite[0]} />
+      {spriteSelectorItems.map((sprite, idx) => (
+        <SpriteSelectorItem
+          sprite={sprite[1]}
+          key={sprite[0]}
+          spritekey={sprite[0]}
+          idx={idx}
+          length={spriteSelectorItems.length}
+        />
       ))}
       <DialMenu />
     </SpriteContainer>
