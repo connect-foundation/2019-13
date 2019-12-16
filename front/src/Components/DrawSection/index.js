@@ -17,7 +17,7 @@ let dispatch;
 
 let allsprites;
 let interval;
-let isPlay = false;
+const isPlay = false;
 const getPosition = () => ({ key, position, dispatch, allsprites });
 
 const playHandler = (workspace) => {
@@ -75,6 +75,15 @@ export default () => {
         <div className="draw-section__row">
           <Canvas />
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            console.log(Collision(Object.keys(sprites)));
+          }}
+        >
+테스트코드
+
+        </button>
         <div className="draw-section__row">
           <div className="setting">
             <div className="setting__name">

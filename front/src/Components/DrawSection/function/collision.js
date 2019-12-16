@@ -1,21 +1,37 @@
+/* eslint-disable no-continue */
 import Utils from '../../../utils/utils';
+import Obb from '../../../utils/obb';
+import isOBBOverlap from '../../../utils/obb/isOBBOverlap';
+import Vector2 from '../../../utils/vector2';
 
-
-const haveIntersection = (r1, r2) => !(
-  r2.x > r1.x + r1.width * (r1.size / 100)
-        || r2.x + r2.width * (r2.size / 100) < r1.x
-        || r2.y > r1.y + (r1.height * (r1.size / 100))
-        || r2.y + (r2.height * (r2.size / 100)) < r1.y
-);
-
-
-export default (callback) => {
-  const { key, position, dispatch, allsprites } = Utils.getPosition();
-  Object.entries(allsprites).forEach((sprite) => {
-    if (sprite[0] === key) return;
-    if (haveIntersection(sprite[1], position)) {
-      console.log('collision');
-      // callback(); Callback 코드 완성시 console.log 지워주면됩니다.
-    } else { console.log('not collision'); }
-  });
+/**
+ * @param {Array<String>} collisionSprites 충돌여부를 확인 할 sprite들
+ * @returns {Boolean} 충돌했으면 True 충돌하지 않았으면 false
+ */
+export default (collisionSprites) => {
+  const { key, position, allsprites } = Utils.getPosition();
+  for (let i = 0; i < collisionSprites.length; i += 1) {
+    if (collisionSprites[i] === key) continue;
+    const sprite = allsprites[collisionSprites[i]];
+    const o1 = new Obb(
+      new Vector2(sprite.x, sprite.y),
+      new Vector2(
+        (sprite.width * sprite.size) / 100,
+        (sprite.height * sprite.size) / 100,
+      ),
+      sprite.direction,
+    );
+    const o2 = new Obb(
+      new Vector2(position.x, position.y),
+      new Vector2(
+        (position.width * position.size) / 100,
+        (position.height * position.size) / 100,
+      ),
+      position.direction,
+    );
+    if (isOBBOverlap(o1, o2)) {
+      return true;
+    }
+  }
+  return false;
 };

@@ -6,7 +6,7 @@ import useImage from '../../custom_hooks/useImage';
 import CANVASCONSTANTS from '../Canvas/constants';
 import Theme from '../../Styles/Theme';
 
-const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite, theme }) => {
+const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
   const [image] = useImage(sprite);
   const handleDragStart = (e) => {
     e.target.setAttrs({
