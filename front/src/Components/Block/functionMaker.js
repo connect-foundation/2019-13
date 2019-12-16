@@ -23,6 +23,12 @@ const FunctionList = {
     }
     return { func: once() };
   },
+
+  eventBlock: (args) => {
+    const data = { input: [1], firstChild: args };
+    return FunctionList.control_for(data);
+  },
+
   control_for: (args) => {
     const limit = args.input[0];
     let isChildEnd = false;

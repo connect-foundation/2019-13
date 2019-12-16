@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { start, getIsPlay } from './playBlocks';
 
-const KeyListener = () => {
-  const [key, setKey] = useState(-1);
+const KeyListener = ({ workspace }) => {
   const handleKeyPress = (e) => {
-    setKey(e.keyCode);
+    if (!workspace.keyDown[e.keyCode]) { workspace.setKeyDown(e.keyCode, true); }
+    if (!getIsPlay()) start(workspace, false);
   };
   useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
