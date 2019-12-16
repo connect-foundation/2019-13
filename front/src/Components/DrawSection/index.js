@@ -17,7 +17,6 @@ let dispatch;
 
 let allsprites;
 let interval;
-let isPlay = false;
 const getPosition = () => ({ key, position, dispatch, allsprites });
 
 const playHandler = (workspace) => {
