@@ -3,15 +3,23 @@ import styled from 'styled-components';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import { CurrentSpriteContext, SpritesContext } from '../../Context';
+import { CurrentSpriteContext, SpritesContext, WorkspaceContext } from '../../Context';
 
-const SpriteSelectorItem = ({ sprite, spritekey }) => {
+const SpriteSelectorItem = ({ sprite, spritekey, idx, length }) => {
   const { setCurrentSprite } = useContext(CurrentSpriteContext);
   const { spritesDispatch } = useContext(SpritesContext);
+  const { workspace, workspaceDispatch } = useContext(WorkspaceContext);
   const onClickHandler = () => {
     setCurrentSprite({ key: spritekey, position: sprite });
+    workspaceDispatch({ type: 'CHANGE_WORKSPACE', id: spritekey });
   };
-  const onClickCloseButtonHandler = () => {
+  const onClickCloseButtonHandler = (e) => {
+    if (length === 1) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (workspace.imageId === spritekey) {
+      workspaceDispatch({ type: 'SELECTED_WORKSPACE_DELETED', id: idx > 0 ? idx - 1 : idx + 1 });
+    }
     spritesDispatch({
       type: 'DELETE_IMAGE',
       key: spritekey,
@@ -85,6 +93,8 @@ const SpriteContainer = styled.div`
 SpriteSelectorItem.propTypes = {
   sprite: PropTypes.object.isRequired,
   spritekey: PropTypes.string.isRequired,
+  idx: PropTypes.number.isRequired,
+  length: PropTypes.number.isRequired,
 };
 
 export default SpriteSelectorItem;
