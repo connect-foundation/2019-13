@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faSignInAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import { WorkspaceContext } from '../Context';
-import { LOAD_PROJECT, TOGGLE_LIKE } from '../Apollo/queries/Project';
+import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../Apollo/queries/Project';
+import Comments from '../Components/Comment/Comments';
+import { setLocalStorageItem } from '../utils/storage';
+import DetailCanvas from '../Components/detailCanvas';
+
+
+const VIEW_DELAY = 3600000;
 
 export default ({ match, history }) => {
+  const [user, setUser] = useState();
   const [project, setProject] = useState();
   const [isLiked, setIsLiked] = useState();
+  const [addView] = useMutation(ADD_VIEW);
   const [likeCount, setLikeCount] = useState();
   const [ready, setReady] = useState(false);
+  const [me] = useLazyQuery(ME, {
+    onCompleted(res) {
+      if (res.me) {
+        setUser(res.me);
+      }
+    },
+  });
+
   const [loadProject] = useLazyQuery(LOAD_PROJECT, {
     onCompleted(res) {
       if (!res.findProjectById) {
@@ -24,17 +40,44 @@ export default ({ match, history }) => {
       }
     },
   });
-  const [toggleLike] = useMutation(TOGGLE_LIKE);
+  const [toggleLike] = useMutation(TOGGLE_LIKE, {
+    onCompleted(res) {
+      if (res.toggleLike) {
+        isLiked ? setLikeCount(likeCount - 1) : setLikeCount(likeCount + 1);
+        setIsLiked(!isLiked);
+      }
+    },
+  });
+
   useEffect(() => {
     if (match.params.name) {
+      const projectId = match.params.name;
+      me();
       loadProject({
-        variables: { projectId: match.params.name },
+        variables: { projectId },
       });
+
+      const old = localStorage.getItem(projectId);
+      const now = new Date().getTime();
+
+      if (!old || old + VIEW_DELAY < now) {
+        addView({
+          variables: { projectId },
+        });
+        setLocalStorageItem([
+          { key: projectId, value: now },
+        ]);
+      }
     }
   }, []);
 
-  const likeHandler = () => {
 
+  const likeHandler = () => {
+    if (localStorage.getItem('token')) {
+      toggleLike({
+        variables: { projectId: project.id },
+      });
+    }
   };
 
   if (!ready) return <span>loading...</span>;
@@ -42,8 +85,10 @@ export default ({ match, history }) => {
   return (
     <Wrapper>
       <ProjectWrapper project={project} isLiked={isLiked}>
-        <div className="canvas">canvas</div>
-        <div className="controller">controll</div>
+        <div className="canvas">
+          <DetailCanvas blocks={project.blocks} />
+        </div>
+        {/* <div className="controller">controll</div> */}
         <div className="projectInfo">
           <div>
             <div id="userImg" />
@@ -63,6 +108,10 @@ export default ({ match, history }) => {
                 </button>
               </Link>
               <div id="projectCount">
+                <button type="button" id="views">
+                  <FontAwesomeIcon icon={faEye} className="faEye-icon" />
+                  <span>{project.views}</span>
+                </button>
                 <button type="button" onClick={likeHandler}>
                   <FontAwesomeIcon icon={faStar} className="star-icon" />
                   <span>{likeCount}</span>
@@ -73,9 +122,7 @@ export default ({ match, history }) => {
         </div>
         <div>{project.description}</div>
       </ProjectWrapper>
-      <CommentWrapper>
-        <div>댓글 0개</div>
-      </CommentWrapper>
+      <Comments project={project} user={user} />
     </Wrapper>
   );
 };
@@ -95,7 +142,7 @@ const ProjectWrapper = styled.div`
         border-bottom: ${props => props.theme.mainBorder};
     }
     .canvas {
-        height:478px;
+        height:fit-content;
     }
     .controller {
         height: 30px;
@@ -142,18 +189,20 @@ const ProjectWrapper = styled.div`
           font-weight: bold;
           padding: 10px;
           border-radius: 5px;
-        }
-        
+        } 
       }
       #projectCount {
         margin-top: 10px;
         button {
           background: none;
         }
+        .star-icon{
+          color: ${props => (props.isLiked === true ? props.theme.eventsColor : 'grey')};
+        }
+        display: flex;
+        #views{
+          cursor: default;
+        }
       }
     }
-`;
-
-const CommentWrapper = styled.div`
-  margin-top: 50px;
 `;

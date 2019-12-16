@@ -6,12 +6,23 @@ import Utils from '../../utils/utils';
 import CONSTANTS from './constants';
 
 const Workspace = class {
-  constructor(blockDB, topblocks, setRender) {
+  constructor(blockDB, topblocks, setRender, id, imageId) {
+    this.id = id || Utils.uid();
+    this.imageId = imageId || '';
     this.blockDB = blockDB || Object.create(null);
     this.connectionDB = new ConnectionDB(this);
     this.dragging = new Dragging(this.connectionDB);
     this.topblocks = topblocks || [];
     this.setRender = setRender || null;
+    this.keyDown = Object.create(null);
+  }
+
+  setKeyDown(keyNum, condition) {
+    this.keyDown[keyNum] = condition;
+  }
+
+  resetKey() {
+    this.keyDown = Object.create(null);
   }
 
   addBlock(usedId) {
@@ -36,10 +47,14 @@ const Workspace = class {
   }
 
   deleteBlockInModelList() {
-    Object.values(this.blockDB).forEach((block) => {
-      if (block.x < CONSTANTS.DELETE_AREA_X) delete this.blockDB[block.id];
-    });
-    this.topblocks = this.topblocks.filter(block => block.x > CONSTANTS.DELETE_AREA_X);
+    let { length } = this.topblocks;
+    for (let i = 0; i < length; i += 1) {
+      if (this.topblocks[i].x < CONSTANTS.DELETE_AREA_X) {
+        this.deleteBlock(this.topblocks[i].id);
+        i -= 1;
+        length -= 1;
+      }
+    }
   }
 
   getStartBlocks() {
@@ -47,6 +62,17 @@ const Workspace = class {
       if (cur.type === 'event_start' && cur.nextElement) prev.push(cur.nextElement);
       return prev;
     }, []);
+  }
+
+  getEventBlocks() {
+    return this.topblocks.reduce((prev, cur) => {
+      if (cur.type === 'event_key_pressed' && cur.nextElement) {
+        prev[cur.value] = (prev[cur.value])
+          ? [...prev[cur.value], cur.nextElement]
+          : [cur.nextElement];
+      }
+      return prev;
+    }, {});
   }
 
   addTopblock(block) {

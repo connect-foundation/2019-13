@@ -4,6 +4,7 @@ import drag from '../Block/Logic/Drag';
 import { WorkspaceContext } from '../../Context';
 import CONSTANTS from '../Block/constants';
 import Input from './input';
+import Dropdown from './dropdown';
 
 const Group = ({ block }) => {
   // eslint-disable-next-line
@@ -58,11 +59,15 @@ const Group = ({ block }) => {
     >
       {block.path}
       {block.args.reduce((acc, cur) => {
-        if (cur !== 'input' && cur !== 'block') {
+        if (cur !== 'input' && cur !== 'block' && cur !== 'dropdown') {
           acc.push(cur);
           return acc;
         }
         inputIdx += 1;
+        if (cur === 'dropdown') {
+          acc.push(<Dropdown block={block} index={inputIdx} key={inputIdx} />);
+          return acc;
+        }
         if (cur === 'block') {
           const inputBlock = block.workspace.getBlockById(block.inputElement[inputIdx].id);
           acc.push(<Group block={inputBlock} key={block.inputElement[inputIdx].id} />);

@@ -23,6 +23,12 @@ const FunctionList = {
     }
     return { func: once() };
   },
+
+  eventBlock: (args) => {
+    const data = { input: [1], firstChild: args };
+    return FunctionList.control_for(data);
+  },
+
   control_for: (args) => {
     const limit = args.input[0];
     let isChildEnd = false;
@@ -32,18 +38,20 @@ const FunctionList = {
     function* FOR_LOOP() {
       while (codes) {
         if (limit <= 0) yield i += 1;
-        if (i >= limit) i = 0;
-        if (j === codes.length) j = 0;
-        while (j < codes.length) {
-          isChildEnd = true;
-          const cur = codes[j].func.next();
-          if (cur && cur.value < codes[j].limit) {
-            isChildEnd = false;
-            break;
+        else {
+          if (i >= limit) i = 0;
+          if (j === codes.length) j = 0;
+          while (j < codes.length) {
+            isChildEnd = true;
+            const cur = codes[j].func.next();
+            if (cur && cur.value < codes[j].limit) {
+              isChildEnd = false;
+              break;
+            }
+            j += 1;
           }
-          j += 1;
+          yield i += isChildEnd ? 1 : 0;
         }
-        yield i += isChildEnd ? 1 : 0;
       }
     }
     return { func: FOR_LOOP(), limit };
@@ -75,7 +83,7 @@ const FunctionList = {
   },
 
   control_if: (args) => {
-    const value = true;
+    const value = args.input[0];
     args.input[0] = 1;
     return value ? FunctionList.control_for(args) : { func: { next: () => {} } };
   },

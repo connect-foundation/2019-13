@@ -1,9 +1,9 @@
 export default (target) => {
   let path = target;
-  if (target.tagName === 'INPUT') {
-    path = target.parentNode.parentNode.firstChild;
-  } else if (target.tagName === 'foreignObject') {
-    path = target.parentNode.firstChild;
+  while (path.tagName !== 'g') {
+    if (path.tagName === 'BODY' || path.tagName === 'LI' || path.tagName === 'UL') { return null; }
+    path = path.parentNode;
   }
+  path = path.firstChild;
   return path;
 };

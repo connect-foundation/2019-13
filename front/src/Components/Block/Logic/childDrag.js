@@ -8,6 +8,9 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
       return;
     }
     let { target } = eventDown;
+    if (target.tagName === 'INPUT') {
+      target.select();
+    }
     target = makeTargetPath(target);
     eventDown.preventDefault();
     eventDown.stopPropagation();
@@ -61,9 +64,15 @@ const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
     const mouseup = (eventUp) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
-      if (eventUp.target.tagName === 'INPUT') {
-        eventUp.target.select();
+      if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
+        currentRealPosition.x = CONSTANTS.DELETE_AREA_X + 1;
+      } else if (target.getBoundingClientRect().right
+      > target.ownerSVGElement.getBoundingClientRect().right) {
+        currentRealPosition.x = startRealPosition.x;
+        currentRealPosition.y = startRealPosition.y;
+        set({ x: currentRealPosition.x, y: currentRealPosition.y });
       }
+      block.dragUpdate(currentRealPosition.x, currentRealPosition.y);
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
       if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
         workspaceDispatch({

@@ -1,13 +1,3 @@
-type user {
-  id: ID!
-  name: String!
-  picture: String!
-  email: String!
-  projects: [project]!
-  authes: [project_auth]!
-  likes: [like]!
-}
-
 type Query {
-  hello: String!
+  me: user
 }

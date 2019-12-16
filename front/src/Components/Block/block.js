@@ -33,10 +33,10 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
-    this.firstchildHeight = 24;
-    this.secondchildHeight = 24;
+    this.firstchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT;
+    this.secondchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT;
     this.inputElement = [];
-    this.inputWidth = [];
+    this.inputWidth = [CONSTANTS.DEFAULT_INPUT_WIDTH, CONSTANTS.DEFAULT_INPUT_WIDTH];
     this.inputConnection = null;
     this.outputConnection = null;
     this.outputElement = null;
@@ -60,16 +60,16 @@ const Block = class {
         || (node.tagName === 'g' && node.id === this.inputElement.reduce((acc, cur) => { if (cur.id === node.id) acc.push(cur.id); return acc; }, [])[0])) {
           this.setArgsPosition(node, positionX);
           if (node.tagName === 'foreignObject' || node.tagName === 'g') { this.inputX.push(positionX); }
-          positionX += node.getBoundingClientRect().width;
+          if (node.tagName === 'foreignObject') { positionX += this.inputWidth[this.inputX.length - 1] + CONSTANTS.PIXEL; } else { positionX += node.getBoundingClientRect().width; }
           lastChild = node;
         }
       });
-      if (this.firstchildHeight < 24) { this.firstchildHeight = 24; }
-      if (this.secondchildHeight < 24) { this.secondchildHeight = 24; }
+      if (this.firstchildHeight < CONSTANTS.MINIMUM_BLOCK_HEIGHT) { this.firstchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT; }
+      if (this.secondchildHeight < CONSTANTS.MINIMUM_BLOCK_HEIGHT) { this.secondchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT; }
       let { right } = lastChild.getBoundingClientRect();
       const { left } = this.node.firstChild.getBoundingClientRect();
       if (lastChild.tagName === 'foreignObject') {
-        right = left + Number(lastChild.getAttribute('x')) + lastChild.getBoundingClientRect().width;
+        right = left + Number(lastChild.getAttribute('x')) + this.inputWidth[this.inputWidth.length - 1];
       }
       this.makeStyleFromJSON(
         (right - left - CONSTANTS.PIXEL * 5) / CONSTANTS.PIXEL,
@@ -89,7 +89,7 @@ const Block = class {
       node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
         ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
     } else if (node.tagName === 'foreignObject') {
-      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX - 1 : positionX + 5}`);
+      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
       node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
     }
   };
@@ -162,6 +162,12 @@ const Block = class {
     this.setArgs();
   };
 
+  changeDropdownWidth = set => (event) => {
+    const { target } = event;
+    this.value = Number(target.value);
+    set(target.value);
+  }
+
   makeFromJSON = (json) => {
     this.type = json.type;
     this.color = json.color;
@@ -179,9 +185,11 @@ const Block = class {
     json.args.forEach((arg) => {
       this.makeArgsFromJSON(arg);
     });
+    this.arithmeticOrCompare(false);
 
     this.style = json.style;
     this.makeStyleFromJSON();
+    this.arithmeticOrCompare(false);
 
     if (json.previousConnection) {
       this.previousConnection = true;
@@ -211,9 +219,13 @@ const Block = class {
   makeArgsFromJSON = (json) => {
     if (json.type === 'text') {
       this.args.push(create(json.type, { key: json.value }, json.value));
-    } else if (json.type === 'input') {
+    } else {
       this.inputElement.push({ type: json.type, value: json.value });
-      this.args.push('input');
+      this.args.push(json.type);
+      if (json.type === 'dropdown') {
+        this.inputWidth[this.inputElement.length - 1] = CONSTANTS.DEFAULT_DROPDOWN_WIDTH;
+        this.value = CONSTANTS.DROPDOWN_INIT_VALUE;
+      }
     }
   };
 

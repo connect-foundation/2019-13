@@ -5,8 +5,8 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { WorkspaceContext, SpritesContext } from '../Context';
 import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
-import init from './Block/Init';
 import Snackbar from './Snackbar';
+import makeBlock from '../utils/makeBlock';
 
 export default ({ props, setReady }) => {
   const [projectId, setPorjectId] = useState();
@@ -22,53 +22,7 @@ export default ({ props, setReady }) => {
     horizontal: 'center',
   });
 
-  const connectBlock = (connected, position, connect) => {
-    const reverse = {
-      nextElement: 'previousElement',
-      firstchildElement: 'parentElement',
-      secondchildElement: 'parentElement',
-    };
-    connected[position] = connect;
-    connect[reverse[position]] = connected;
-  };
 
-  const makeBlock = (Blocks) => {
-    const blockTypes = {};
-    init.forEach((data) => {
-      data.forEach((datum) => { blockTypes[datum.type] = datum; });
-    });
-    Blocks.forEach((blockData) => {
-      const block = workspace.addBlock(blockData.id);
-      const dataJSON = blockTypes[blockData.type];
-      dataJSON.x = blockData.positionX;
-      dataJSON.y = blockData.positionY;
-      block.x = blockData.positionX;
-      block.y = blockData.positionY;
-      block.makeFromJSON(dataJSON);
-    });
-    Blocks.forEach((blockData) => {
-      const block = workspace.getBlockById(blockData.id);
-      if (blockData.nextElementId) {
-        connectBlock(block, 'nextElement', workspace.getBlockById(blockData.nextElementId));
-      }
-      if (blockData.firstChildElementId) {
-        connectBlock(block, 'firstchildElement', workspace.getBlockById(blockData.firstChildElementId));
-      }
-      if (blockData.secondChildElementId) {
-        connectBlock(block, 'secondchildElement', workspace.getBlockById(blockData.secondChildElementId));
-      }
-      if (blockData.inputElementId) {
-        block.inputElement = blockData.inputElementId.map(v => ({ type: 'input', value: v }));
-      }
-    });
-    Blocks.forEach((blockData) => {
-      const block = workspace.getBlockById(blockData.id);
-      if (!block.parentElement && !block.previousElement) {
-        workspace.addTopblock(block);
-      }
-    });
-    // workspace.topblocks.forEach(block => block.setAllBlockPosition());
-  };
   const [createAndSave] = useMutation(CREATE_AND_SAVE,
     {
       onCompleted(res) {
@@ -110,7 +64,7 @@ export default ({ props, setReady }) => {
           setProjectName(res.findProjectById.title);
           setIsLiked(res.findProjectById.isLiked);
           setIsPrivate(res.findProjectById.private);
-          makeBlock(res.findProjectById.blocks);
+          makeBlock(res.findProjectById.blocks, workspace);
           setReady(true);
         }
       },

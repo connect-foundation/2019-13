@@ -1,33 +1,80 @@
 import Workspace from '../Components/Block/workspace';
 import CANVASCONSTANTS from '../Components/Canvas/constants';
 import Utils from '../utils/utils';
+import workspaceList from '../Components/Block/workspaceList';
 /* eslint-disable import/prefer-default-export */
 
 export const workspaceReducer = (workspace, { type, blockParams, id }) => {
   let block = null;
   switch (type) {
     case 'ADD_BLOCK':
-      block = workspace.addBlock(id);
+    { block = workspace.addBlock(id);
       workspace.addTopblock(block);
       block.makeFromJSON(blockParams);
-      return new Workspace(
+      const nWorkspace = new Workspace(
         workspace.blockDB,
         workspace.topblocks,
         workspace.setRender,
+        workspace.id,
+        workspace.imageId,
       );
+      workspaceList.workspaces.splice(
+        workspaceList.getWorkspaceIdxById(workspace.id),
+        1,
+        nWorkspace,
+      );
+      return nWorkspace; }
     case 'DELETE_BLOCK':
-      workspace.deleteBlock(id);
-      return new Workspace(
+    { workspace.deleteBlock(id);
+      const nWorkspace = new Workspace(
         workspace.blockDB,
         workspace.topblocks,
         workspace.setRender,
+        workspace.id,
+        workspace.imageId,
       );
+      workspaceList.workspaces.splice(
+        workspaceList.getWorkspaceIdxById(workspace.id),
+        1,
+        nWorkspace,
+      );
+      return nWorkspace; }
     case 'SCROLL_END':
-      workspace.deleteBlockInModelList();
-      return new Workspace(
+    { workspace.deleteBlockInModelList();
+      const nWorkspace = new Workspace(
         workspace.blockDB,
         workspace.topblocks,
         workspace.setRender,
+        workspace.id,
+        workspace.imageId,
+      );
+      workspaceList.workspaces.splice(
+        workspaceList.getWorkspaceIdxById(workspace.id),
+        1,
+        nWorkspace,
+      );
+      return nWorkspace; }
+    case 'CHANGE_WORKSPACE':
+    { let changedWorkspace;
+      workspaceList.workspaces.forEach((ws) => {
+        if (ws.imageId === id) {
+          changedWorkspace = new Workspace(
+            ws.blockDB,
+            ws.topblocks,
+            workspace.setRender,
+            ws.id,
+            ws.imageId,
+          );
+        }
+      });
+      return changedWorkspace; }
+    case 'SELECTED_WORKSPACE_DELETED':
+      return new Workspace(
+        workspaceList.workspaces[id].blockDB,
+        workspaceList.workspaces[id].topblocks,
+        workspace.setRender,
+        workspaceList.workspaces[id].id,
+        workspaceList.workspaces[id].imageId,
       );
     default:
       throw new Error('NOT FOUND TYPE');
@@ -82,6 +129,10 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
       position.direction = value % 360;
       changeSprites[key] = position;
       return changeSprites;
+    case 'CHANGE_NAME':
+      position.name = value;
+      changeSprites[key] = position;
+      return changeSprites;
     case 'DRAG_MOVE':
     case 'MOVE':
       position.x = Utils.checkRange(
@@ -121,7 +172,25 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
       return changeSprites;
     case 'ADD_IMAGE':
       changeSprites[key] = value;
+      workspaceList.images.push(key);
+      workspaceList.workspaces.push(new Workspace(null, null, null, null, key));
       return changeSprites;
+    case 'DELETE_IMAGE':
+    { let { length } = workspaceList.workspaces;
+      for (let i = 0; i < length; i += 1) {
+        if (workspaceList.workspaces[i].imageId === key) {
+          delete workspaceList.workspaces[i].dragging;
+          delete workspaceList.workspaces[i].connectionDB;
+          delete workspaceList.workspaces[i].blockDB;
+          delete workspaceList.workspaces[i];
+          workspaceList.workspaces.splice(i, 1);
+          workspaceList.images.splice(i, 1);
+          i -= 1;
+          length -= 1;
+        }
+      }
+      delete changeSprites[key];
+      return changeSprites; }
     case 'LOAD_PROJECT':
       return images.reduce((prev, curr) => {
         // eslint-disable-next-line no-param-reassign

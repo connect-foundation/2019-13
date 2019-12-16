@@ -1,6 +1,0 @@
-type input_value {
-  id: ID!
-  value: Float!
-  block: block!
-  order: Int!
-}

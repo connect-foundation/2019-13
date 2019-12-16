@@ -56,17 +56,23 @@ export default () => {
       }
       const reader = new FileReader();
       reader.onload = (event) => {
-        const value = {
-          name: file.name,
-          type: file.type,
-          url: event.target.result,
-          size: 100,
-          direction: 90,
-          x: 0,
-          y: 0,
-          file,
+        const loadImage = new Image();
+        loadImage.src = reader.result;
+        loadImage.onload = () => {
+          const value = {
+            name: file.name,
+            type: file.type,
+            url: event.target.result,
+            size: 100,
+            direction: 90,
+            width: loadImage.width,
+            height: loadImage.height,
+            x: 0,
+            y: 0,
+            file,
+          };
+          spritesDispatch({ type: 'ADD_IMAGE', key: Utils.uid(), value });
         };
-        spritesDispatch({ type: 'ADD_IMAGE', key: Utils.uid(), value });
       };
       reader.readAsDataURL(file);
     });

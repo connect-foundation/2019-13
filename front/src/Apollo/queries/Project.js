@@ -1,4 +1,35 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
+
+export const ME = gql`
+  query me {
+    me {
+      email,
+      picture,
+    }
+  }
+`;
+
+export const ADD_VIEW = gql`
+  mutation addView($projectId: String!) {
+   addView(projectId: $projectId)
+  }
+`;
+
+export const GET_PROJECTS_BY_VIEWS = gql`
+  query projects {
+    projects {
+      id,
+      title,
+      isLiked,
+      likeCount,
+      description,
+      owner {
+        email,
+        picture,
+      },
+    }
+  }
+`;
 
 export const GET_PROJECTS = gql`
   query findProjectsByUserId {
@@ -55,6 +86,7 @@ export const LOAD_PROJECT = gql`
         secondChildElementId,
         positionX,
         positionY,
+        inputElementId,
       },
       images{
         id,
@@ -66,6 +98,7 @@ export const LOAD_PROJECT = gql`
         direction,
         realName
       },
+      views,
     }
   }
 `;

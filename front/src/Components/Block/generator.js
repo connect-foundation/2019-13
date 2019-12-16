@@ -1,7 +1,8 @@
 import FunctionMaker from './functionMaker';
 
 export default class {
-  workspaceToCode(blocks) {
+  workspaceToCode(blocks, isEvent = false) {
+    if (isEvent) return FunctionMaker.eventBlock(this.blockToCode(blocks));
     return blocks.map(block => FunctionMaker.topblock(this.blockToCode(block)));
   }
 
