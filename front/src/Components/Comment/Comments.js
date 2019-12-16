@@ -10,6 +10,7 @@ export default ({ project, user }) => {
   const [comments, setComments] = useState();
   const [readComment] = useLazyQuery(LOAD_COMMENT, {
     onCompleted(res) {
+      if (!res || !res.findProjectById) return;
       setCommentCount(res.findProjectById.commentCount);
       setComments(res.findProjectById.comments);
     },
@@ -36,7 +37,7 @@ export default ({ project, user }) => {
   return (
     <CommentWrapper user={user}>
       <div>{`댓글 ${commentCount} 개`}</div>
-      {(user) ? (<CommentWriter projectId={project.id} updateComments={updateComments} />) : (<></>) }
+      {(user) && (<CommentWriter projectId={project.id} updateComments={updateComments} />) }
       {comments.map((comment, i) => (<Comment comment={comment} user={user} key={comment.id} idx={i} localUpdate={localUpdate} />))}
     </CommentWrapper>
   );
