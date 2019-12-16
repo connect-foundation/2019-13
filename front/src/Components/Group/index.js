@@ -7,8 +7,6 @@ import Input from './input';
 import Dropdown from './dropdown';
 
 const Group = ({ block }) => {
-  // eslint-disable-next-line
-  let [isMoved, setMoved] = useState(true);
   const [position, setPosition] = useState({ x: block.x, y: block.y });
   if (block.previousElement && position.y !== block.previousElement.height - CONSTANTS.PIXEL) {
     setPosition({ x: 0, y: block.previousElement.height - CONSTANTS.PIXEL });
@@ -40,20 +38,13 @@ const Group = ({ block }) => {
     block.render = setRender;
     block.setNode(gRef.current);
   }, [block]);
-  if (block.previousElement || block.parentElement || block.outputElement) isMoved = true;
   return (
     <g
       id={block.id}
       key={block.id}
       ref={gRef}
-      onMouseLeave={isMoved ? () => {} : () => {
-        workspaceDispatch({
-          type: 'DELETE_BLOCK',
-          id: block.id,
-        });
-      }}
       onMouseDown={
-          drag({ set: setPosition, block, setMoved, workspaceDispatch })
+          drag({ set: setPosition, block, workspaceDispatch })
       }
       transform={`translate(${position.x},${position.y})`}
     >

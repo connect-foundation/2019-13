@@ -2,13 +2,12 @@ import childDrag from './childDrag';
 import CONSTANTS from '../constants';
 import makeTargetPath from './makeTargetPath';
 
-const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
+const mouseHandler = ({ set, block, workspaceDispatch }) => {
   if (block.parentElement || block.previousElement || block.outputElement) {
-    const mousedownChild = childDrag({ set, block, setMoved, workspaceDispatch });
+    const mousedownChild = childDrag({ set, block, workspaceDispatch });
     return mousedownChild;
   }
   const mousedown = (eventDown) => {
-    setMoved(true);
     if (eventDown.button !== 0) {
       return;
     }
