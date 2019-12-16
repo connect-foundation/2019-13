@@ -73,7 +73,7 @@ const Project = (props) => {
             <div className="Contents__Column block-space" />
             <DrawSection />
           </Contents>
-          <KeyListener />
+          <KeyListener workspace={workspace} />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>
