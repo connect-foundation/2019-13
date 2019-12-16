@@ -86,6 +86,7 @@ export const LOAD_PROJECT = gql`
         secondChildElementId,
         positionX,
         positionY,
+        inputElementId,
       },
       images{
         id,

@@ -64,7 +64,11 @@ const Workspace = class {
 
   getEventBlocks() {
     return this.topblocks.reduce((prev, cur) => {
-      if (cur.type === 'event_key_pressed' && cur.nextElement) prev[cur.value] = cur.nextElement;
+      if (cur.type === 'event_key_pressed' && cur.nextElement) {
+        prev[cur.value] = (prev[cur.value])
+          ? [...prev[cur.value], cur.nextElement]
+          : [cur.nextElement];
+      }
       return prev;
     }, {});
   }
