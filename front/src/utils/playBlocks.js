@@ -17,7 +17,14 @@ export const start = (workspace, isStartMode) => {
     : undefined;
   isPlay = true;
   const eventCodes = Object.entries(workspace.getEventBlocks())
-    .reduce((pre, [key, value]) => pre.set(key, generator.workspaceToCode(value, true)), new Map());
+    .reduce((pre, [key, value]) => {
+      let data = value.map(block => generator.workspaceToCode(block, true));
+      const preData = pre.get(key);
+      if (preData) {
+        data = [...preData, ...data];
+      }
+      return pre.set(key, data);
+    }, new Map());
   interval = setInterval(() => {
     let isEnd = true;
     if (startCodes) {
@@ -31,14 +38,16 @@ export const start = (workspace, isStartMode) => {
 
     eventCodes.forEach((value, key) => {
       if (workspace.keyDown[key]) {
-        const res = value.func.next();
-        if (res) {
-          if (res.value < value.limit) {
-            isEnd = false;
-          } else {
-            workspace.setKeyDown(key, false);
+        value.forEach((code) => {
+          const res = code.func.next();
+          if (res) {
+            if (res.value < code.limit) {
+              isEnd = false;
+            } else {
+              workspace.setKeyDown(key, false);
+            }
           }
-        }
+        });
       }
     });
     if (isEnd) {
