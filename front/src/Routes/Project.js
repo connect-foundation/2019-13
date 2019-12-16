@@ -17,6 +17,8 @@ defaultSprite[Utils.uid()] = {
   direction: 90,
   x: 0,
   y: 0,
+  width: 245,
+  height: 246,
   reversal: false,
   realName: '/logo.png',
 };

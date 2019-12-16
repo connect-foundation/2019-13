@@ -8,13 +8,18 @@ import SpriteSelector from '../SpriteSelector';
 import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
+import Collision from './function/collision';
 import { start, stop } from '../../utils/playBlocks';
 
 let key;
 let position;
 let dispatch;
 
-const getPosition = () => ({ key, position, dispatch });
+let allsprites;
+let interval;
+let isPlay = false;
+const getPosition = () => ({ key, position, dispatch, allsprites });
+
 const playHandler = (workspace) => {
   start(workspace, true);
 };
@@ -36,6 +41,7 @@ export default () => {
     position: Object.values(sprites)[0],
   });
   const { workspace } = useContext(WorkspaceContext);
+  allsprites = sprites;
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
   const checkPositionHandler = ({ type, coordinate }, event) => {
