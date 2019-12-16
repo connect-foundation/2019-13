@@ -10,7 +10,9 @@ const workspaceList = {
     return true;
   },
   getWorkspaceIdxById(id) {
-    workspaceList.workspaces.findIndex((ws) => { if (ws.id === id) return true; return false; });
+    return workspaceList.workspaces.findIndex((ws) => {
+      if (ws.id === id) return true; return false;
+    });
   },
 };
 
