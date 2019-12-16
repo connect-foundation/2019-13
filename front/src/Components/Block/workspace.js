@@ -6,7 +6,9 @@ import Utils from '../../utils/utils';
 import CONSTANTS from './constants';
 
 const Workspace = class {
-  constructor(blockDB, topblocks, setRender) {
+  constructor(blockDB, topblocks, setRender, id, imageId) {
+    this.id = id || Utils.uid();
+    this.imageId = imageId || '';
     this.blockDB = blockDB || Object.create(null);
     this.connectionDB = new ConnectionDB(this);
     this.dragging = new Dragging(this.connectionDB);

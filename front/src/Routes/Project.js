@@ -8,6 +8,7 @@ import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
 import KeyListener from '../utils/keyListener';
+import workspaceList from '../Components/Block/workspaceList';
 
 const defaultSprite = {};
 defaultSprite[Utils.uid()] = {
@@ -21,10 +22,14 @@ defaultSprite[Utils.uid()] = {
   realName: '/logo.png',
 };
 
+const nWorkspace = new Workspace(null, null, null, null, Object.keys(defaultSprite)[0]);
+workspaceList.workspaces.push(nWorkspace);
+workspaceList.images.push(Object.keys(defaultSprite)[0]);
+
 const Project = (props) => {
   const [workspace, workspaceDispatch] = useReducer(
     workspaceReducer,
-    new Workspace(),
+    nWorkspace,
   );
   const [isReady, setReady] = useState(false);
   const [sprites, spritesDispatch] = useReducer(
