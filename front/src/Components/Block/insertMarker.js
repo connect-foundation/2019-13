@@ -26,7 +26,7 @@ const InsertMarker = () => {
         transform={`translate(${typeAndPos.x},${typeAndPos.y})`}
         d={d}
         fill={color.alertColor}
-        visibility={typeAndPos.x !== 0 ? 'visible' : 'hidden'}
+        visibility={typeAndPos.x > CONSTANTS.DELETE_AREA_X ? 'visible' : 'hidden'}
       />
       <use xlinkHref="#marker" />
     </>
