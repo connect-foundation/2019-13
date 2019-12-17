@@ -1,4 +1,6 @@
 import ConnectionDB from './connection_db';
+import workspaceList from './workspaceList';
+import CONSTANTS from './constants';
 
 const Dragging = class {
   constructor() {
@@ -51,6 +53,17 @@ const Dragging = class {
       this.closetConnection = null;
       this.localConnection = null;
     }
+    if (this.closetConnection) {
+      const diffX = this.closetConnection.source.style === 'variable' || this.closetConnection.source.style === 'condition'
+        ? 3 : 2;
+      const diffY = this.closetConnection.source.style === 'variable' || this.closetConnection.source.style === 'condition'
+        ? 2 : 1;
+      workspaceList.showInsertMarker(this.localConnection.source.style,
+        this.closetConnection.source.x + this.closetConnection.diffX - CONSTANTS.PIXEL * diffX,
+        this.closetConnection.source.y + this.closetConnection.diffY - CONSTANTS.PIXEL * diffY);
+    } else {
+      workspaceList.hideInsertMarker();
+    }
   };
 
   reset = () => {
@@ -72,6 +85,9 @@ const Dragging = class {
       this.connectBlock();
     }
     this.reset();
+    if (workspaceList.setInsertMarker) {
+      workspaceList.hideInsertMarker();
+    }
     return block;
   };
 

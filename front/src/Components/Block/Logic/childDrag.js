@@ -1,9 +1,8 @@
 import CONSTANTS from '../constants';
 import makeTargetPath from './makeTargetPath';
 
-const mouseHandler = ({ set, block, setMoved, workspaceDispatch }) => {
+const mouseHandler = ({ set, block, workspaceDispatch }) => {
   const mousedown = (eventDown) => {
-    setMoved(true);
     if (eventDown.button !== 0) {
       return;
     }

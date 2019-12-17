@@ -67,6 +67,37 @@ export default [
     stroke_color: color.motionStrokeColor,
   },
   {
+    type: 'motion_move_xy',
+    args: [
+      {
+        type: 'text',
+        value: 'x :',
+      },
+      {
+        type: 'input',
+        value: 10,
+      },
+      {
+        type: 'text',
+        value: 'y :',
+      },
+      {
+        type: 'input',
+        value: 10,
+      },
+      {
+        type: 'text',
+        value: '로 이동하기',
+      },
+    ],
+    style: 'single',
+    nextConnection: true,
+    previousConnection: true,
+    inputConnection: true,
+    color: color.motionColor,
+    stroke_color: color.motionStrokeColor,
+  },
+  {
     type: 'motion_rotate_clock',
     args: [
       {

@@ -94,6 +94,8 @@ const Workspace = class {
     this.topblocks.forEach((topblock) => {
       if (topblock !== block) {
         topblock.setAllBlockPosition(true);
+      } else {
+        topblock.setAllBlockPosition(false);
       }
     });
     this.setRender(Math.random());
