@@ -57,29 +57,29 @@ const FunctionList = {
     return { func: FOR_LOOP(), limit };
   },
 
-  motion_move_forward: (args) => {
+  motion_move_forward: (args, imgId) => {
     const value = args.input[0];
-    return { func: { next: () => Move({ moving: value }) } };
+    return { func: { next: () => Move({ movement: { moving: value }, spritekey: imgId }) } };
   },
 
-  motion_change_x: (args) => {
+  motion_change_x: (args, imgId) => {
     const value = args.input[0];
-    return { func: { next: () => Move({ x: value }, 'x') } };
+    return { func: { next: () => Move({ movement: { x: value }, spritekey: imgId }, 'x') } };
   },
 
-  motion_change_y: (args) => {
+  motion_change_y: (args, imgId) => {
     const value = args.input[0];
-    return { func: { next: () => Move({ y: value }, 'y') } };
+    return { func: { next: () => Move({ movement: { y: value }, spritekey: imgId }, 'y') } };
   },
 
-  motion_rotate_clock: (args) => {
+  motion_rotate_clock: (args, imgId) => {
     const value = args.input[0];
-    return { func: { next: () => Rotate(value, 'clock') } };
+    return { func: { next: () => Rotate({ movement: value, spritekey: imgId }, 'clock') } };
   },
 
-  motion_rotate_anti_clock: (args) => {
+  motion_rotate_anti_clock: (args, imgId) => {
     const value = args.input[0];
-    return { func: { next: () => Rotate(value, 'anticlock') } };
+    return { func: { next: () => Rotate({ movement: value, spritekey: imgId }, 'anticlock') } };
   },
 
   control_if: (args) => {

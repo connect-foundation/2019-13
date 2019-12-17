@@ -9,19 +9,18 @@ export default ({ comment, user, idx, localUpdate }) => {
   const [edit, setEdit] = useState(false);
   const [updateComment] = useMutation(UPDATE_COMMENT, {
     onCompleted(res) {
-      if (res.updateComment) {
-        localUpdate(idx, { ...comment,
-          text: textRefference.current.value,
-        });
-        setEdit(false);
-      }
+      if (!res || !res.updateComment) return;
+
+      localUpdate(idx, { ...comment,
+        text: textRefference.current.value,
+      });
+      setEdit(false);
     },
   });
   const [removeComment] = useMutation(REMOVE_COMMENT, {
     onCompleted(res) {
-      if (res.removeComment) {
-        localUpdate(idx);
-      }
+      if (!res || !res.removeComment) return;
+      localUpdate(idx);
     },
   });
 
@@ -61,13 +60,12 @@ export default ({ comment, user, idx, localUpdate }) => {
                 {comment.text}
               </h3>
               {(user && user.email === comment.user.email)
-                ? (
+                && (
                   <div className="button_box">
                     <button type="button" onClick={() => setEdit(true)}> 수정 </button>
                     <button type="button" onClick={removeHandler}> 삭제 </button>
                   </div>
                 )
-                : undefined
               }
             </>
           )}

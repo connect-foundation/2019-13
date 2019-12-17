@@ -8,7 +8,6 @@ import SpriteSelector from '../SpriteSelector';
 import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
-import Collision from './function/collision';
 import { start, stop } from '../../utils/playBlocks';
 
 let key;
@@ -16,12 +15,10 @@ let position;
 let dispatch;
 
 let allsprites;
-let interval;
-let isPlay = false;
 const getPosition = () => ({ key, position, dispatch, allsprites });
 
-const playHandler = (workspace) => {
-  start(workspace, true);
+const playHandler = () => {
+  start(true);
 };
 
 const stopHandler = () => {
@@ -69,7 +66,7 @@ export default () => {
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
       <DrawSectionWrapper className="Contents__Column">
         <div className="draw-section__row controller">
-          <FontAwesomeIcon icon={faPlay} onClick={() => playHandler(workspace)} className="play-button" />
+          <FontAwesomeIcon icon={faPlay} onClick={() => playHandler()} className="play-button" />
           <FontAwesomeIcon icon={faStop} onClick={stopHandler} className="stop-button" />
         </div>
         <div className="draw-section__row">

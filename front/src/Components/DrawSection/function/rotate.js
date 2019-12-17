@@ -1,11 +1,14 @@
 import Utils from '../../../utils/utils';
 /**
+ * @param {String} spritekey spritekey
  * @param {Number} movement 회전반경(0~360)
- * @param {String} type 'clock' => 시계방향으로 movement만큼 회전, 'anticlock' 반시계방향으로 movement만큼 회전,  designation => movement각도로 지정
+ * @param {String} type 'clock' 시계방향으로 movement만큼 회전,
+ *                      'anticlock' 반시계방향으로 movement만큼 회전,  'designation' movement로 지정
  *
  */
-export default (movement, type) => {
-  const { key, position, dispatch } = Utils.getPosition();
+export default ({ spritekey, movement }, type) => {
+  const { dispatch, allsprites } = Utils.getPosition();
+  const position = allsprites[spritekey];
   let value;
   switch (type) {
     case 'clock':
@@ -26,5 +29,5 @@ export default (movement, type) => {
     default:
       throw new TypeError('NOT FOUND TYPE');
   }
-  dispatch({ type: 'ROTATE', key, value });
+  dispatch({ type: 'ROTATE', key: spritekey, value });
 };

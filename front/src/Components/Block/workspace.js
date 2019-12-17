@@ -14,15 +14,6 @@ const Workspace = class {
     this.dragging = new Dragging(this.connectionDB);
     this.topblocks = topblocks || [];
     this.setRender = setRender || null;
-    this.keyDown = Object.create(null);
-  }
-
-  setKeyDown(keyNum, condition) {
-    this.keyDown[keyNum] = condition;
-  }
-
-  resetKey() {
-    this.keyDown = Object.create(null);
   }
 
   addBlock(usedId) {

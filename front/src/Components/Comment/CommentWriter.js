@@ -6,18 +6,16 @@ export default ({ projectId, updateComments }) => {
   const [text, setText] = useState('');
   const [createComment] = useMutation(CREAT_COMMENT, {
     onCompleted(res) {
-      if (res.createComment) {
-        setText('');
-        updateComments();
-      }
+      if (!res || !res.createComment) return;
+      setText('');
+      updateComments();
     },
   });
   const addCommentHandler = () => {
-    if (text.length > 0) {
-      createComment({
-        variables: { projectId, text },
-      });
-    }
+    if (text.length < 1) return;
+    createComment({
+      variables: { projectId, text },
+    });
   };
   return (
     <>
