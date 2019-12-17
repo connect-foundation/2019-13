@@ -388,31 +388,32 @@ const Block = class {
     return availableConnection;
   };
 
-  setNextElementPosition = () => {
+  setNextElementPosition = (doRender) => {
     this.inputElement.forEach((input, idx) => {
       if (input.type === 'block') {
         this.workspace.getBlockById(input.id).x = this.x + this.inputX[idx];
         if (this.style === 'condition' || this.style === 'variable') { this.workspace.getBlockById(input.id).y = this.y; } else { this.workspace.getBlockById(input.id).y = this.y + CONSTANTS.PIXEL + 1; }
-        this.workspace.getBlockById(input.id).setNextElementPosition();
+        this.workspace.getBlockById(input.id).setNextElementPosition(doRender);
       }
     });
     if (this.firstchildElement) {
-      this.setFirstChildPosition();
+      this.setFirstChildPosition(doRender);
       this.firstchildHeight = this.firstchildElement.node.getBoundingClientRect().height
       - CONSTANTS.PIXEL;
     }
     if (this.nextElement) {
       this.nextElement.y = this.y + this.height - CONSTANTS.PIXEL;
       this.nextElement.x = this.x;
-      this.nextElement.setNextElementPosition();
+      this.nextElement.setNextElementPosition(doRender);
     }
-    this.setArgs();
+    if (doRender)
+      this.setArgs();
   };
 
-  setFirstChildPosition = () => {
+  setFirstChildPosition = (doRender) => {
     this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
     this.firstchildElement.x = this.x + CONSTANTS.PREVIOUS_NEXT_POS_X;
-    this.firstchildElement.setNextElementPosition();
+    this.firstchildElement.setNextElementPosition(doRender);
   }
 
   setpreviousElement = (previousElement) => {
@@ -530,8 +531,8 @@ const Block = class {
     }
   };
 
-  setAllBlockPosition = () => {
-    this.setNextElementPosition();
+  setAllBlockPosition = (doRender = true) => {
+    this.setNextElementPosition(doRender);
   }
 
   arithmetic = (doRender) => {
