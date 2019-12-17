@@ -28,7 +28,7 @@ type ProjectAuth {
 type Workspace {
   id: ID! @id
   project: Project! @relation(name:"WorkspacesByProject")
-  image: Image @relation(name:"ImageByWorkspace" onDelete: CASCADE)
+  images: [Image]! @relation(name:"ImageByWorkspace" onDelete: CASCADE)
   blocks: [Block]! @relation(name:"BlocksByWorkspace" onDelete: CASCADE)
 }
 type Block {
@@ -51,7 +51,7 @@ type Image {
   positionY: Float!
   size: Int!
   direction: Int!
-  workspace: Workspace! @relation(link : INLINE, name:"ImageByWorkspace")
+  workspace: Workspace! @relation(link : TABLE, name:"ImageByWorkspace")
 }
 type Comment {
   id: ID! @id

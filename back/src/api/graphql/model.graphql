@@ -78,7 +78,7 @@ type Comment {
 }
 type workspace {
   id: ID!
-  image: Image!
+  images: [Image]!
   blocks: [block]!
 }
 
