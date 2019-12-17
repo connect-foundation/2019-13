@@ -11,12 +11,15 @@ const DropDown = ({ type = null }) => {
     setLoggedIn(false);
     window.location.href = '/';
   };
+  const myPageHandler = () => {
+    window.location.href = '/mypage';
+  };
 
   const dropDownData = {
     Header: [
       {
-        content: '나의 정보',
-        onClick: null,
+        content: '마이페이지',
+        onClick: myPageHandler,
       },
       {
         content: '로그아웃',
