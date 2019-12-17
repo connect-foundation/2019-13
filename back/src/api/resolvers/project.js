@@ -210,14 +210,12 @@ export default {
             },
           },
         });
-        console.log(prevBlocks.length, prevImages.length);
 
         const blocks = workspacesInput.reduce((prev, workspace) => {
           // eslint-disable-next-line max-len,no-param-reassign
           prev = prev.concat(workspace.blocks.map((block) => ({ ...block, workspaceId: workspace.id })));
           return prev;
         }, []);
-        console.log(blocks);
 
         const notFoundBlock = [];
         prevBlocks.forEach((prev) => {
@@ -302,7 +300,6 @@ export default {
             const resultStorage = await Upload(createReadStream, realName);
             url = resultStorage.Location;
           }
-          console.log(id);
           await prisma.upsertImage({
             where: {
               id,
