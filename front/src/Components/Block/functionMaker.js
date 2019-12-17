@@ -72,6 +72,11 @@ const FunctionList = {
     return { func: { next: () => Move({ movement: { y: value }, spritekey: imgId }, 'y') } };
   },
 
+  motion_move_xy: (args, imgId) => {
+    const values = args.input;
+    return { func: { next: () => Move({ movement: { x: values[0], y: values[1] }, spritekey: imgId }, 'xy') } };
+  },
+
   motion_rotate_clock: (args, imgId) => {
     const value = args.input[0];
     return { func: { next: () => Rotate({ movement: value, spritekey: imgId }, 'clock') } };
