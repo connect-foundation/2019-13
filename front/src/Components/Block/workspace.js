@@ -116,8 +116,8 @@ const Workspace = class {
       positionX: b.x,
       positionY: b.y,
       nextElementId: this.getBlockId(b.nextElement),
-      firstChildElementId: this.getBlockId(b.firstchildElement),
-      secondChildElementId: this.getBlockId(b.secondchildElement),
+      firstChildElementId: this.getBlockId(b.firstChildElement),
+      secondChildElementId: this.getBlockId(b.secondChildElement),
       inputElementId: b.inputElement.map(input => (input.id ? input.id : input.value.toString())),
     }));
   }

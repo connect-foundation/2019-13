@@ -12,12 +12,12 @@ export default class {
     if (block.inputElement) {
       values.input = block.inputElement.map(input => input.value);
     }
-    if (block.firstchildElement) {
-      const firstChild = this.blockToCode(block.firstchildElement, imgId);
+    if (block.firstChildElement) {
+      const firstChild = this.blockToCode(block.firstChildElement, imgId);
       values.firstChild = firstChild;
     }
-    if (block.secondchildElement) {
-      const secondChild = this.blockToCode(block.secondchildElement, imgId);
+    if (block.secondChildElement) {
+      const secondChild = this.blockToCode(block.secondChildElement, imgId);
       values.secondChild = secondChild;
     }
     code.push(FunctionMaker[block.type](values, imgId));

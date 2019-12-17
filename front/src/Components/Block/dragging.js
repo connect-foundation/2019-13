@@ -10,7 +10,7 @@ const Dragging = class {
     this.availableConnection = null;
     this.x = 0;
     this.y = 0;
-    this.closetConnection = null;
+    this.closestConnection = null;
     this.localConnection = null;
     this.lastBlock = null;
     this.lastBlockDiff = null;
@@ -45,22 +45,22 @@ const Dragging = class {
       const result = this.connectionDB.findClosetConnection(conn, bestRadius);
       if (result.connection && result.radius < bestRadius) {
         bestRadius = result.radius;
-        this.closetConnection = result.connection;
+        this.closestConnection = result.connection;
         this.localConnection = conn;
       }
     });
     if (bestRadius === maxRadius) {
-      this.closetConnection = null;
+      this.closestConnection = null;
       this.localConnection = null;
     }
-    if (this.closetConnection) {
-      const diffX = this.closetConnection.source.style === 'variable' || this.closetConnection.source.style === 'condition'
+    if (this.closestConnection) {
+      const diffX = this.closestConnection.source.style === 'variable' || this.closestConnection.source.style === 'condition'
         ? 3 : 2;
-      const diffY = this.closetConnection.source.style === 'variable' || this.closetConnection.source.style === 'condition'
+      const diffY = this.closestConnection.source.style === 'variable' || this.closestConnection.source.style === 'condition'
         ? 2 : 1;
       workspaceList.showInsertMarker(this.localConnection.source.style,
-        this.closetConnection.source.x + this.closetConnection.diffX - CONSTANTS.PIXEL * diffX,
-        this.closetConnection.source.y + this.closetConnection.diffY - CONSTANTS.PIXEL * diffY);
+        this.closestConnection.source.x + this.closestConnection.diffX - CONSTANTS.PIXEL * diffX,
+        this.closestConnection.source.y + this.closestConnection.diffY - CONSTANTS.PIXEL * diffY);
     } else {
       workspaceList.hideInsertMarker();
     }
@@ -73,7 +73,7 @@ const Dragging = class {
     this.availableConnection = null;
     this.x = 0;
     this.y = 0;
-    this.closetConnection = null;
+    this.closestConnection = null;
     this.localConnection = null;
     this.lastBlock = null;
     this.lastBlockDiff = null;
@@ -81,7 +81,7 @@ const Dragging = class {
 
   dragEnd = () => {
     const block = this.draggedBlock;
-    if (this.closetConnection) {
+    if (this.closestConnection) {
       this.connectBlock();
     }
     this.reset();
@@ -92,7 +92,7 @@ const Dragging = class {
   };
 
   connectBlock = () => {
-    this.localConnection.connectBlock(this.closetConnection);
+    this.localConnection.connectBlock(this.closestConnection);
   };
 };
 

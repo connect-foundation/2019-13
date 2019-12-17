@@ -11,10 +11,10 @@ const Block = class {
     this.type = '';
     this.style = '';
     this.workspace = workspace;
-    this.firstchildConnection = null;
-    this.secondchildConnection = null;
-    this.firstchildElement = null;
-    this.secondchildElement = null;
+    this.firstChildConnection = null;
+    this.secondChildConnection = null;
+    this.firstChildElement = null;
+    this.secondChildElement = null;
     this.x = 0;
     this.y = 0;
     this.args = [];
@@ -33,8 +33,8 @@ const Block = class {
     this.parentElement = null;
     this.parentConnection = null;
     this.height = 0;
-    this.firstchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT;
-    this.secondchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT;
+    this.firstChildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT;
+    this.secondChildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT;
     this.inputElement = [];
     this.inputWidth = [CONSTANTS.DEFAULT_INPUT_WIDTH, CONSTANTS.DEFAULT_INPUT_WIDTH];
     this.inputConnection = null;
@@ -49,12 +49,12 @@ const Block = class {
     this.setArgs();
   };
 
-  setArgs = () => {
+  setArgs = (doRender = true) => {
     if (this.node) {
       let positionX = CONSTANTS.PIXEL;
       this.inputX = [];
       let lastChild;
-      this.render(Math.random());
+      if (doRender) { this.render(Math.random()); }
       this.node.childNodes.forEach((node) => {
         if ((node.tagName !== 'path' && node.tagName !== 'g')
         || (node.tagName === 'g' && node.id === this.inputElement.reduce((acc, cur) => { if (cur.id === node.id) acc.push(cur.id); return acc; }, [])[0])) {
@@ -64,8 +64,8 @@ const Block = class {
           lastChild = node;
         }
       });
-      if (this.firstchildHeight < CONSTANTS.MINIMUM_BLOCK_HEIGHT) { this.firstchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT; }
-      if (this.secondchildHeight < CONSTANTS.MINIMUM_BLOCK_HEIGHT) { this.secondchildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT; }
+      if (this.firstChildHeight < CONSTANTS.MINIMUM_BLOCK_HEIGHT) { this.firstChildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT; }
+      if (this.secondChildHeight < CONSTANTS.MINIMUM_BLOCK_HEIGHT) { this.secondChildHeight = CONSTANTS.MINIMUM_BLOCK_HEIGHT; }
       let { right } = lastChild.getBoundingClientRect();
       const { left } = this.node.firstChild.getBoundingClientRect();
       if (lastChild.tagName === 'foreignObject') {
@@ -73,10 +73,10 @@ const Block = class {
       }
       this.makeStyleFromJSON(
         (right - left - CONSTANTS.PIXEL * 5) / CONSTANTS.PIXEL,
-        this.firstchildHeight / CONSTANTS.PIXEL - 2,
-        this.secondchildHeight / CONSTANTS.PIXEL - 2,
+        this.firstChildHeight / CONSTANTS.PIXEL - 2,
+        this.secondChildHeight / CONSTANTS.PIXEL - 2,
       );
-      this.render(Math.random());
+      if (doRender) { this.render(Math.random()); }
       this.height = this.node.firstChild.getBoundingClientRect().height;
       this.setConnectionPosition();
     }
@@ -111,12 +111,12 @@ const Block = class {
       this.nextConnection.setPositions();
     }
 
-    if (this.firstchildConnection) {
-      this.firstchildConnection = new Connection(
+    if (this.firstChildConnection) {
+      this.firstChildConnection = new Connection(
         CONSTANTS.NEXT_CONNECTION,
         this, 'firstChildPosition',
       );
-      this.firstchildConnection.setPositions();
+      this.firstChildConnection.setPositions();
     }
 
     if (this.inputConnection) {
@@ -198,8 +198,8 @@ const Block = class {
       this.nextConnection = true;
     }
 
-    if (json.firstchildConnection) {
-      this.firstchildConnection = true;
+    if (json.firstChildConnection) {
+      this.firstChildConnection = true;
     }
 
     if (json.inputConnection) {
@@ -344,12 +344,12 @@ const Block = class {
       this.nextElement.setDrag(isDragged);
     }
 
-    if (this.firstchildElement) {
-      this.firstchildElement.setDrag(isDragged);
+    if (this.firstChildElement) {
+      this.firstChildElement.setDrag(isDragged);
     }
 
-    if (this.secondchildElement) {
-      this.secondchildElement.setDrag(isDragged);
+    if (this.secondChildElement) {
+      this.secondChildElement.setDrag(isDragged);
     }
 
     this.inputElement.forEach((input) => {
@@ -362,7 +362,7 @@ const Block = class {
   getAvailableConnection = (isDragged = false) => {
     const availableConnection = [];
 
-    if (this.previousConnection && this.parentElement === null) {
+    if (this.previousConnection && this.parentElement === null && this.previousElement === null) {
       availableConnection.push(this.previousConnection);
     }
 
@@ -371,8 +371,8 @@ const Block = class {
       if (nextConn) availableConnection.push(nextConn);
     }
 
-    if (this.firstchildConnection) {
-      availableConnection.push(this.firstchildConnection);
+    if (this.firstChildConnection && !isDragged) {
+      availableConnection.push(this.firstChildConnection);
     }
 
     if (this.inputConnection && !isDragged) {
@@ -396,9 +396,9 @@ const Block = class {
         this.workspace.getBlockById(input.id).setNextElementPosition(doRender);
       }
     });
-    if (this.firstchildElement) {
+    if (this.firstChildElement) {
       this.setFirstChildPosition(doRender);
-      this.firstchildHeight = this.firstchildElement.node.getBoundingClientRect().height
+      this.firstChildHeight = this.firstChildElement.node.getBoundingClientRect().height
       - CONSTANTS.PIXEL;
     }
     if (this.nextElement) {
@@ -406,14 +406,13 @@ const Block = class {
       this.nextElement.x = this.x;
       this.nextElement.setNextElementPosition(doRender);
     }
-    if (doRender)
-      this.setArgs();
+    this.setArgs(doRender);
   };
 
   setFirstChildPosition = (doRender) => {
-    this.firstchildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
-    this.firstchildElement.x = this.x + CONSTANTS.PREVIOUS_NEXT_POS_X;
-    this.firstchildElement.setNextElementPosition(doRender);
+    this.firstChildElement.y = this.y + CONSTANTS.BLOCK_HEAD_HEIGHT;
+    this.firstChildElement.x = this.x + CONSTANTS.PREVIOUS_NEXT_POS_X;
+    this.firstChildElement.setNextElementPosition(doRender);
   }
 
   setpreviousElement = (previousElement) => {
@@ -428,12 +427,12 @@ const Block = class {
     this.parentElement = parentElement;
   }
 
-  setFirstChildElement = (firstchildElement) => {
-    this.firstchildElement = firstchildElement;
+  setFirstChildElement = (firstChildElement) => {
+    this.firstChildElement = firstChildElement;
   }
 
-  setSecondChildElement = (secondchildElement) => {
-    this.secondchildElement = secondchildElement;
+  setSecondChildElement = (secondChildElement) => {
+    this.secondChildElement = secondChildElement;
   }
 
   connectBlock = (type, conn) => {
@@ -461,11 +460,11 @@ const Block = class {
           this.previousElement = conn.source;
           conn.source.setNextElement(this);
         } else if (conn.positiontype === 'firstChildPosition') {
-          if (conn.source.firstchildElement) {
+          if (conn.source.firstChildElement) {
             const lastBlock = this.getLastBlock(true);
-            conn.source.firstchildElement.setpreviousElement(lastBlock);
-            conn.source.firstchildElement.parentElement = null;
-            lastBlock.setNextElement(conn.source.firstchildElement);
+            conn.source.firstChildElement.setpreviousElement(lastBlock);
+            conn.source.firstChildElement.parentElement = null;
+            lastBlock.setNextElement(conn.source.firstChildElement);
           }
           this.parentElement = conn.source;
           conn.source.setFirstChildElement(this);
@@ -504,12 +503,12 @@ const Block = class {
       this.previousElement = null;
     }
     if (this.parentElement) {
-      if (this.parentElement.firstchildElement === this) {
-        this.parentElement.firstchildHeight -= this.node.getBoundingClientRect().height - CONSTANTS.PIXEL;
-        this.parentElement.firstchildElement = null;
+      if (this.parentElement.firstChildElement === this) {
+        this.parentElement.firstChildHeight -= this.node.getBoundingClientRect().height - CONSTANTS.PIXEL;
+        this.parentElement.firstChildElement = null;
         this.parentElement = null;
-      } else if (this.parentElement.secondchildElement === this) {
-        this.parentElement.secondchildElement = null;
+      } else if (this.parentElement.secondChildElement === this) {
+        this.parentElement.secondChildElement = null;
         this.parentElement = null;
       }
     }

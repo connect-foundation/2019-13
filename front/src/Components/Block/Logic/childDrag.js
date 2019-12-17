@@ -63,7 +63,12 @@ const mouseHandler = ({ set, block, workspaceDispatch }) => {
     const mouseup = (eventUp) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
-      if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
+      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
+        workspaceDispatch({
+          type: 'DELETE_BLOCK',
+          id: block.id,
+        });
+      } else if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
         currentRealPosition.x = CONSTANTS.DELETE_AREA_X + 1;
       } else if (target.getBoundingClientRect().right
       > target.ownerSVGElement.getBoundingClientRect().right) {
@@ -73,12 +78,6 @@ const mouseHandler = ({ set, block, workspaceDispatch }) => {
       }
       block.dragUpdate(currentRealPosition.x, currentRealPosition.y);
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
-      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X) {
-        workspaceDispatch({
-          type: 'DELETE_BLOCK',
-          id: block.id,
-        });
-      }
     };
 
     document.addEventListener('mousemove', mousemove);

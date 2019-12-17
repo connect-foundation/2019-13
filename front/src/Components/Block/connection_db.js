@@ -36,7 +36,7 @@ ConnectionDB.prototype.isInYRange = function (connectIdx, y, maxRadius) {
 
 ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
   const startIdx = this.findStartIdxForConnection(connect.Y_());
-  let closetConnection = null;
+  let closestConnection = null;
   let bestRadius = maxRadius;
   let temp;
   let findBackword = startIdx - 1;
@@ -51,7 +51,7 @@ ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
   ) {
     temp = this.connections[findBackword];
     if (connect.canConnect(temp, bestRadius)) {
-      closetConnection = temp;
+      closestConnection = temp;
       bestRadius = temp.distanceFrom(connect);
     }
     findBackword -= 1;
@@ -63,13 +63,13 @@ ConnectionDB.prototype.findClosetConnection = function (connect, maxRadius) {
   ) {
     temp = this.connections[findForward];
     if (connect.canConnect(temp, bestRadius)) {
-      closetConnection = temp;
+      closestConnection = temp;
       bestRadius = temp.distanceFrom(connect);
     }
     findForward += 1;
   }
 
-  return { connection: closetConnection, radius: bestRadius };
+  return { connection: closestConnection, radius: bestRadius };
 };
 
 
@@ -81,13 +81,13 @@ ConnectionDB.prototype.findStartIdxForConnection = function (Y) {
   }
 
   while (positionMin < positionMax) {
-    const postionMid = Math.floor((positionMin + positionMax) / 2);
-    if (this.connections[postionMid].Y_() < Y) {
-      positionMin = postionMid + 1;
-    } else if (this.connections[postionMid].Y_() > Y) {
-      positionMax = postionMid;
+    const positionMid = Math.floor((positionMin + positionMax) / 2);
+    if (this.connections[positionMid].Y_() < Y) {
+      positionMin = positionMid + 1;
+    } else if (this.connections[positionMid].Y_() > Y) {
+      positionMax = positionMid;
     } else {
-      positionMin = postionMid;
+      positionMin = positionMid;
       break;
     }
   }
