@@ -54,14 +54,14 @@ export const DELETE_PROJECT = gql`
 `;
 
 export const CREATE_AND_SAVE = gql`
-  mutation createProjectAndBlocks($projectTitle: String!, $input: [createBlockInput]!, $images: [Upload]! ) {
-    createProjectAndBlocks(projectTitle: $projectTitle, input: $input, images: $images)
+  mutation createProjectAndBlocks($projectTitle: String!, $workspacesInput: [workspaceInput], $images: [Upload]!) {
+    createProjectAndBlocks(projectTitle: $projectTitle, workspacesInput: $workspacesInput, images: $images)
   }
 `;
 
 export const UPDATE_BLOCK = gql`
-  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $input: [createBlockInput]! $images: [Upload]!) {
-    updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, input: $input, images: $images)
+  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $workspacesInput: [workspaceInput],  $images: [Upload]!) {
+    updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, workspacesInput: $workspacesInput, images: $images)
   }
 `;
 
@@ -78,26 +78,29 @@ export const LOAD_PROJECT = gql`
       },
       isLiked,
       private,
-      blocks{
+      workspaces {
         id,
-        type,
-        nextElementId,
-        firstChildElementId,
-        secondChildElementId,
-        positionX,
-        positionY,
-        inputElementId,
-      },
-      images{
-        id,
-        name,
-        url,
-        positionX,
-        positionY,
-        size,
-        direction,
-        realName
-      },
+        blocks {
+          id,
+          type,
+          positionX,
+          positionY,
+          nextElementId,
+          firstChildElementId,
+          secondChildElementId,
+          inputElementId
+        },
+        images {
+          id,
+          name,
+          url,
+          positionX,
+          positionY,
+          size,
+          direction,
+          realName
+        }
+      }
       views,
     }
   }

@@ -30,8 +30,7 @@ workspaceList.images.push(Object.keys(defaultSprite)[0]);
 
 const Project = (props) => {
   const [workspace, workspaceDispatch] = useReducer(
-    workspaceReducer,
-    nWorkspace,
+    workspaceReducer, workspaceList.workspaces[0],
   );
   const [isReady, setReady] = useState(false);
   const [sprites, spritesDispatch] = useReducer(
