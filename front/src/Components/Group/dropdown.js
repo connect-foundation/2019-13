@@ -5,7 +5,7 @@ import dropdownItems from '../../utils/key';
 import CONSTANTS from '../Block/constants';
 
 const Dropdown = ({ block, index }) => {
-  const [value, setValue] = useState(CONSTANTS.DROPDOWN_INIT_VALUE);
+  const [value, setValue] = useState(block.value || CONSTANTS.DROPDOWN_INIT_VALUE);
   return (
     <foreignObject style={{ width: block.inputWidth[index] }}>
       <Select
