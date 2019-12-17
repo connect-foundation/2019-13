@@ -9,6 +9,7 @@ import CONSTANTS from './constants';
 import BlockModel from './blockmodel';
 import init from './Init';
 import Theme from '../../Styles/Theme';
+import InsertMarker from './insertMarker';
 
 const blockModelList = new BlockModelList();
 const yArray = [];
@@ -124,7 +125,6 @@ const Blocks = ({ clickedButton }) => {
             onMouseLeave={dragEndHandler}
           />
         )}
-
       <rect
         width="20"
         height="100"
@@ -137,6 +137,7 @@ const Blocks = ({ clickedButton }) => {
         onMouseUp={dragEndHandler}
         onMouseMove={dragMoveHandler}
       />
+      <InsertMarker />
     </Svg>
   );
 };
