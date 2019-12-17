@@ -1,3 +1,9 @@
+input workspaceInput {
+  id: ID!
+  blocks: [createBlockInput]!
+  image: Upload!
+}
+
 input createBlockInput {
   id: ID!
   type: String!

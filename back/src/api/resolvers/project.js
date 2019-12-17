@@ -6,8 +6,6 @@ import Delete from '../../objectstorage/delete';
 export default {
   Query: {
     projects: async (root, value, context) => {
-      // const user = Utils.findUser(context.req);
-      // if (!user) throw new Error('Not Authorization');
       const project = await prisma.projects({
         where: { private: false },
         orderBy: 'views_DESC',
@@ -45,7 +43,7 @@ export default {
   Mutation: {
     createProjectAndBlocks: async (
       root,
-      { projectTitle, input, images },
+      { projectTitle, workspacesInput },
       context,
     ) => {
       try {
@@ -62,26 +60,35 @@ export default {
             },
           },
         });
-        input.forEach(async (blockData) => {
-          await prisma.createBlock({
-            id: blockData.id,
-            type: blockData.type,
-            positionX: blockData.positionX,
-            positionY: blockData.positionY,
-            nextElementId: blockData.nextElementId,
-            firstChildElementId: blockData.firstChildElementId,
-            secondChildElementId: blockData.secondChildElementId,
-            inputElementId: {
-              set: blockData.inputElementId,
-            },
+        workspacesInput.forEach(async (workspace) => {
+          await prisma.createWorkspace({
+            id: workspace.id,
             project: {
               connect: {
                 id: project.id,
               },
             },
           });
-        });
-        images.forEach(async (image) => {
+          workspace.blocks.forEach(async (blockData) => {
+            await prisma.createBlock({
+              id: blockData.id,
+              type: blockData.type,
+              positionX: blockData.positionX,
+              positionY: blockData.positionY,
+              nextElementId: blockData.nextElementId,
+              firstChildElementId: blockData.firstChildElementId,
+              secondChildElementId: blockData.secondChildElementId,
+              inputElementId: {
+                set: blockData.inputElementId,
+              },
+              workspace: {
+                connect: {
+                  id: workspace.id,
+                },
+              },
+            });
+          });
+          const { image } = workspace;
           let url;
           let realName;
           if (image.file) {
@@ -103,13 +110,14 @@ export default {
             positionY: image.y,
             size: image.size,
             direction: image.direction,
-            project: {
+            workspace: {
               connect: {
-                id: project.id,
+                id: workspace.id,
               },
             },
           });
         });
+
         return project.id;
       } catch (e) {
         console.error(e);
@@ -118,7 +126,7 @@ export default {
     updateProjectAndBlocks: async (
       root,
       {
-        projectId, projectTitle, input, images,
+        projectId, projectTitle, workspacesInput,
       },
       context,
     ) => {
@@ -128,6 +136,7 @@ export default {
         const project = await prisma.project({
           id: projectId,
         });
+        if (!project) return false;
         const owner = await prisma
           .project({
             id: projectId,
@@ -142,29 +151,81 @@ export default {
             title: projectTitle,
           },
         });
-        if (!project) return false;
-        const blocks = await prisma.blocks({
-          where: {
-            project: {
-              id: projectId,
-            },
-          },
-        });
-        const notFoundBlock = [];
-        blocks.forEach((block) => {
+        const notFoundWorkspace = [];
+        const prevWorkspaces = await prisma.project({
+          id: projectId,
+        }).workspaces();
+        prevWorkspaces.forEach((workspace) => {
           let found = false;
-          input.forEach(async (i) => {
-            if (i.id === block.id) {
+          workspacesInput.forEach((prev) => {
+            if (prev.id === workspace.id) {
               found = true;
             }
           });
-          if (!found) notFoundBlock.push(block.id);
+          if (!found) notFoundWorkspace.push(workspace.id);
+        });
+        await prisma.deleteManyWorkspaces({
+          id_in: notFoundWorkspace,
+        });
+        workspacesInput.forEach(async (workspace) => {
+          await prisma.upsertWorkspace({
+            where: {
+              id: workspace.id,
+            },
+            create: {
+              id: workspace.id,
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
+            },
+            update: {
+              project: {
+                connect: {
+                  id: project.id,
+                },
+              },
+            },
+          });
+        });
+        const workspaceIds = workspacesInput.map((workspace) => workspace.id);
+        const prevImages = await prisma.images({
+          where: {
+            id_in: workspaceIds,
+          },
+        });
+        const prevBlocks = await prisma.blocks({
+          where: {
+            id_in: workspaceIds,
+          },
+        });
+
+
+        const allInput = workspacesInput.reduce((prev, workspace) => {
+          const { image, blocks } = workspace;
+          prev[0].push({ ...image, workspaceId: workspace.id });
+          prev[1].concat(blocks.map((block) => ({ ...block, workspaceId: workspace.id })));
+          return prev;
+        }, [[], []]);
+        const [images, blocks] = allInput;
+
+
+        const notFoundBlock = [];
+        prevBlocks.forEach((prev) => {
+          let found = false;
+          blocks.forEach(async (block) => {
+            if (block.id === prev.id) {
+              found = true;
+            }
+          });
+          if (!found) notFoundBlock.push(prev.id);
         });
         await prisma.deleteManyBlocks({
           id_in: [...notFoundBlock],
         });
-        input.forEach(async (i) => {
-          const block = await prisma.upsertBlock({
+        blocks.forEach(async (i) => {
+          await prisma.upsertBlock({
             where: {
               id: i.id,
             },
@@ -195,20 +256,13 @@ export default {
               inputElementId: {
                 set: i.inputElementId,
               },
-              project: {
+              workspace: {
                 connect: {
-                  id: project.id,
+                  id: i.workspaceId,
                 },
               },
             },
           });
-        });
-        const prevImages = await prisma.images({
-          where: {
-            project: {
-              id: project.id,
-            },
-          },
         });
         const imageSet = new Set();
         images.forEach((image) => {
@@ -261,15 +315,14 @@ export default {
               name,
               url,
               realName,
-              project: {
+              workspace: {
                 connect: {
-                  id: project.id,
+                  id: image.workspaceId,
                 },
               },
             },
           });
         });
-
         return true;
       } catch (e) {
         console.error(e);
@@ -283,47 +336,26 @@ export default {
         const isProject = await prisma.$exists.project({
           id: projectId,
         });
-
         if (!isProject) return true;
-
         const owner = await prisma
           .project({
             id: projectId,
           })
           .owner();
-
         if (user.id !== owner.id) return false;
-
-        await prisma.deleteManyBlocks({
-          project: {
-            id: projectId,
-          },
-        });
-
-        await prisma.deleteManyLikes({
-          project: {
-            id: projectId,
-          },
-        });
+        const workspaces = await prisma.project({
+          id: projectId,
+        }).workspaces();
+        const workspaceIds = workspaces.map((workspace) => workspace.id);
         const images = await prisma.images({
           where: {
-            project: {
-              id: projectId,
+            workspace: {
+              id_in: workspaceIds,
             },
           },
         });
         images.forEach(async (image) => {
           await Delete(image.realName);
-        });
-        await prisma.deleteManyImages({
-          project: {
-            id: projectId,
-          },
-        });
-        await prisma.deleteManyComments({
-          project: {
-            id: projectId,
-          },
         });
         await prisma.deleteProject({
           id: projectId,
