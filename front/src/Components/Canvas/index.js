@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { Stage, Layer, Group } from 'react-konva';
 import PropTypes from 'prop-types';
-import { SpritesContext, CurrentSpriteContext } from '../../Context';
+import { SpritesContext, CurrentSpriteContext, WorkspaceContext } from '../../Context';
 import URLImage from '../URLImage';
 import CONSTANTS from './constants';
 
 const Canvas = ({ WIDTH = CONSTANTS.CANVAS.WIDTH, HEIGHT = CONSTANTS.CANVAS.HEIGHT }) => {
+  const { workspaceDispatch } = useContext(WorkspaceContext);
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const { setCurrentSprite } = useContext(CurrentSpriteContext);
   return (
@@ -19,6 +20,7 @@ const Canvas = ({ WIDTH = CONSTANTS.CANVAS.WIDTH, HEIGHT = CONSTANTS.CANVAS.HEIG
               spritekey={sprite[0]}
               spritesDispatch={spritesDispatch}
               setCurrentSprite={setCurrentSprite}
+              workspaceDispatch={workspaceDispatch}
             />
           </Group>
         ))}

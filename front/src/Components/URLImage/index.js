@@ -6,7 +6,7 @@ import useImage from '../../custom_hooks/useImage';
 import CANVASCONSTANTS from '../Canvas/constants';
 import Theme from '../../Styles/Theme';
 
-const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
+const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite, workspaceDispatch }) => {
   const [image] = useImage(sprite);
   const handleDragStart = (e) => {
     e.target.setAttrs({
@@ -48,6 +48,7 @@ const URLImage = ({ sprite, spritekey, spritesDispatch, setCurrentSprite }) => {
   };
   const handleMouseDown = () => {
     setCurrentSprite({ key: spritekey, position: sprite });
+    workspaceDispatch({ type: 'CHANGE_WORKSPACE', id: spritekey });
   };
   return (
     <Image
@@ -72,5 +73,6 @@ URLImage.propTypes = {
   spritekey: PropType.string.isRequired,
   spritesDispatch: PropType.func.isRequired,
   setCurrentSprite: PropType.func.isRequired,
+  workspaceDispatch: PropType.func.isRequired,
 };
 export default URLImage;
