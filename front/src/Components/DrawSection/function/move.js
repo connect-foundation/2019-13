@@ -11,6 +11,11 @@ export default ({ spritekey, movement }, type) => {
   switch (type) {
     case 'x':
     case 'y':
+      value = {
+        x: Utils.parseInt10(position.x + (movement.x || 0)),
+        y: Utils.parseInt10(position.y + (movement.y || 0)),
+      };
+      break;
     case 'xy':
       value = {
         x: Utils.parseInt10(movement.x || position.x),
