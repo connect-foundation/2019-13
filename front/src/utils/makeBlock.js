@@ -3,8 +3,8 @@ import Init from '../Components/Block/Init';
 const connectBlock = (connected, position, connect) => {
   const reverse = {
     nextElement: 'previousElement',
-    firstchildElement: 'parentElement',
-    secondchildElement: 'parentElement',
+    firstChildElement: 'parentElement',
+    secondChildElement: 'parentElement',
   };
   connected[position] = connect;
   connect[reverse[position]] = connected;
@@ -30,10 +30,10 @@ export default (Blocks, workspace) => {
       connectBlock(block, 'nextElement', workspace.getBlockById(blockData.nextElementId));
     }
     if (blockData.firstChildElementId) {
-      connectBlock(block, 'firstchildElement', workspace.getBlockById(blockData.firstChildElementId));
+      connectBlock(block, 'firstChildElement', workspace.getBlockById(blockData.firstChildElementId));
     }
     if (blockData.secondChildElementId) {
-      connectBlock(block, 'secondchildElement', workspace.getBlockById(blockData.secondChildElementId));
+      connectBlock(block, 'secondChildElement', workspace.getBlockById(blockData.secondChildElementId));
     }
     if (blockData.inputElementId) {
       block.inputElement = blockData.inputElementId.map(v => ({ type: 'input', value: v }));

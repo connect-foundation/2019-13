@@ -67,10 +67,10 @@ const Group = ({ block }) => {
         acc.push(<Input block={block} index={inputIdx} key={inputIdx} />);
         return acc;
       }, [])}
-      {block.firstchildElement
-      && <Group block={block.firstchildElement} key={block.firstchildElement.id} />}
-      {block.secondchildElement
-      && <Group block={block.secondchildElement} key={block.secondchildElement.id} />}
+      {block.firstChildElement
+      && <Group block={block.firstChildElement} key={block.firstChildElement.id} />}
+      {block.secondChildElement
+      && <Group block={block.secondChildElement} key={block.secondChildElement.id} />}
       {block.nextElement && <Group block={block.nextElement} key={block.nextElement.id} />}
     </g>
   );
