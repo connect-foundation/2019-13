@@ -22,6 +22,7 @@ const workspaceList = {
   },
   hideInsertMarker() {
     this.showInsertMarker('', 0, 0);
+  },
 };
 
 export default workspaceList;
