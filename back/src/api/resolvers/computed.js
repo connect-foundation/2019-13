@@ -4,9 +4,8 @@ import utils from '../../utils/utils';
 export default {
   project: {
     owner: ({ id }) => prisma.project({ id }).owner(),
-    blocks: ({ id }) => prisma.project({ id }).blocks(),
-    images: ({ id }) => prisma.project({ id }).images(),
     comments: ({ id }) => prisma.project({ id }).comments({ orderBy: 'createdAt_DESC' }),
+    workspaces: async ({ id }) => prisma.project({ id }).workspaces(),
     isLiked: async (root, value, context) => {
       const { id } = root;
       const user = utils.findUser(context.req);
@@ -36,5 +35,9 @@ export default {
     })
       .aggregate()
       .count(),
+  },
+  workspace: {
+    blocks: ({ id }) => prisma.workspace({ id }).blocks(),
+    image: ({ id }) => prisma.workspace({ id }).image(),
   },
 };
