@@ -1,5 +1,8 @@
 import Generator from '../Components/Block/generator';
 import WorkspaceList from '../Components/Block/workspaceList';
+import Utils from './utils';
+import { setTempLocations, getTempLocations } from './tempLocationStore';
+import { spritesReducer } from '../reducer';
 
 
 let interval;
@@ -16,6 +19,8 @@ export const start = (isStartMode) => {
     isPlay = false;
   }
   isPlay = true;
+  const { dispatch, allsprites } = Utils.getPosition();
+  setTempLocations(allsprites);
 
   const startCodes = isStartMode
     ? workspacelist.reduce((pre, ws) => [...pre, ...generator.workspaceToCode(ws.getStartBlocks(ws),
@@ -61,6 +66,7 @@ export const start = (isStartMode) => {
       clearInterval(interval);
       isPlay = false;
     }
+    dispatch({ type: 'UPDATE_POSITION', tempLocations: getTempLocations() });
   }, 1000 / 30);
 };
 
