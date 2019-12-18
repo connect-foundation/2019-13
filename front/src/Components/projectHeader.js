@@ -129,6 +129,7 @@ export default ({ props, setReady }) => {
       return;
     }
     setCanSave(false);
+    workspaceDispatch({ type: 'SCROLL_END' });
     const images = [];
     const workspacesInput = workspaceList.workspaces.reduce((prev, ws) => {
       const data = ws.extractCoreData();
