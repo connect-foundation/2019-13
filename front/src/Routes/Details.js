@@ -4,14 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faSignInAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
-import { WorkspaceContext } from '../Context';
 import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../Apollo/queries/Project';
 import Comments from '../Components/Comment/Comments';
 import { setLocalStorageItem } from '../utils/storage';
 import DetailCanvas from '../Components/detailCanvas';
-
+import workspaceList from '../Components/Block/workspaceList';
+import Workspace from '../Components/Block/workspace';
+import makeBlock from '../utils/makeBlock';
 
 const VIEW_DELAY = 3600000;
+const images = [];
 
 export default ({ match, history }) => {
   const [user, setUser] = useState();
@@ -33,9 +35,25 @@ export default ({ match, history }) => {
       if (!res.findProjectById) {
         history.goBack();
       } else {
+        const projectData = res.findProjectById;
         setProject(res.findProjectById);
         setIsLiked(res.findProjectById.isLiked);
         setLikeCount(res.findProjectById.likeCount);
+
+        const render = workspaceList.workspaces[0].setRender;
+        workspaceList.workspaces = [];
+        workspaceList.images = [];
+        workspaceList.dropdownItems.sprite = { 0: '벽' };
+        projectData.workspaces.forEach((ws) => {
+          const newWorkSpace = new Workspace(null, null, render, ws.id, ws.images[0].id);
+          makeBlock(ws.blocks, newWorkSpace);
+          workspaceList.workspaces.push(newWorkSpace);
+          workspaceList.images.push(ws.images[0].id);
+          workspaceList.dropdownItems.sprite[ws.images[0].id] = ws.images[0].name;
+          images.push(ws.images[0]);
+        });
+        // eslint-disable-next-line
+          workspaceList.currentImageId = workspaceList.images[0];
         setReady(true);
       }
     },
@@ -86,7 +104,7 @@ export default ({ match, history }) => {
     <Wrapper>
       <ProjectWrapper project={project} isLiked={isLiked}>
         <div className="canvas">
-          <DetailCanvas blocks={project.blocks} />
+          <DetailCanvas blocks={project.blocks} images={images} />
         </div>
         {/* <div className="controller">controll</div> */}
         <div className="projectInfo">

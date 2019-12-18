@@ -1,9 +1,9 @@
 import Workspace from '../Components/Block/workspace';
-import CANVASCONSTANTS from '../Components/Canvas/constants';
 import Utils from '../utils/utils';
 import workspaceList from '../Components/Block/workspaceList';
+import { getCanvasSize } from '../utils/canvasSize';
 /* eslint-disable import/prefer-default-export */
-
+const canvasSize = getCanvasSize();
 export const workspaceReducer = (workspace, { type, blockParams, id }) => {
   let block = null;
   switch (type) {
@@ -108,14 +108,14 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images, 
       if (coordinate === 'x') {
         inputEl = Utils.checkRange(
           inputEl,
-          -CANVASCONSTANTS.CANVAS.WIDTH / 2,
-          CANVASCONSTANTS.CANVAS.WIDTH / 2,
+          -canvasSize.WIDTH / 2,
+          canvasSize.WIDTH / 2,
         );
       } else if (coordinate === 'y') {
         inputEl = Utils.checkRange(
           inputEl,
-          -CANVASCONSTANTS.CANVAS.HEIGHT / 2,
-          CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+          -canvasSize.HEIGHT / 2,
+          canvasSize.HEIGHT / 2,
         );
       }
       position[coordinate] = inputEl;
@@ -141,26 +141,26 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images, 
     case 'DRAG_MOVE':
       position.x = Utils.checkRange(
         value.x,
-        -CANVASCONSTANTS.CANVAS.WIDTH / 2,
-        CANVASCONSTANTS.CANVAS.WIDTH / 2,
+        -canvasSize.WIDTH / 2,
+        canvasSize.WIDTH / 2,
       );
       position.y = Utils.checkRange(
         value.y,
-        -CANVASCONSTANTS.CANVAS.HEIGHT / 2,
-        CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+        -canvasSize.HEIGHT / 2,
+        canvasSize.HEIGHT / 2,
       );
       changeSprites[key] = position;
       return changeSprites;
     case 'DRAG_END':
       position.x = Utils.checkRange(
         value.x,
-        -CANVASCONSTANTS.CANVAS.WIDTH / 2 + 1,
-        CANVASCONSTANTS.CANVAS.WIDTH / 2 - 1,
+        -canvasSize.WIDTH / 2 + 1,
+        canvasSize.WIDTH / 2 - 1,
       );
       position.y = Utils.checkRange(
         value.y,
-        -CANVASCONSTANTS.CANVAS.HEIGHT / 2 + 1,
-        CANVASCONSTANTS.CANVAS.HEIGHT / 2 - 1,
+        -canvasSize.HEIGHT / 2 + 1,
+        canvasSize.HEIGHT / 2 - 1,
       );
       return changeSprites;
     case 'BOUNCE':

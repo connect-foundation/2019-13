@@ -5,10 +5,15 @@ import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
-import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
+import {
+  SpritesContext,
+  WorkspaceContext,
+  CurrentSpriteContext,
+} from '../../Context';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
 import { start, stop } from '../../utils/playBlocks';
+import { setCanvasSize } from '../../utils/canvasSize';
 
 let key;
 let position;
@@ -25,7 +30,10 @@ const stopHandler = () => {
   stop();
 };
 
+
 export default () => {
+  setCanvasSize('DEFAULT');
+  const { workspaceDispatch } = useContext(WorkspaceContext);
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     vertical: 'top',
@@ -37,14 +45,14 @@ export default () => {
     key: Object.keys(sprites)[0],
     position: Object.values(sprites)[0],
   });
-  const { workspace } = useContext(WorkspaceContext);
   allsprites = sprites;
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
   const checkPositionHandler = ({ type, coordinate }, event) => {
     if (!currentSprite.position) {
       setSnackbar({
-        ...snackbar, open: true,
+        ...snackbar,
+        open: true,
       });
       return;
     }
@@ -66,18 +74,32 @@ export default () => {
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
       <DrawSectionWrapper className="Contents__Column">
         <div className="draw-section__row controller">
-          <FontAwesomeIcon icon={faPlay} onClick={() => playHandler()} className="play-button" />
-          <FontAwesomeIcon icon={faStop} onClick={stopHandler} className="stop-button" />
+          <FontAwesomeIcon
+            icon={faPlay}
+            onClick={() => playHandler()}
+            className="play-button"
+          />
+          <FontAwesomeIcon
+            icon={faStop}
+            onClick={stopHandler}
+            className="stop-button"
+          />
         </div>
         <div className="draw-section__row">
-          <Canvas />
+          <Canvas
+            draggable
+            workspaceDispatch={workspaceDispatch}
+            setCurrentSprite={setCurrentSprite}
+          />
         </div>
         <div className="draw-section__row">
           <div className="setting">
             <div className="setting__name">
               <div> 이름 </div>
               <input
-                value={currentSprite.position ? currentSprite.position.name : '입력'}
+                value={
+                  currentSprite.position ? currentSprite.position.name : '입력'
+                }
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_NAME',
                 })}
@@ -111,7 +133,9 @@ export default () => {
               />
               <div> 방향 </div>
               <input
-                value={currentSprite.position ? currentSprite.position.direction : 0}
+                value={
+                  currentSprite.position ? currentSprite.position.direction : 0
+                }
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_DIRECTION',
                 })}

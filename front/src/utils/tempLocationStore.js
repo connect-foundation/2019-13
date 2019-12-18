@@ -1,5 +1,5 @@
 import Utils from './utils';
-import CANVASCONSTANTS from '../Components/Canvas/constants';
+import { getCanvasSize } from './canvasSize';
 
 let tempLocation = Object.create(null);
 
@@ -11,20 +11,22 @@ export const setTempLocations = (locations) => {
   tempLocation = { ...locations };
 };
 
+const canvasSize = getCanvasSize();
+
 
 export const setTempLocation = (key, value) => {
   if (value.x) {
     tempLocation[key].x = Utils.checkRange(
       value.x,
-      -CANVASCONSTANTS.CANVAS.WIDTH / 2,
-      CANVASCONSTANTS.CANVAS.WIDTH / 2,
+      -canvasSize.WIDTH / 2,
+      canvasSize.WIDTH / 2,
     );
   }
   if (value.y) {
     tempLocation[key].y = Utils.checkRange(
       value.y,
-      -CANVASCONSTANTS.CANVAS.HEIGHT / 2,
-      CANVASCONSTANTS.CANVAS.HEIGHT / 2,
+      -canvasSize.HEIGHT / 2,
+      canvasSize.HEIGHT / 2,
     );
   }
   if (value.direction !== undefined) {
