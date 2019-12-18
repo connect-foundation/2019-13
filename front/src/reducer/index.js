@@ -81,9 +81,10 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
   }
 };
 
-export const spritesReducer = (sprites, { type, coordinate, key, value, images }) => {
+export const spritesReducer = (sprites, { type, coordinate, key, value, images, tempLocations }) => {
   const changeSprites = { ...sprites };
   const position = sprites[key];
+  const curLocations = { ...tempLocations };
   let eventValue = null;
   let inputEl = '';
   switch (type) {
@@ -134,7 +135,6 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
       changeSprites[key] = position;
       return changeSprites;
     case 'DRAG_MOVE':
-    case 'MOVE':
       position.x = Utils.checkRange(
         value.x,
         -CANVASCONSTANTS.CANVAS.WIDTH / 2,
@@ -159,17 +159,14 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images }
         CANVASCONSTANTS.CANVAS.HEIGHT / 2 - 1,
       );
       return changeSprites;
-    case 'ROTATE':
-      position.direction = value.direction % 360;
-      if (position.direction < 0) position.direction = 360 + position.direction;
-      changeSprites[key] = position;
-      return changeSprites;
     case 'BOUNCE':
       position.x = value.x;
       position.y = value.y;
       position.direction = value.direction;
       position.reversal = value.reversal;
       return changeSprites;
+    case 'UPDATE_POSITION':
+      return curLocations;
     case 'ADD_IMAGE':
       changeSprites[key] = value;
       workspaceList.images.push(key);

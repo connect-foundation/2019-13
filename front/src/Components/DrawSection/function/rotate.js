@@ -1,4 +1,5 @@
 import Utils from '../../../utils/utils';
+import { getTempLocation, setTempLocation } from '../../../utils/tempLocationStore';
 /**
  * @param {String} spritekey spritekey
  * @param {Number} movement 회전반경(0~360)
@@ -7,8 +8,7 @@ import Utils from '../../../utils/utils';
  *
  */
 export default ({ spritekey, movement }, type) => {
-  const { dispatch, allsprites } = Utils.getPosition();
-  const position = allsprites[spritekey];
+  const position = getTempLocation(spritekey);
   let value;
   switch (type) {
     case 'clock':
@@ -29,5 +29,5 @@ export default ({ spritekey, movement }, type) => {
     default:
       throw new TypeError('NOT FOUND TYPE');
   }
-  dispatch({ type: 'ROTATE', key: spritekey, value });
+  setTempLocation(spritekey, value);
 };

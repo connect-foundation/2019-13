@@ -45,7 +45,7 @@ const Utils = {
     };
     return value;
   },
-  setPostion: (func) => {
+  setPosition: (func) => {
     position = func;
   },
   getPosition: () => position(),
