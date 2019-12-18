@@ -40,7 +40,6 @@ export default () => {
     ]);
     setLoggedIn(data.result);
     setOpen(!data.result);
-    window.location.href = '/';
   };
   const responseFacebook = async (response) => {
     const body = JSON.stringify({

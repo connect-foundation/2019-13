@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 /**
  *
- * @param {Array} options
+ * @param {Array<Object>} options
  */
 const setLocalStorageItem = (options) => {
   options.forEach((option) => {
@@ -12,7 +12,7 @@ const setLocalStorageItem = (options) => {
 
 /**
  *
- * @param {Array} keys
+ * @param {Array<String>} keys
  */
 const removeLocalStorageItem = (keys) => {
   keys.forEach((key) => {
