@@ -11,7 +11,8 @@ import KeyListener from '../utils/keyListener';
 import workspaceList from '../Components/Block/workspaceList';
 
 const defaultSprite = {};
-defaultSprite[Utils.uid()] = {
+const defaultKey = Utils.uid();
+defaultSprite[defaultKey] = {
   name: 'logo.png',
   url: '/logo.png',
   size: 100,
@@ -24,9 +25,13 @@ defaultSprite[Utils.uid()] = {
   realName: '/logo.png',
 };
 
-const nWorkspace = new Workspace(null, null, null, null, Object.keys(defaultSprite)[0]);
+
+const nWorkspace = new Workspace(null, null, null, null, defaultKey);
 workspaceList.workspaces.push(nWorkspace);
-workspaceList.images.push(Object.keys(defaultSprite)[0]);
+workspaceList.images.push(defaultKey);
+// eslint-disable-next-line prefer-destructuring
+workspaceList.currentImageId = workspaceList.images[0];
+workspaceList.dropdownItems.sprite[defaultKey] = 'logo.png';
 
 const Project = (props) => {
   const [workspace, workspaceDispatch] = useReducer(
@@ -62,7 +67,7 @@ const Project = (props) => {
                 <div />
                 <span> 연산 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="sensing" onClick={() => { }}>
+              <TypesButton className="block-types__button" btype="sensing" onClick={() => { setClickedButton(4 + Math.random()); }}>
                 <div />
                 <span> 감지 </span>
               </TypesButton>
