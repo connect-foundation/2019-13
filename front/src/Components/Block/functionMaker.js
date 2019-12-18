@@ -91,18 +91,16 @@ const FunctionList = {
   isCollision: (value, imgId) => () => Collision([value], imgId),
 
   control_if: (args) => {
-    let value;
-    if (Number.isNaN(Number(args.input[0])) && args.input[0]) {
-      value = args.input[0];
-      args.input[0] = 1;
-      return { func: { next: () => {
-        if (value()) return FunctionList.control_for(args).func.next();
-      } },
-      limit: 1 };
+    const value = args.input[0];
+    const childArgs = { ...args, ...{ input: [1] } };
+    if (Number.isNaN(Number(value)) && value) {
+      const next = () => {
+        if (value()) return FunctionList.control_for(childArgs).func.next();
+      };
+      return { func: { next },
+        limit: 1 };
     }
-    value = args.input[0];
-    args.input[0] = 1;
-    return value ? FunctionList.control_for(args) : { func: { next: () => {} } };
+    return value ? FunctionList.control_for(childArgs) : { func: { next: () => {} } };
   },
 };
 
