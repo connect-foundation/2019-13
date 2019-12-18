@@ -22,12 +22,23 @@ server.express.use(logger('dev'));
 server.express.use(passport.initialize());
 passportConfig(passport);
 server.express.use((req, res, next) => {
-  if (!req.headers.authorization) return next();
+  if (!req.headers.authorization || req.headers.authorization === 'Bearer undefined') return next();
   return passport.authenticate('jwt', { session: false }, (err, user) => {
-    if (user) req.user = user;
+    console.log(user);
+    if (!user) {
+      next(new Error('Not Authorization'));
+      return;
+    }
+    req.user = user;
     next();
   })(req, res, next);
 });
-
 server.express.use('/auth', authRouter);
 server.start({ port: PORT, debug: false }, () => console.log(`Server is running on port ${PORT}!`));
+
+server.express.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(401).json({
+    result: err.message,
+  });
+});
