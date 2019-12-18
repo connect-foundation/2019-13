@@ -3,105 +3,56 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import Canvas from './Canvas';
-import { CurrentSpriteContext, SpritesContext } from '../Context';
-import { spritesReducer } from '../reducer';
-import Generator from './Block/generator';
 import Utils from '../utils/utils';
-import Workspace from './Block/workspace';
-import makeBlock from '../utils/makeBlock';
+import { start, stop } from '../utils/playBlocks';
+import { SpritesContext } from '../Context';
+import { spritesReducer } from '../reducer';
+import { setCanvasSize } from '../utils/canvasSize';
 
-let key;
-let position;
 let dispatch;
-let isPlay;
-let interval;
-
-const defaultSprite = {};
-defaultSprite[Utils.uid()] = {
-  name: 'logo.png',
-  url: '/logo.png',
-  size: 100,
-  direction: 90,
-  x: 0,
-  y: 0,
-  reversal: false,
-  realName: '/logo.png',
+let allsprites;
+const playHandler = () => {
+  start(true);
 };
 
-const WIDTH = 840;
-const HEIGHT = 470;
-const getPosition = () => ({ key, position, dispatch });
+const stopHandler = () => {
+  stop();
+};
+const getPosition = () => ({ dispatch, allsprites });
 
-export default ({ blocks }) => {
-  const [workspace] = useState(new Workspace());
-  const [sprites, spritesDispatch] = useReducer(
-    spritesReducer,
-    defaultSprite,
-  );
-  const [currentSprite, setCurrentSprite] = useState({
-    key: Object.keys(sprites)[0],
-    position: Object.values(sprites)[0],
-  });
-  const playHandler = () => {
-    if (!isPlay) {
-      const generator = new Generator();
-      const codes = generator.workspaceToCode(workspace.getStartBlocks());
-      isPlay = true;
-      interval = setInterval(() => {
-        let isEnd = true;
-        codes.forEach((code) => {
-          const res = code.func.next();
-          if (res && !res.done) {
-            isEnd = false;
-          }
-        });
-        if (isEnd) {
-          clearInterval(interval);
-          isPlay = false;
-        }
-      }, 1000 / 30);
-    }
-  };
-
-  const stopHandler = () => {
-    if (interval) {
-      clearInterval(interval);
-      isPlay = false;
-    }
-  };
-
+export default ({ blocks, images }) => {
+  setCanvasSize('DETAIL');
+  const [sprites, spritesDispatch] = useReducer(spritesReducer, {});
+  allsprites = sprites;
   dispatch = spritesDispatch;
-  ({ key, position } = currentSprite);
-
   useEffect(() => {
-    setCurrentSprite({
-      key: key && sprites[key] ? key : Object.keys(sprites)[0],
-      position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],
-    });
-  }, [sprites]);
-
-  useEffect(() => {
-    makeBlock(blocks, workspace);
-    Utils.setPosition(getPosition);
+    spritesDispatch({ type: 'LOAD_PROJECT', images });
+    Utils.setSprite(getPosition);
   }, []);
-
   return (
     <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
-      <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
-        <DrawSectionWrapper className="Contents__Column">
-          <Canvas WIDTH={WIDTH} HEIGHT={HEIGHT} />
-        </DrawSectionWrapper>
-        <Controller>
-          <FontAwesomeIcon icon={faPlay} onClick={playHandler} className="play-button" />
-          <FontAwesomeIcon icon={faStop} onClick={stopHandler} className="stop-button" />
-          <span>아직 미완성(테스트 중)입니다.</span>
-        </Controller>
-      </CurrentSpriteContext.Provider>
+      <DrawSectionWrapper className="Contents__Column">
+        <Canvas draggable={false} />
+      </DrawSectionWrapper>
+      <Controller>
+        <FontAwesomeIcon
+          icon={faPlay}
+          onClick={playHandler}
+          className="play-button"
+        />
+        <FontAwesomeIcon
+          icon={faStop}
+          onClick={stopHandler}
+          className="stop-button"
+        />
+        <span>아직 미완성(테스트 중)입니다.</span>
+      </Controller>
     </SpritesContext.Provider>
   );
 };
 
 const DrawSectionWrapper = styled.div`
+  padding : 4px;
   .draw-section__row {
     & > div {
       width: 100%;
@@ -158,14 +109,14 @@ const Controller = styled.div`
   .play-button {
     color: ${props => props.theme.operatorsColor};
     &:hover {
-      color: ${props => props.theme.motionColor}
+      color: ${props => props.theme.motionColor};
     }
   }
   .stop-button {
     margin-left: 15px;
     color: grey;
     &:hover {
-      color : red;
+      color: red;
     }
   }
 `;

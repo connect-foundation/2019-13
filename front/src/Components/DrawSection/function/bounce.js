@@ -2,6 +2,7 @@
 import { getPosition } from '../index';
 import CANVASCONSTANTS from '../../Canvas/constants';
 import Utils from '../../../utils/utils';
+import { getCanvasSize } from '../../../utils/canvasSize';
 /**
  * 문제점!!! => 모서리부분
  * param은 맨마지막에 움직일 값
@@ -10,10 +11,12 @@ import Utils from '../../../utils/utils';
  * @param {Number} moving 지금바라보는 방향으로 이동 (선택)
  * @param {Function} callback {move함수} => 모든 if을 통과할경우 move함수 실행하게 해놓음 //제일 마지막에 실행될 callback 함수
  */
+
+const canvasSize = getCanvasSize();
 export default ({ moving, x, y }, callback) => {
   const { key, position, dispatch } = getPosition();
-  const width = CANVASCONSTANTS.CANVAS.WIDTH / 2;
-  const height = CANVASCONSTANTS.CANVAS.HEIGHT / 2;
+  const width = canvasSize.WIDTH / 2;
+  const height = canvasSize.HEIGHT / 2;
   const value = Utils.straightSprite({ position, movement: { moving } });
   let collisionX = width;
   let collisionY = height;
