@@ -2,8 +2,6 @@ import Generator from '../Components/Block/generator';
 import WorkspaceList from '../Components/Block/workspaceList';
 import Utils from './utils';
 import { setTempLocations, getTempLocations } from './tempLocationStore';
-import { spritesReducer } from '../reducer';
-
 
 let interval;
 let isPlay = false;
@@ -19,7 +17,7 @@ export const start = (isStartMode) => {
     isPlay = false;
   }
   isPlay = true;
-  const { dispatch, allsprites } = Utils.getPosition();
+  const { dispatch, allsprites } = Utils.getSprite();
   setTempLocations(allsprites);
 
   const startCodes = isStartMode

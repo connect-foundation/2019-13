@@ -25,41 +25,39 @@ export default ({ props, setReady }) => {
   });
 
 
-  const [createAndSave] = useMutation(CREATE_AND_SAVE,
-    {
-      onCompleted(res) {
-        const projectId = res.createProjectAndBlocks;
-        if (projectId !== 'false') {
-          props.history.push(`/project/${projectId}`);
-        }
-        setCanSave(true);
-      },
-    });
+  const [createAndSave] = useMutation(CREATE_AND_SAVE, {
+    onCompleted(res) {
+      if (!res || !res.createProjectAndBlocks) return;
+      const projectId = res.createProjectAndBlocks;
+      if (projectId !== 'false') {
+        props.history.push(`/project/${projectId}`);
+      }
+      setCanSave(true);
+    },
+  });
   const [updateProject] = useMutation(UPDATE_BLOCK, {
     onCompleted(res) {
-      const result = res.updateProjectAndBlocks;
+      if (!res || !res.updateProjectAndBlocks) return;
       setCanSave(true);
-      if (!canSave) {
-        setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
-      }
+      setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
     },
   });
   const [toggleLike] = useMutation(TOGGLE_LIKE, {
     onCompleted(res) {
-      if (res.toggleLike) {
-        setIsLiked(!isLiked);
-      }
+      if (!res || !res.toggleLike) return;
+      setIsLiked(!isLiked);
     },
   });
   const [toggleAuth] = useMutation(TOGGLE_AUTH, {
     onCompleted(res) {
-      if (res.toggleAuth) setIsPrivate(!isPrivate);
+      if (!res || !res.toggleAuth) return;
+      setIsPrivate(!isPrivate);
     },
   });
   const [loadProject] = useLazyQuery(LOAD_PROJECT,
     {
       onCompleted(res) {
-        if (!res.findProjectById) {
+        if (!res || !res.findProjectById) {
           props.history.goBack();
         } else {
           const projectData = res.findProjectById;
@@ -108,6 +106,7 @@ export default ({ props, setReady }) => {
   const getProjectName = () => {
     if (projectName.length < 1) {
       setProjectName('임시이름');
+      return '임시이름';
     }
     return projectName;
   };
