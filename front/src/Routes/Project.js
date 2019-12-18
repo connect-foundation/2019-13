@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Blockspace from '../Components/Block/index';
 import Workspace from '../Components/Block/workspace';
@@ -43,6 +43,11 @@ const Project = (props) => {
     defaultSprite,
   );
   const [clickedButton, setClickedButton] = useState(0);
+  useEffect(() => {
+    if (isReady) {
+      workspace.topblocks.forEach(block => block.setAllBlockPosition(true));
+    }
+  });
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>

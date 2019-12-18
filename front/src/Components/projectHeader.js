@@ -68,11 +68,13 @@ export default ({ props, setReady }) => {
           const render = workspaceList.workspaces[0].setRender;
           workspaceList.workspaces = [];
           workspaceList.images = [];
+          workspaceList.dropdownItems.sprite = { 0: '벽' };
           projectData.workspaces.forEach((ws) => {
             const newWorkSpace = new Workspace(null, null, render, ws.id, ws.images[0].id);
             makeBlock(ws.blocks, newWorkSpace);
             workspaceList.workspaces.push(newWorkSpace);
             workspaceList.images.push(ws.images[0].id);
+            workspaceList.dropdownItems.sprite[ws.images[0].id] = ws.images[0].name;
             images.push(ws.images[0]);
           });
           // eslint-disable-next-line
@@ -129,6 +131,7 @@ export default ({ props, setReady }) => {
       return;
     }
     setCanSave(false);
+    workspaceDispatch({ type: 'SCROLL_END' });
     const images = [];
     const workspacesInput = workspaceList.workspaces.reduce((prev, ws) => {
       const data = ws.extractCoreData();
