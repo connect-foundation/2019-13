@@ -56,6 +56,7 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
       return nWorkspace; }
     case 'CHANGE_WORKSPACE':
     { let changedWorkspace;
+      workspace.deleteBlockInModelList();
       workspaceList.workspaces.forEach((ws) => {
         if (ws.imageId === id) {
           changedWorkspace = new Workspace(

@@ -9,7 +9,12 @@ const connectBlock = (connected, position, connect, i) => {
   };
   if (position === 'inputElement') {
     connect.arithmeticOrCompare(false);
-    connected[position][i] = { type: 'block', id: connect.id };
+    connected[position][i] = { type: 'block', id: connect.id, value: connect.value };
+    if (i) {
+      connected.args[connected.args.lastIndexOf('input')] = 'block';
+    } else {
+      connected.args[connected.args.indexOf('input')] = 'block';
+    }
   } else connected[position] = connect;
   connect[reverse[position]] = connected;
 };
@@ -51,7 +56,7 @@ export default (Blocks, workspace) => {
   });
   Blocks.forEach((blockData) => {
     const block = workspace.getBlockById(blockData.id);
-    if (!block.parentElement && !block.previousElement) {
+    if (!block.parentElement && !block.previousElement && !block.outputElement) {
       workspace.addTopblock(block);
     }
   });
