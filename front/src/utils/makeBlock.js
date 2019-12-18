@@ -1,12 +1,16 @@
 import Init from '../Components/Block/Init';
 
-const connectBlock = (connected, position, connect) => {
+const connectBlock = (connected, position, connect, i) => {
   const reverse = {
     nextElement: 'previousElement',
     firstChildElement: 'parentElement',
     secondChildElement: 'parentElement',
+    inputElement: 'outputElement',
   };
-  connected[position] = connect;
+  if (position === 'inputElement') {
+    connect.arithmeticOrCompare(false);
+    connected[position][i] = { type: 'block', id: connect.id };
+  } else connected[position] = connect;
   connect[reverse[position]] = connected;
 };
 
@@ -35,8 +39,14 @@ export default (Blocks, workspace) => {
     if (blockData.secondChildElementId) {
       connectBlock(block, 'secondChildElement', workspace.getBlockById(blockData.secondChildElementId));
     }
-    if (blockData.inputElementId) {
-      block.inputElement = blockData.inputElementId.map(v => ({ type: 'input', value: v }));
+    if (blockData.inputElementId.length > 0) {
+      blockData.inputElementId.forEach((v, i) => {
+        if (workspace.getBlockById(v)) {
+          connectBlock(block, 'inputElement', workspace.getBlockById(blockData.inputElementId), i);
+        } else {
+          block.inputElement[i] = { type: 'input', value: v };
+        }
+      });
     }
   });
   Blocks.forEach((blockData) => {
