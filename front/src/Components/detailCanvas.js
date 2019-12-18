@@ -7,12 +7,10 @@ import Utils from '../utils/utils';
 import { start, stop } from '../utils/playBlocks';
 import { SpritesContext } from '../Context';
 import { spritesReducer } from '../reducer';
+import { setCanvasSize } from '../utils/canvasSize';
 
 let dispatch;
 let allsprites;
-const WIDTH = 840;
-const HEIGHT = 470;
-
 const playHandler = () => {
   start(true);
 };
@@ -23,6 +21,7 @@ const stopHandler = () => {
 const getPosition = () => ({ dispatch, allsprites });
 
 export default ({ blocks, images }) => {
+  setCanvasSize('DETAIL');
   const [sprites, spritesDispatch] = useReducer(spritesReducer, {});
   allsprites = sprites;
   dispatch = spritesDispatch;
@@ -30,11 +29,10 @@ export default ({ blocks, images }) => {
     spritesDispatch({ type: 'LOAD_PROJECT', images });
     Utils.setSprite(getPosition);
   }, []);
-
   return (
     <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
       <DrawSectionWrapper className="Contents__Column">
-        <Canvas WIDTH={WIDTH} HEIGHT={HEIGHT} draggable={false} />
+        <Canvas draggable={false} />
       </DrawSectionWrapper>
       <Controller>
         <FontAwesomeIcon
@@ -54,6 +52,7 @@ export default ({ blocks, images }) => {
 };
 
 const DrawSectionWrapper = styled.div`
+  padding : 4px;
   .draw-section__row {
     & > div {
       width: 100%;
