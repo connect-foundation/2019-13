@@ -9,8 +9,12 @@ export default class {
   blockToCode(block, imgId) {
     const code = [];
     const values = {};
-    if (block.inputElement) {
-      values.input = block.inputElement.map(input => input.value);
+    if (block.inputElement.length > 0) {
+      if (Number.isNaN(Number(block.inputElement[0].value)) && block.inputElement[0].value) {
+        values.input = [FunctionMaker.isCollision(block.inputElement[0].value, imgId)];
+      } else {
+        values.input = block.inputElement.map(input => input.value);
+      }
     }
     if (block.firstChildElement) {
       const firstChild = this.blockToCode(block.firstChildElement, imgId);
