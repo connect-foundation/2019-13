@@ -6,7 +6,7 @@ export default [
     args: [
       {
         type: 'dropdown',
-        value: 0,
+        value: 'wall',
       },
       {
         type: 'text',

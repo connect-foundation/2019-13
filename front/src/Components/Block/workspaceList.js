@@ -1,4 +1,5 @@
 import key from '../../utils/key';
+import CONSTANTS from './constants';
 
 const workspaceList = {
   workspaces: [],
@@ -26,7 +27,7 @@ const workspaceList = {
     this.showInsertMarker('', 0, 0);
   },
   currentImageId: null,
-  dropdownItems: { key, sprite: { 0: '벽' } },
+  dropdownItems: { key, sprite: CONSTANTS.DROPDOWN_SPRITE_INIT_OBJECT },
 };
 
 export default workspaceList;
