@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-let position;
+let sprite;
 
 const Utils = {
   uid: () => {
@@ -45,10 +45,10 @@ const Utils = {
     };
     return value;
   },
-  setPosition: (func) => {
-    position = func;
+  setSprite: (func) => {
+    sprite = func;
   },
-  getPosition: () => position(),
+  getSprite: () => sprite(),
   getSeoulTime: worldTime => moment.tz(worldTime, 'Asia/Seoul').format('YYYY 년 MM 월 DD 일 HH:mm'),
   radian: degree => Math.PI * degree / 180,
   checkImageSize: ({ width, height }) => {

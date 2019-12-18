@@ -56,7 +56,7 @@ export default () => {
     });
   };
   useEffect(() => {
-    Utils.setPosition(getPosition);
+    Utils.setSprite(getPosition);
     setCurrentSprite({
       key: key && sprites[key] ? key : Object.keys(sprites)[0],
       position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],
