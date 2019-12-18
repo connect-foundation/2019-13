@@ -82,7 +82,7 @@ export default ({ blocks }) => {
 
   useEffect(() => {
     makeBlock(blocks, workspace);
-    Utils.setPostion(getPosition);
+    Utils.setPosition(getPosition);
   }, []);
 
   return (
