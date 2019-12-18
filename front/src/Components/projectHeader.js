@@ -69,18 +69,16 @@ export default ({ props, setReady }) => {
           workspaceList.workspaces = [];
           workspaceList.images = [];
           projectData.workspaces.forEach((ws) => {
-            const newWorkSpace = new Workspace(null, null, null, ws.id, ws.images[0].id);
+            const newWorkSpace = new Workspace(null, null, render, ws.id, ws.images[0].id);
             makeBlock(ws.blocks, newWorkSpace);
             workspaceList.workspaces.push(newWorkSpace);
             workspaceList.images.push(ws.images[0].id);
             images.push(ws.images[0]);
           });
-          workspaceList.workspaces[0].setRender = render;
           // eslint-disable-next-line
           workspaceList.currentImageId = workspaceList.images[0];
           spritesDispatch({ type: 'LOAD_PROJECT', images });
           workspaceDispatch({ type: 'CHANGE_WORKSPACE', id: workspaceList.currentImageId });
-          // makeBlock(res.findProjectById.workspaces[0].blocks, new Workspace(null,null,null,null,res.findProjectById.workspace));
           setReady(true);
         }
       },
