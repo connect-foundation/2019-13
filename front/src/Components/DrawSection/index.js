@@ -26,6 +26,7 @@ const stopHandler = () => {
 };
 
 export default () => {
+  const { workspaceDispatch } = useContext(WorkspaceContext);
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     vertical: 'top',
@@ -37,7 +38,6 @@ export default () => {
     key: Object.keys(sprites)[0],
     position: Object.values(sprites)[0],
   });
-  const { workspace } = useContext(WorkspaceContext);
   allsprites = sprites;
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
@@ -70,7 +70,7 @@ export default () => {
           <FontAwesomeIcon icon={faStop} onClick={stopHandler} className="stop-button" />
         </div>
         <div className="draw-section__row">
-          <Canvas />
+          <Canvas draggable workspaceDispatch={workspaceDispatch} setCurrentSprite={setCurrentSprite} />
         </div>
         <div className="draw-section__row">
           <div className="setting">
