@@ -78,7 +78,7 @@ const Block = class {
       );
       if (doRender) {
         this.render(Math.random());
-      this.height = this.node.firstChild.getBoundingClientRect().height;
+        this.height = this.node.firstChild.getBoundingClientRect().height;
       }
       this.setConnectionPosition();
     }
@@ -95,9 +95,9 @@ const Block = class {
         node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX + 3 : positionX + 5}`);
         node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? -3 : 8}`);
       } else {
-      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
-      node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
-    }
+        node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
+        node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
+      }
     }
   };
 
@@ -409,8 +409,10 @@ const Block = class {
     });
     if (this.firstChildElement) {
       this.setFirstChildPosition(doRender);
-      this.firstChildHeight = this.firstChildElement.node.getBoundingClientRect().height
-      - CONSTANTS.PIXEL;
+      if (doRender) {
+        this.firstChildHeight = (this.firstChildElement.node.getBoundingClientRect().height
+        - CONSTANTS.PIXEL);
+      }
     }
     if (this.nextElement) {
       this.nextElement.y = this.y + this.height - CONSTANTS.PIXEL;
@@ -476,6 +478,7 @@ const Block = class {
             conn.source.firstChildElement.setpreviousElement(lastBlock);
             conn.source.firstChildElement.parentElement = null;
             lastBlock.setNextElement(conn.source.firstChildElement);
+            conn.source.firstChildHeight = this.height + conn.source.firstChildElement.height - (CONSTANTS.PIXEL * 2);
           }
           this.parentElement = conn.source;
           conn.source.setFirstChildElement(this);
@@ -515,7 +518,7 @@ const Block = class {
     }
     if (this.parentElement) {
       if (this.parentElement.firstChildElement === this) {
-        this.parentElement.firstChildHeight -= this.node.getBoundingClientRect().height - CONSTANTS.PIXEL;
+        this.parentElement.firstChildHeight -= (this.height - CONSTANTS.PIXEL * 5);
         this.parentElement.firstChildElement = null;
         this.parentElement = null;
       } else if (this.parentElement.secondChildElement === this) {
