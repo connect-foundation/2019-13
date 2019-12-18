@@ -12,6 +12,10 @@ export default ({ history }) => {
   const [projects, setProjects] = useState([]);
   const [getProjects] = useLazyQuery(GET_PROJECTS, {
     onCompleted(res) {
+      if (!res || !res.findProjectsByUserId) {
+        window.location.href('/');
+        return;
+      }
       setProjects(res.findProjectsByUserId);
     },
   });
