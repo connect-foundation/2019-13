@@ -1,3 +1,5 @@
+import key from '../../utils/key';
+
 const workspaceList = {
   workspaces: [],
   images: [],
@@ -23,6 +25,8 @@ const workspaceList = {
   hideInsertMarker() {
     this.showInsertMarker('', 0, 0);
   },
+  currentImageId: null,
+  dropdownItems: { key, sprite: { 0: '벽' } },
 };
 
 export default workspaceList;

@@ -76,8 +76,10 @@ const Block = class {
         this.firstChildHeight / CONSTANTS.PIXEL - 2,
         this.secondChildHeight / CONSTANTS.PIXEL - 2,
       );
-      if (doRender) { this.render(Math.random()); }
-      this.height = this.node.firstChild.getBoundingClientRect().height;
+      if (doRender) {
+        this.render(Math.random());
+        this.height = this.node.firstChild.getBoundingClientRect().height;
+      }
       this.setConnectionPosition();
     }
   };
@@ -89,8 +91,13 @@ const Block = class {
       node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
         ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
     } else if (node.tagName === 'foreignObject') {
-      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
-      node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
+      if (this.args.includes('dropdown')) {
+        node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX + 3 : positionX + 5}`);
+        node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? -3 : 8}`);
+      } else {
+        node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
+        node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
+      }
     }
   };
 
@@ -162,9 +169,13 @@ const Block = class {
     this.setArgs();
   };
 
-  changeDropdownWidth = set => (event) => {
+  changeDropdownWidth = ({ set, index, items }) => (event) => {
     const { target } = event;
-    this.value = Number(target.value);
+    this.value = target.value;
+    if (typeof items[target.value] === 'string') {
+      this.inputWidth[index] = items[target.value].length * 20;
+      this.setArgs(true);
+    }
     set(target.value);
   }
 
@@ -223,7 +234,7 @@ const Block = class {
       this.args.push(json.type);
       if (json.type === 'dropdown') {
         this.inputWidth[this.inputElement.length - 1] = CONSTANTS.DEFAULT_DROPDOWN_WIDTH;
-        this.value = CONSTANTS.DROPDOWN_INIT_VALUE;
+        this.value = json.value;
       }
     }
   };
@@ -398,8 +409,10 @@ const Block = class {
     });
     if (this.firstChildElement) {
       this.setFirstChildPosition(doRender);
-      this.firstChildHeight = this.firstChildElement.node.getBoundingClientRect().height
-      - CONSTANTS.PIXEL;
+      if (doRender) {
+        this.firstChildHeight = (this.firstChildElement.node.getBoundingClientRect().height
+        - CONSTANTS.PIXEL);
+      }
     }
     if (this.nextElement) {
       this.nextElement.y = this.y + this.height - CONSTANTS.PIXEL;
@@ -465,6 +478,7 @@ const Block = class {
             conn.source.firstChildElement.setpreviousElement(lastBlock);
             conn.source.firstChildElement.parentElement = null;
             lastBlock.setNextElement(conn.source.firstChildElement);
+            conn.source.firstChildHeight = this.height + conn.source.firstChildElement.height - (CONSTANTS.PIXEL * 2);
           }
           this.parentElement = conn.source;
           conn.source.setFirstChildElement(this);
@@ -504,7 +518,7 @@ const Block = class {
     }
     if (this.parentElement) {
       if (this.parentElement.firstChildElement === this) {
-        this.parentElement.firstChildHeight -= this.node.getBoundingClientRect().height - CONSTANTS.PIXEL;
+        this.parentElement.firstChildHeight -= (this.height - CONSTANTS.PIXEL * 5);
         this.parentElement.firstChildElement = null;
         this.parentElement = null;
       } else if (this.parentElement.secondChildElement === this) {
@@ -590,13 +604,12 @@ const Block = class {
         input.value = this.value;
       }
     });
-    if (this.outputElement.type.substring(0, 8) === 'operator') {
-      this.outputElement.arithmeticOrCompare();
-    }
+    this.outputElement.arithmeticOrCompare(doRender);
     if (doRender) { this.outputElement.setArgs(); }
   }
 
   arithmeticOrCompare = (doRender = true) => {
+    if (this.type.substring(0, 8) !== 'operator') return;
     if (this.style === 'variable') { this.arithmetic(doRender); } else if (this.style === 'condition') { this.compare(doRender); }
   }
 };

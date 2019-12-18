@@ -4,7 +4,8 @@ import drag from '../Block/Logic/Drag';
 import { WorkspaceContext } from '../../Context';
 import CONSTANTS from '../Block/constants';
 import Input from './input';
-import Dropdown from './dropdown';
+import KeyDropdown from './keyDropdown';
+import SpriteDropdown from './spriteDropdown';
 
 const Group = ({ block }) => {
   const [position, setPosition] = useState({ x: block.x, y: block.y });
@@ -56,7 +57,9 @@ const Group = ({ block }) => {
         }
         inputIdx += 1;
         if (cur === 'dropdown') {
-          acc.push(<Dropdown block={block} index={inputIdx} key={inputIdx} />);
+          if (block.style === 'condition') {
+            acc.push(<SpriteDropdown block={block} index={inputIdx} key={inputIdx} />);
+          } else { acc.push(<KeyDropdown block={block} index={inputIdx} key={inputIdx} />); }
           return acc;
         }
         if (cur === 'block') {

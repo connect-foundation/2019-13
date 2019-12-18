@@ -79,7 +79,7 @@ export default [
       },
       {
         type: 'text',
-        value: 'y :',
+        value: '　y :',
       },
       {
         type: 'input',
@@ -87,7 +87,7 @@ export default [
       },
       {
         type: 'text',
-        value: '로 이동하기',
+        value: '으로 이동하기',
       },
     ],
     style: 'single',

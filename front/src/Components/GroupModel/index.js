@@ -2,7 +2,8 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropType from 'prop-types';
 import copy from '../Block/Logic/Copy';
 import { WorkspaceContext } from '../../Context';
-import Dropdown from './dropdown';
+import KeyDropdown from './keyDropdown';
+import SpriteDropdown from './spriteDropdown';
 
 const GroupModel = ({ block, scrollY }) => {
   const [position] = useState({ x: block.x, y: block.y });
@@ -30,7 +31,9 @@ const GroupModel = ({ block, scrollY }) => {
         }
         inputIdx += 1;
         if (cur === 'dropdown') {
-          acc.push(<Dropdown block={block} index={inputIdx} key={inputIdx} />);
+          if (block.style === 'condition') {
+            acc.push(<SpriteDropdown block={block} index={inputIdx} key={inputIdx} />);
+          } else { acc.push(<KeyDropdown block={block} index={inputIdx} key={inputIdx} />); }
           return acc;
         }
         acc.push(cur);

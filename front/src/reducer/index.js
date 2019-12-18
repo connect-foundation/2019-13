@@ -67,8 +67,10 @@ export const workspaceReducer = (workspace, { type, blockParams, id }) => {
           );
         }
       });
+      workspaceList.currentImageId = changedWorkspace.imageId;
       return changedWorkspace; }
     case 'SELECTED_WORKSPACE_DELETED':
+      workspaceList.currentImageId = workspaceList.workspaces[id].imageId;
       return new Workspace(
         workspaceList.workspaces[id].blockDB,
         workspaceList.workspaces[id].topblocks,
@@ -131,6 +133,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images, 
       changeSprites[key] = position;
       return changeSprites;
     case 'CHANGE_NAME':
+      workspaceList.dropdownItems.sprite[key] = value;
       position.name = value;
       changeSprites[key] = position;
       return changeSprites;
@@ -168,6 +171,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images, 
     case 'UPDATE_POSITION':
       return curLocations;
     case 'ADD_IMAGE':
+      workspaceList.dropdownItems.sprite[key] = value.name;
       changeSprites[key] = value;
       workspaceList.images.push(key);
       workspaceList.workspaces.push(new Workspace(null, null, null, null, key));
@@ -186,6 +190,7 @@ export const spritesReducer = (sprites, { type, coordinate, key, value, images, 
           length -= 1;
         }
       }
+      delete workspaceList.dropdownItems.sprite[key];
       delete changeSprites[key];
       return changeSprites; }
     case 'LOAD_PROJECT':

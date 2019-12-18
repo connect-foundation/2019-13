@@ -13,12 +13,14 @@ const mouseHandler = ({ set, block, workspaceDispatch }) => {
     target = makeTargetPath(target);
     eventDown.preventDefault();
     eventDown.stopPropagation();
+    if (target === null) return;
+    const { ownerSVGElement } = target;
 
     const startRealPosition = { x: 0, y: 0 };
     startRealPosition.x = target.getBoundingClientRect().x
-    - target.ownerSVGElement.getBoundingClientRect().x;
+    - ownerSVGElement.getBoundingClientRect().x;
     startRealPosition.y = target.getBoundingClientRect().y
-    - target.ownerSVGElement.getBoundingClientRect().y;
+    - ownerSVGElement.getBoundingClientRect().y;
 
     const startPosition = { x: 0, y: 0 };
     const { node } = block;
@@ -63,21 +65,22 @@ const mouseHandler = ({ set, block, workspaceDispatch }) => {
     const mouseup = (eventUp) => {
       document.removeEventListener('mousemove', mousemove);
       document.removeEventListener('mouseup', mouseup);
-      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
-        workspaceDispatch({
-          type: 'DELETE_BLOCK',
-          id: block.id,
-        });
-      } else if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
+      if (currentRealPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
         currentRealPosition.x = CONSTANTS.DELETE_AREA_X + 1;
       } else if (target.getBoundingClientRect().right
-      > target.ownerSVGElement.getBoundingClientRect().right) {
+      > ownerSVGElement.getBoundingClientRect().right) {
         currentRealPosition.x = startRealPosition.x;
         currentRealPosition.y = startRealPosition.y;
         set({ x: currentRealPosition.x, y: currentRealPosition.y });
       }
       block.dragUpdate(currentRealPosition.x, currentRealPosition.y);
       block.dragEnd(currentRealPosition.x, currentRealPosition.y);
+      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
+        workspaceDispatch({
+          type: 'DELETE_BLOCK',
+          id: block.id,
+        });
+      }
     };
 
     document.addEventListener('mousemove', mousemove);

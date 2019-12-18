@@ -19,7 +19,7 @@ export default [
     args: [
       {
         type: 'dropdown',
-        value: 0,
+        value: 38,
       },
       {
         type: 'text',

@@ -53,8 +53,13 @@ const BlockModel = class {
       node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
         ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
     } else if (node.tagName === 'foreignObject') {
-      node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
-      node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
+      if (this.args.includes('dropdown')) {
+        node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX + 3 : positionX + 5}`);
+        node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? -3 : 8}`);
+      } else {
+        node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX : positionX + 5}`);
+        node.setAttribute('y', `${this.style === 'condition' || this.style === 'variable' ? 1 : 8}`);
+      }
     }
   }
 
