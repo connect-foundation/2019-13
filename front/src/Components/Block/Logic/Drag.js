@@ -55,12 +55,7 @@ const mouseHandler = ({ set, block, workspaceDispatch }) => {
         }
         return;
       }
-      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
-        workspaceDispatch({
-          type: 'DELETE_BLOCK',
-          id: block.id,
-        });
-      } else if (currentPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
+      if (currentPosition.x < CONSTANTS.DELETE_AREA_X + 1) {
         currentPosition.x = CONSTANTS.DELETE_AREA_X + 1;
         set({ x: currentPosition.x, y: currentPosition.y });
       } else if (target.getBoundingClientRect().right
@@ -68,9 +63,15 @@ const mouseHandler = ({ set, block, workspaceDispatch }) => {
         currentPosition.x = startPosition.x;
         currentPosition.y = startPosition.y;
         set({ x: currentPosition.x, y: currentPosition.y });
+        block.dragUpdate(currentPosition.x, currentPosition.y);
       }
-      block.dragUpdate(currentPosition.x, currentPosition.y);
       block.dragEnd(currentPosition.x, currentPosition.y);
+      if (eventUp.clientX < CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH) {
+        workspaceDispatch({
+          type: 'DELETE_BLOCK',
+          id: block.id,
+        });
+      }
     };
 
     document.addEventListener('mousemove', mousemove);
