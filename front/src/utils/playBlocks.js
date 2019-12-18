@@ -7,10 +7,10 @@ let interval;
 let isPlay = false;
 const generator = new Generator();
 export const getIsPlay = () => isPlay;
-const workspacelist = WorkspaceList.workspaces;
 
 
 export const start = (isStartMode) => {
+  const workspacelist = WorkspaceList.workspaces;
   if (isStartMode && isPlay) {
     clearInterval(interval);
     WorkspaceList.resetKey();
@@ -19,7 +19,7 @@ export const start = (isStartMode) => {
   isPlay = true;
   const { dispatch, allsprites } = Utils.getSprite();
   setTempLocations(allsprites);
-
+  
   const startCodes = isStartMode
     ? workspacelist.reduce((pre, ws) => [...pre, ...generator.workspaceToCode(ws.getStartBlocks(ws),
       false, ws.imageId)], [])
