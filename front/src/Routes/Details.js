@@ -43,16 +43,17 @@ export default ({ match, history }) => {
         const render = workspaceList.workspaces[0].setRender;
         workspaceList.workspaces = [];
         workspaceList.images = [];
+        workspaceList.dropdownItems.sprite = { 0: '벽' };
         projectData.workspaces.forEach((ws) => {
-          const newWorkSpace = new Workspace(null, null, null, ws.id, ws.images[0].id);
+          const newWorkSpace = new Workspace(null, null, render, ws.id, ws.images[0].id);
           makeBlock(ws.blocks, newWorkSpace);
           workspaceList.workspaces.push(newWorkSpace);
           workspaceList.images.push(ws.images[0].id);
+          workspaceList.dropdownItems.sprite[ws.images[0].id] = ws.images[0].name;
           images.push(ws.images[0]);
         });
-        workspaceList.workspaces[0].setRender = render;
-        // eslint-disable-next-line prefer-destructuring
-        workspaceList.currentImageId = workspaceList.images[0];
+        // eslint-disable-next-line
+          workspaceList.currentImageId = workspaceList.images[0];
         setReady(true);
       }
     },

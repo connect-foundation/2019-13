@@ -80,7 +80,7 @@ const URLImage = ({
       image={image}
       onMouseDown={handleMouseDown}
       draggable
-      scale={scale}
+      scale={canvasSize.SCALE}
       scaleY={sprite.reversal ? -1 : 1}
       onDragStart={handleDragStart}
       onDragMove={handleDragMove}
