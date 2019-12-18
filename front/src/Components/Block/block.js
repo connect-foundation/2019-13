@@ -589,6 +589,10 @@ const Block = class {
       case 'operator_ne':
         value = Number(this.inputElement[0].value) !== Number(this.inputElement[1].value);
         break;
+      case 'sense_collision':
+        // eslint-disable-next-line prefer-destructuring
+        value = this.inputElement[0].value;
+        break;
       default:
         break;
     }
@@ -609,7 +613,6 @@ const Block = class {
   }
 
   arithmeticOrCompare = (doRender = true) => {
-    if (this.type.substring(0, 8) !== 'operator') return;
     if (this.style === 'variable') { this.arithmetic(doRender); } else if (this.style === 'condition') { this.compare(doRender); }
   }
 };
