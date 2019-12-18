@@ -1,0 +1,3 @@
+type Mutation {
+  createProjectAndBlocks(projectTitle: String!, workspacesInput: [workspaceInput], images: [Upload]!): String!
+}
