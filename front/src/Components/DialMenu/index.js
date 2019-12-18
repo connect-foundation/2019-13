@@ -76,6 +76,7 @@ export default () => {
         };
       };
       reader.readAsDataURL(file);
+      image.current.value = '';
     });
   };
   const onClickhandlerFunction = (callbacks) => {
