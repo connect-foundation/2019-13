@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { prisma } from '../../../prisma-client';
 import Utils from '../../utils/utils';
 import Upload from '../../objectstorage/upload';
@@ -43,10 +44,11 @@ export default {
   Mutation: {
     createProjectAndBlocks: async (
       root,
-      { projectTitle, workspacesInput },
+      { projectTitle, workspacesInput, images },
       context,
     ) => {
       try {
+
         const user = Utils.findUser(context.req);
         if (!user) throw new Error('Not Authorization');
         const project = await prisma.createProject({
@@ -60,7 +62,8 @@ export default {
             },
           },
         });
-        workspacesInput.forEach(async (workspace) => {
+
+        for await (const workspace of workspacesInput) {
           await prisma.createWorkspace({
             id: workspace.id,
             project: {
@@ -69,7 +72,7 @@ export default {
               },
             },
           });
-          workspace.blocks.forEach(async (blockData) => {
+          for await (const blockData of workspace.blocks) {
             await prisma.createBlock({
               id: blockData.id,
               type: blockData.type,
@@ -87,8 +90,9 @@ export default {
                 },
               },
             });
-          });
-          const { image } = workspace;
+          }
+        }
+        for await (const image of images) {
           let url;
           let realName;
           if (image.file) {
@@ -100,9 +104,10 @@ export default {
             url = storageResult.Location;
           } else {
             url = image.url;
-            realName = image.url;
+            realName = image.realName;
           }
           await prisma.createImage({
+            id: image.id,
             url,
             name: image.name,
             realName,
@@ -112,11 +117,12 @@ export default {
             direction: image.direction,
             workspace: {
               connect: {
-                id: workspace.id,
+                id: image.workspaceId,
               },
             },
           });
-        });
+        }
+
 
         return project.id;
       } catch (e) {
@@ -126,7 +132,7 @@ export default {
     updateProjectAndBlocks: async (
       root,
       {
-        projectId, projectTitle, workspacesInput,
+        projectId, projectTitle, workspacesInput, images,
       },
       context,
     ) => {
@@ -167,7 +173,7 @@ export default {
         await prisma.deleteManyWorkspaces({
           id_in: notFoundWorkspace,
         });
-        workspacesInput.forEach(async (workspace) => {
+        for await (const workspace of workspacesInput) {
           await prisma.upsertWorkspace({
             where: {
               id: workspace.id,
@@ -188,28 +194,28 @@ export default {
               },
             },
           });
-        });
+        }
         const workspaceIds = workspacesInput.map((workspace) => workspace.id);
         const prevImages = await prisma.images({
           where: {
-            id_in: workspaceIds,
+            workspace: {
+              id_in: workspaceIds,
+            } ,
           },
         });
         const prevBlocks = await prisma.blocks({
           where: {
-            id_in: workspaceIds,
+            workspace: {
+              id_in: workspaceIds,
+            },
           },
         });
 
-
-        const allInput = workspacesInput.reduce((prev, workspace) => {
-          const { image, blocks } = workspace;
-          prev[0].push({ ...image, workspaceId: workspace.id });
-          prev[1].concat(blocks.map((block) => ({ ...block, workspaceId: workspace.id })));
+        const blocks = workspacesInput.reduce((prev, workspace) => {
+          // eslint-disable-next-line max-len,no-param-reassign
+          prev = prev.concat(workspace.blocks.map((block) => ({ ...block, workspaceId: workspace.id })));
           return prev;
-        }, [[], []]);
-        const [images, blocks] = allInput;
-
+        }, []);
 
         const notFoundBlock = [];
         prevBlocks.forEach((prev) => {
@@ -224,7 +230,7 @@ export default {
         await prisma.deleteManyBlocks({
           id_in: [...notFoundBlock],
         });
-        blocks.forEach(async (i) => {
+        for await (const i of blocks) {
           await prisma.upsertBlock({
             where: {
               id: i.id,
@@ -240,9 +246,9 @@ export default {
               inputElementId: {
                 set: i.inputElementId,
               },
-              project: {
+              workspace: {
                 connect: {
-                  id: project.id,
+                  id: i.workspaceId,
                 },
               },
             },
@@ -263,7 +269,7 @@ export default {
               },
             },
           });
-        });
+        }
         const imageSet = new Set();
         images.forEach((image) => {
           if (!image.id) return;
@@ -273,17 +279,16 @@ export default {
             }
           });
         });
-
-        prevImages.forEach(async (prevImage) => {
+        for await (const prevImage of prevImages) {
           if (!(imageSet.has(prevImage.id))) {
             await Delete(prevImage.realName);
             await prisma.deleteImage({
               id: prevImage.id,
             });
           }
-        });
+        }
 
-        images.forEach(async (image) => {
+        for await (const image of images) {
           let {
             id, positionX, positionY, size, direction, name, realName, url, file,
           } = image;
@@ -305,6 +310,11 @@ export default {
               size,
               direction,
               name,
+              workspace: {
+                connect: {
+                  id: image.workspaceId,
+                },
+              },
             },
             create: {
               id,
@@ -322,7 +332,7 @@ export default {
               },
             },
           });
-        });
+        }
         return true;
       } catch (e) {
         console.error(e);

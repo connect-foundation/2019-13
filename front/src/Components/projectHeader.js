@@ -7,6 +7,8 @@ import { WorkspaceContext, SpritesContext } from '../Context';
 import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import Snackbar from './Snackbar';
 import makeBlock from '../utils/makeBlock';
+import workspaceList from './Block/workspaceList';
+import Workspace from './Block/workspace';
 
 export default ({ props, setReady }) => {
   const [projectId, setPorjectId] = useState();
@@ -60,11 +62,21 @@ export default ({ props, setReady }) => {
         if (!res.findProjectById) {
           props.history.goBack();
         } else {
-          spritesDispatch({ type: 'LOAD_PROJECT', images: res.findProjectById.images });
-          setProjectName(res.findProjectById.title);
-          setIsLiked(res.findProjectById.isLiked);
-          setIsPrivate(res.findProjectById.private);
-          makeBlock(res.findProjectById.blocks, workspace);
+          const projectData = res.findProjectById;
+          setProjectName(projectData.title);
+          setIsLiked(projectData.isLiked);
+          setIsPrivate(projectData.private);
+          const images = [];
+          workspaceList.workspaces = [];
+          workspaceList.images = [];
+          projectData.workspaces.forEach((ws) => {
+            const newWorkSpace = new Workspace(null, null, null, ws.id, ws.images[0].id);
+            makeBlock(ws.blocks, newWorkSpace);
+            workspaceList.workspaces.push(newWorkSpace);
+            images.push(ws.images[0]);
+          });
+          spritesDispatch({ type: 'LOAD_PROJECT', images });
+          // makeBlock(res.findProjectById.workspaces[0].blocks, new Workspace(null,null,null,null,res.findProjectById.workspace));
           setReady(true);
         }
       },
@@ -114,16 +126,27 @@ export default ({ props, setReady }) => {
       return;
     }
     setCanSave(false);
+    const images = [];
+    const workspacesInput = workspaceList.workspaces.reduce((prev, ws) => {
+      const data = ws.extractCoreData();
+      const image = sprites[data.imageId];
+      image.workspaceId = ws.id;
+      images.push({ ...image, positionX: image.x, positionY: image.y, id: data.imageId });
+      delete data.imageId;
+      prev.push(data);
+      return prev;
+    }, []);
     if (projectId) {
       updateProject({
         variables: { projectId,
           projectTitle: getProjectName(),
-          input: workspace.extractCoreData(),
-          images: Object.entries(sprites).map(sprite => ({ ...sprite[1], positionX: sprite[1].x, positionY: sprite[1].y, id: sprite[0] })) },
+          workspacesInput,
+          images,
+        },
       });
     } else {
       createAndSave({
-        variables: { projectTitle: getProjectName(), input: workspace.extractCoreData(), images: Object.values(sprites) },
+        variables: { projectTitle: getProjectName(), workspacesInput, images },
       });
     }
   };

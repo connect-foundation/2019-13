@@ -110,7 +110,7 @@ const Workspace = class {
   }
 
   extractCoreData() {
-    return Object.values(this.blockDB).map(b => ({
+    const blocks = Object.values(this.blockDB).map(b => ({
       id: b.id,
       type: b.type,
       positionX: b.x,
@@ -120,6 +120,11 @@ const Workspace = class {
       secondChildElementId: this.getBlockId(b.secondChildElement),
       inputElementId: b.inputElement.map(input => (input.id ? input.id : input.value.toString())),
     }));
+    return {
+      id: this.id,
+      blocks,
+      imageId: this.imageId,
+    };
   }
 
   getBlockId(block) {
