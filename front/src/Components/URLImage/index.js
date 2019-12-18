@@ -6,8 +6,29 @@ import useImage from '../../custom_hooks/useImage';
 import CANVASCONSTANTS from '../Canvas/constants';
 import Theme from '../../Styles/Theme';
 
-const URLImage = ({ draggable, sprite, spritekey, spritesDispatch, setCurrentSprite, workspaceDispatch }) => {
+const URLImage = ({
+  draggable,
+  sprite,
+  spritekey,
+  spritesDispatch,
+  setCurrentSprite,
+  workspaceDispatch,
+}) => {
   const [image] = useImage(sprite);
+  if (!draggable) {
+    return (
+      <Image
+        x={CANVASCONSTANTS.CANVAS.WIDTH / 2 + Number(sprite.x)}
+        y={CANVASCONSTANTS.CANVAS.HEIGHT / 2 + Number(sprite.y)}
+        image={image}
+        scaleY={sprite.reversal ? -1 : 1}
+        rotation={(sprite.direction - 90) % 360}
+        offsetX={image ? image.width / 2 : 0}
+        offsetY={image ? image.height / 2 : 0}
+      />
+    );
+  }
+
   const handleDragStart = (e) => {
     e.target.setAttrs({
       shadowOffset: {
@@ -35,7 +56,6 @@ const URLImage = ({ draggable, sprite, spritekey, spritesDispatch, setCurrentSpr
       scaleY: 1,
       shadowOffsetX: 0,
       shadowOffsetY: 0,
-
     });
     spritesDispatch({
       type: 'DRAG_END',
@@ -69,6 +89,7 @@ const URLImage = ({ draggable, sprite, spritekey, spritesDispatch, setCurrentSpr
 };
 
 URLImage.propTypes = {
+  draggable: PropType.bool.isRequired,
   sprite: PropType.object.isRequired,
   spritekey: PropType.string.isRequired,
   spritesDispatch: PropType.func.isRequired,

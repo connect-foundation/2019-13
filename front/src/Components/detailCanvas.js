@@ -34,7 +34,7 @@ export default ({ blocks, images }) => {
   return (
     <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
       <DrawSectionWrapper className="Contents__Column">
-        <Canvas WIDTH={WIDTH} HEIGHT={HEIGHT} draggable="false" />
+        <Canvas WIDTH={WIDTH} HEIGHT={HEIGHT} draggable={false} />
       </DrawSectionWrapper>
       <Controller>
         <FontAwesomeIcon
