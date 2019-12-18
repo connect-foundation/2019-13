@@ -172,11 +172,15 @@ const Block = class {
   changeDropdownWidth = ({ set, index, items }) => (event) => {
     const { target } = event;
     this.value = target.value;
+    this.inputElement[index].value = target.value;
     if (typeof items[target.value] === 'string') {
       this.inputWidth[index] = items[target.value].length * 20;
       this.setArgs(true);
     }
     set(target.value);
+    if (this.outputElement) {
+      this.callOutputElement(true);
+    }
   }
 
   makeFromJSON = (json) => {
