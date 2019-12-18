@@ -55,5 +55,4 @@ export default (Blocks, workspace) => {
       workspace.addTopblock(block);
     }
   });
-  // workspace.topblocks.forEach(block => block.setAllBlockPosition());
 };
