@@ -9,23 +9,31 @@ export default {
   Mutation: {
     createProjectAndBlocks: async (
       root,
-      { projectTitle, workspacesInput, images },
+      {
+        projectTitle, workspacesInput, images, canvasImage,
+      },
       context,
     ) => {
       try {
         const user = utils.findUser(context.req);
         if (!user) throw new Error('Not Authorization');
+        const { filename, createReadStream } = await canvasImage;
+        const canvasFileName = new Date().getTime() + filename;
+        const canvasImagePath = await upload(createReadStream, canvasFileName);
+
         const project = await prisma.createProject({
           title: projectTitle,
           description: '',
           views: 0,
           private: false,
+          canvasImage: canvasImagePath.Location,
           owner: {
             connect: {
               id: user.id,
             },
           },
         });
+
 
         for await (const workspace of workspacesInput) {
           await prisma.createWorkspace({
