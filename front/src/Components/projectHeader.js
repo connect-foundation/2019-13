@@ -73,7 +73,7 @@ export default ({ props, setReady }) => {
           workspaceList.images = [];
           workspaceList.dropdownItems.sprite = CONSTANTS.DROPDOWN_SPRITE_INIT_OBJECT;
           projectData.workspaces.forEach((ws) => {
-            const newWorkSpace = new Workspace(null, null, render, ws.id, ws.images[0].id);
+            const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
             makeBlock(ws.blocks, newWorkSpace);
             workspaceList.workspaces.push(newWorkSpace);
             workspaceList.images.push(ws.images[0].id);
