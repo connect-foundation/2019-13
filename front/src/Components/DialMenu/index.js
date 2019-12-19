@@ -28,7 +28,7 @@ const uploadHandler = ({ snackbar, setSnackbar }) => {
     setSnackbar({
       ...snackbar,
       open: true,
-      message: '동작시 이미지를 업로드 할 수 없습니다.',
+      message: '실행시 이미지를 업로드 할 수 없습니다.',
       color: 'alertColor',
     });
     return;

@@ -12,7 +12,7 @@ import {
 } from '../../Context';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
-import { start, stop } from '../../utils/playBlocks';
+import { start, stop, getIsPlay } from '../../utils/playBlocks';
 import { setCanvasSize } from '../../utils/canvasSize';
 
 let key;
@@ -33,8 +33,9 @@ const stopHandler = () => {
 
 export default () => {
   setCanvasSize('DEFAULT');
+  const isPlay = getIsPlay();
   const { workspaceDispatch } = useContext(WorkspaceContext);
-  const [snackbar, setSnackbar] = React.useState({
+  const [snackbar, setSnackbar] = useState({
     open: false,
     vertical: 'top',
     horizontal: 'center',
@@ -48,7 +49,9 @@ export default () => {
   allsprites = sprites;
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
+
   const checkPositionHandler = ({ type, coordinate }, event) => {
+    if (isPlay) return;
     if (!currentSprite.position) {
       setSnackbar({
         ...snackbar,
@@ -81,13 +84,19 @@ export default () => {
           />
           <FontAwesomeIcon
             icon={faStop}
-            onClick={stopHandler}
+            onClick={(e) => {
+              stopHandler(e);
+              setSnackbar({
+                ...snackbar,
+                open: false,
+              });
+            }}
             className="stop-button"
           />
         </div>
         <div className="draw-section__row">
           <Canvas
-            draggable
+            draggable={!getIsPlay()}
             workspaceDispatch={workspaceDispatch}
             setCurrentSprite={setCurrentSprite}
           />
