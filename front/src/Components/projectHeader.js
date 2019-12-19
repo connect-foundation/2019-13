@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
+import PropTypes from 'prop-types';
 import { WorkspaceContext, SpritesContext } from '../Context';
 import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import Snackbar from './Snackbar';
@@ -10,8 +11,9 @@ import makeBlock from '../utils/makeBlock';
 import workspaceList from './Block/workspaceList';
 import Workspace from './Block/workspace';
 import CONSTANTS from './Block/constants';
+import dataURLtoFile from '../utils/dataURLtoFile';
 
-export default ({ props, setReady }) => {
+const ProjectHeader = ({ props, setReady }) => {
   const [projectId, setPorjectId] = useState();
   const [projectName, setProjectName] = useState('');
   const [isLiked, setIsLiked] = useState(false);
@@ -29,9 +31,9 @@ export default ({ props, setReady }) => {
   const [createAndSave] = useMutation(CREATE_AND_SAVE, {
     onCompleted(res) {
       if (!res || !res.createProjectAndBlocks) return;
-      const projectId = res.createProjectAndBlocks;
-      if (projectId !== 'false') {
-        props.history.push(`/project/${projectId}`);
+      const loadprojectId = res.createProjectAndBlocks;
+      if (loadprojectId !== 'false') {
+        props.history.push(`/project/${loadprojectId}`);
       }
       setCanSave(true);
     },
@@ -131,6 +133,9 @@ export default ({ props, setReady }) => {
     if (!canSave) {
       return;
     }
+    const canvas = document.querySelector('.konvajs-content').querySelector('canvas');
+    const url = canvas.toDataURL();
+    const canvasImage = dataURLtoFile(url, `${getProjectName()}.png`);
     setCanSave(false);
     workspaceDispatch({ type: 'SCROLL_END' });
     const images = [];
@@ -153,13 +158,13 @@ export default ({ props, setReady }) => {
       });
     } else {
       createAndSave({
-        variables: { projectTitle: getProjectName(), workspacesInput, images },
+        variables: { projectTitle: getProjectName(), workspacesInput, images, canvasImage },
       });
     }
   };
 
   return (
-    <ProjectHeader isLiked={isLiked}>
+    <ProjectHeaderContainer isLiked={isLiked}>
       <div className="project-info">
         <input className="project-title" value={projectName} onChange={projectNameHandler} />
         <button type="button" onClick={likeHandler}>
@@ -173,11 +178,11 @@ export default ({ props, setReady }) => {
         <button type="button" onClick={saveHandler}> 저장하기 </button>
       </div>
       <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
-    </ProjectHeader>
+    </ProjectHeaderContainer>
   );
 };
 
-const ProjectHeader = styled.div`
+const ProjectHeaderContainer = styled.div`
   width: fit-content;
   height: 50px;
   position: relative;
@@ -211,3 +216,11 @@ const ProjectHeader = styled.div`
     }
   }
 `;
+
+
+ProjectHeader.propTypes = {
+  props: PropTypes.object.isRequired,
+  setReady: PropTypes.func.isRequired,
+};
+
+export default ProjectHeader;
