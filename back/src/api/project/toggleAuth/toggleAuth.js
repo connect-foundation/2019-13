@@ -1,5 +1,5 @@
-import { prisma } from '../../../prisma-client';
-import Utils from '../../utils/utils';
+import { prisma } from '../../../../prisma-client';
+import Utils from '../../../utils/utils';
 
 export default {
   Mutation: {
