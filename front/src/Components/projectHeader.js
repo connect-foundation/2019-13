@@ -31,10 +31,12 @@ const ProjectHeader = ({ props, setReady }) => {
   const [createAndSave] = useMutation(CREATE_AND_SAVE, {
     onCompleted(res) {
       if (!res || !res.createProjectAndBlocks) return;
-      const loadprojectId = res.createProjectAndBlocks;
-      if (loadprojectId !== 'false') {
-        props.history.push(`/project/${loadprojectId}`);
+      const pid = res.createProjectAndBlocks;
+      setPorjectId(pid);
+      if (pid !== 'false') {
+        window.location.href = `/project/${pid}`;
       }
+      setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
       setCanSave(true);
     },
   });
@@ -88,14 +90,12 @@ const ProjectHeader = ({ props, setReady }) => {
         }
       },
     });
-
   useEffect(() => {
-    if (props.match.params.name) {
-      setPorjectId(props.match.params.name);
-      loadProject({
-        variables: { projectId: props.match.params.name },
-      });
-    }
+    if (!props.match.params.name) return;
+    setPorjectId(props.match.params.name);
+    loadProject({
+      variables: { projectId: props.match.params.name },
+    });
   }, []);
 
   const likeHandler = () => {

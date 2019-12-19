@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
-import Canvas from './Canvas';
-import Utils from '../utils/utils';
-import { start, stop } from '../utils/playBlocks';
-import { SpritesContext } from '../Context';
-import { spritesReducer } from '../reducer';
-import { setCanvasSize } from '../utils/canvasSize';
+import Canvas from '../Canvas';
+import Utils from '../../utils/utils';
+import { start, stop } from '../../utils/playBlocks';
+import { SpritesContext } from '../../Context';
+import { spritesReducer } from '../../reducer';
+import { setCanvasSize } from '../../utils/canvasSize';
 
 let dispatch;
 let allsprites;
