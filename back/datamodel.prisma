@@ -16,6 +16,7 @@ type Project {
   private: Boolean!
   owner: User! @relation(name: "ProjectByUser")
   canvasImage: String!
+  realCanvasImage: String!
   authes: [ProjectAuth]! @relation(name: "AuthesByProject")
   likes: [Like]! @relation(name : "LikesByProject")
   comments: [Comment]! @relation(name : "CommentByProject" onDelete: CASCADE)
