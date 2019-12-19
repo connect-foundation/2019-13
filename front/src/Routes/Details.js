@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../Apollo/queries/Project';
 import Comments from '../Components/Comment/Comments';
 import { setLocalStorageItem } from '../utils/storage';
-import DetailCanvas from '../Components/detailCanvas';
+import DetailCanvas from '../Components/DetailCanvas';
 import workspaceList from '../Components/Block/workspaceList';
 import Workspace from '../Components/Block/workspace';
 import makeBlock from '../utils/makeBlock';

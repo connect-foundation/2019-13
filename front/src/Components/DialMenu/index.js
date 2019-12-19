@@ -8,8 +8,10 @@ import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
 import { SpritesContext } from '../../Context';
 import Utils from '../../utils/utils';
+import { getIsPlay } from '../../utils/playBlocks';
+import Snackbar from '../Snackbar';
 
-const imageRegExp = /image\/(bmp|jpg|jpeg|tiff|png|svg)$/i;
+const imageRegExp = /image\/(bmp|jpg|jpeg|tiff|png|svg\+xml)$/i;
 
 const useStyles = makeStyles(theme => ({
   speedDial: {
@@ -21,7 +23,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const uploadHandler = () => {
+const uploadHandler = ({ snackbar, setSnackbar }) => {
+  if (getIsPlay()) {
+    setSnackbar({
+      ...snackbar,
+      open: true,
+      message: '동작시 이미지를 업로드 할 수 없습니다.',
+      color: 'alertColor',
+    });
+    return;
+  }
   document.all.uploadImage.click();
 };
 const copyHandler = () => {};
@@ -37,6 +48,11 @@ export default () => {
   const [direction] = useState('up');
   const [open, setOpen] = useState(false);
   const { spritesDispatch } = useContext(SpritesContext);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
 
   const handleClose = () => {
     setOpen(false);
@@ -51,7 +67,12 @@ export default () => {
     const filesArr = Array.prototype.slice.call(files);
     filesArr.forEach((file) => {
       if (!file.type.match(imageRegExp)) {
-        window.alert('이미지 파일이 아닙니다.');
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          message: '이미지 파일이 아닙니다.',
+          color: 'alertColor',
+        });
         return;
       }
       const reader = new FileReader();
@@ -82,7 +103,7 @@ export default () => {
   const onClickhandlerFunction = (callbacks) => {
     const func = (e) => {
       callbacks.forEach((callback) => {
-        callback(e);
+        callback({ e, snackbar, setSnackbar });
       });
     };
     return func;
@@ -110,6 +131,7 @@ export default () => {
           />
         ))}
       </SpeedDial>
+      <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
       <input
         type="file"
         ref={image}

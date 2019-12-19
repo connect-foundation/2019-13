@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 import Canvas from './Canvas';
 import Utils from '../utils/utils';
 import { start, stop } from '../utils/playBlocks';
@@ -13,7 +14,7 @@ let dispatch;
 let allsprites;
 const getPosition = () => ({ dispatch, allsprites });
 
-export default ({ blocks, images }) => {
+const DetailCanvas = ({ images }) => {
   setCanvasSize('DETAIL');
   const [sprites, spritesDispatch] = useReducer(spritesReducer, {});
   allsprites = sprites;
@@ -121,3 +122,8 @@ const Controller = styled.div`
     }
   }
 `;
+DetailCanvas.propTypes = {
+  images: PropTypes.array.isRequired,
+};
+
+export default DetailCanvas;
