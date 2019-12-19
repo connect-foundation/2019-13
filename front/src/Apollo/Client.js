@@ -20,7 +20,9 @@ const authLink = setContext((_, { headers }) => {
 });
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: authLink.concat(createUploadLink).concat(httpLink),
+  link: authLink.concat(createUploadLink({
+    uri: process.env.REACT_APP_SERVER_URL,
+  })).concat(httpLink),
 });
 
 client.defaultOptions = {
