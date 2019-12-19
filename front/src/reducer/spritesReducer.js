@@ -3,9 +3,8 @@ import Utils from '../utils/utils';
 import workspaceList from '../Components/Block/workspaceList';
 import { getCanvasSize } from '../utils/canvasSize';
 /* eslint-disable import/prefer-default-export */
-const canvasSize = getCanvasSize();
-
 export default (sprites, { type, coordinate, key, value, images, tempLocations }) => {
+  const canvasSize = getCanvasSize();
   const changeSprites = { ...sprites };
   const position = sprites[key];
   const curLocations = { ...tempLocations };
