@@ -44,7 +44,7 @@ export default ({ project, user }) => {
 };
 
 const CommentWrapper = styled.div`
-  margin-top: 50px;
+  margin: 50px 0px;
   word-wrap: break-word;
   #commentWriter {
     display: flex;
