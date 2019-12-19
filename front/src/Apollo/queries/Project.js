@@ -27,6 +27,7 @@ export const GET_PROJECTS_BY_VIEWS = gql`
         email,
         picture,
       },
+      canvasImage,
     }
   }
 `;

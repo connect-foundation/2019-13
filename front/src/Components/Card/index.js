@@ -4,7 +4,7 @@ import Proptype from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { DELETE_PROJECT, TOGGLE_LIKE } from '../../Apollo/queries/Project';
-
+import Utils from '../../utils/utils';
 
 const Card = ({ project, removeProjects, history, me }) => {
   const [isLiked, setIsLiked] = useState(project.isLiked);
@@ -40,7 +40,6 @@ const Card = ({ project, removeProjects, history, me }) => {
     <CardContainer>
       <Link to={`/details/${project.id}`}>
         <DetailContainer>
-          <ProjectTitle>{project.title}</ProjectTitle>
           <ProjectDescription>{project.description}</ProjectDescription>
         </DetailContainer>
       </Link>
@@ -48,7 +47,10 @@ const Card = ({ project, removeProjects, history, me }) => {
       <InfoContainer>
         <ProfileWrapper>
           <UserImage project={project} />
-          <UserName>{project.owner ? project.owner.email : 'test'}</UserName>
+          <UserInfoText>
+            <ProjectTitle>{project ? Utils.reduceText(project.title, 8) : 'test'}</ProjectTitle>
+            <UserName>{project.owner ? project.owner.email : 'test'}</UserName>
+          </UserInfoText>
         </ProfileWrapper>
         <div>
           <StarWrapper project={project} isLiked={isLiked} onClick={likeHandler}>
@@ -60,15 +62,13 @@ const Card = ({ project, removeProjects, history, me }) => {
             </StarText>
           </StarWrapper>
           {me
-            ? (
+            && (
               <>
                 <button type="button" onClick={editBlock}> 변경 </button>
                 <button type="button" onClick={deleteHandler}> 삭제 </button>
               </>
             )
-            : (<></>)
           }
-
         </div>
       </InfoContainer>
     </CardContainer>
@@ -83,15 +83,23 @@ const CardContainer = styled.div`
   height: 300px;
   margin: 30px;
 `;
-const UserName = styled.div`
-  padding: 10px 5px;
+
+const ProjectTitle = styled.div`
   font-weight: bold;
+`;
+
+const UserName = styled.div`
+  margin-top:5px;
+  font-size: 14px;
 `;
 const ProjectImage = styled.div`
   width:100%;
   height:80%;
   border-radius: 4px 4px 0px 0px;
-  background:${props => (props.project.canvasImage ? `url(${props.project.canvasImage})` : 'url(https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg)')};
+  background:${props => (props.project.canvasImage
+    ? `url(${props.project.canvasImage})`
+    : 'url(https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg)')};
+  background-size: cover;
 `;
 const InfoContainer = styled.div`
   & > div {
@@ -116,6 +124,10 @@ const InfoContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: center;
+`;
+
+const UserInfoText = styled.div`
+  padding: 5px;
 `;
 
 const StarWrapper = styled.div`
@@ -146,11 +158,11 @@ const StarText = styled.div`
 `;
 
 const UserImage = styled.div`
-  width:20px;
-  height:20px;
+  width:40px;
+  height:40px;
   background: ${props => (props.project.owner ? `url(${props.project.owner.picture})` : 'black')};
-  background-size:20px;
-  border-radius:4px;
+  background-size:40px;
+  border-radius: 50%;
 `;
 
 const ProfileWrapper = styled.div`
@@ -177,10 +189,6 @@ const DetailContainer = styled.div`
   }
 `;
 
-const ProjectTitle = styled.div`
-  font-size: 30px;
-  color: ${props => props.theme.whiteColor};
-`;
 const ProjectDescription = styled.div`
   font-size: 20px;
   color: ${props => props.theme.whiteColor};
