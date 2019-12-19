@@ -45,7 +45,7 @@ const Project = (props) => {
   const [clickedButton, setClickedButton] = useState(0);
   useEffect(() => {
     if (isReady) {
-      workspace.topblocks.forEach(block => block.setAllBlockPosition(true));
+      workspace.renderTopblocks();
     }
   });
   return (
