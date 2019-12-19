@@ -167,7 +167,7 @@ const ProjectHeader = ({ props, setReady }) => {
   return (
     <ProjectHeaderContainer isLiked={isLiked}>
       <div className="project-info">
-        <input className="project-title" value={projectName} onChange={projectNameHandler} />
+        <input className="project-title" value={projectName} onChange={projectNameHandler} maxLength={25} />
         <button type="button" onClick={likeHandler}>
           <FontAwesomeIcon icon={faStar} className="star-icon" />
         </button>
