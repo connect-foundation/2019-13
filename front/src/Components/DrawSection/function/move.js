@@ -18,8 +18,8 @@ export default ({ spritekey, movement }, type) => {
       break;
     case 'xy':
       value = {
-        x: Utils.parseInt10(movement.x || position.x),
-        y: Utils.parseInt10(movement.y || position.y),
+        x: Utils.parseInt10(movement.x),
+        y: Utils.parseInt10(movement.y),
       };
       break;
     case 'locationX':

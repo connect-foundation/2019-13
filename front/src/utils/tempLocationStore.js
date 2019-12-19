@@ -15,14 +15,14 @@ const canvasSize = getCanvasSize();
 
 
 export const setTempLocation = (key, value) => {
-  if (value.x) {
+  if (value.x !== undefined) {
     tempLocation[key].x = Utils.checkRange(
       value.x,
       -canvasSize.WIDTH / 2,
       canvasSize.WIDTH / 2,
     );
   }
-  if (value.y) {
+  if (value.y !== undefined) {
     tempLocation[key].y = Utils.checkRange(
       value.y,
       -canvasSize.HEIGHT / 2,
@@ -34,4 +34,5 @@ export const setTempLocation = (key, value) => {
       ? value.direction % 360
       : value.direction + 360;
   }
+  console.log(tempLocation[key]);
 };
