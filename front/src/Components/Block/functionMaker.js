@@ -93,9 +93,16 @@ const FunctionList = {
   control_if: (args) => {
     const value = args.input[0];
     const childArgs = { ...args, ...{ input: [1] } };
+    let isPlayed = false;
     if (Number.isNaN(Number(value)) && value) {
       const next = () => {
-        if (value()) return FunctionList.control_for(childArgs).func.next();
+        if (value() || isPlayed) {
+          isPlayed = true;
+          const functionWapper = FunctionList.control_for(childArgs);
+          const res = functionWapper.func.next();
+          if (res.value >= functionWapper.limit) isPlayed = false;
+          return res;
+        }
       };
       return { func: { next },
         limit: 1 };
