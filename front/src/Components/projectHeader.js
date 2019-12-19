@@ -33,6 +33,7 @@ export default ({ props, setReady }) => {
       if (projectId !== 'false') {
         props.history.push(`/project/${projectId}`);
       }
+      setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
       setCanSave(true);
     },
   });
