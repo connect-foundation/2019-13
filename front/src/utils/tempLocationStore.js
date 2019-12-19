@@ -34,5 +34,4 @@ export const setTempLocation = (key, value) => {
       ? value.direction % 360
       : value.direction + 360;
   }
-  console.log(tempLocation[key]);
 };
