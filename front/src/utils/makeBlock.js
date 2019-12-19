@@ -49,7 +49,9 @@ export default (Blocks, workspace) => {
         if (workspace.getBlockById(v)) {
           connectBlock(block, 'inputElement', workspace.getBlockById(blockData.inputElementId), i);
         } else {
-          block.inputElement[i] = { type: 'input', value: v };
+          let value = v;
+          if (!Number.isNaN(Number(value))) value = Number(value);
+          block.inputElement[i] = { type: 'input', value };
         }
       });
     }
