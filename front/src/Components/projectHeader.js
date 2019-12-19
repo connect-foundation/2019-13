@@ -154,6 +154,7 @@ const ProjectHeader = ({ props, setReady }) => {
           projectTitle: getProjectName(),
           workspacesInput,
           images,
+          canvasImage,
         },
       });
     } else {
