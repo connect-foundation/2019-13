@@ -60,4 +60,5 @@ export default (Blocks, workspace) => {
       workspace.addTopblock(block);
     }
   });
+  workspace.matchInputValues();
 };
