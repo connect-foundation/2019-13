@@ -11,13 +11,6 @@ import { setCanvasSize } from '../utils/canvasSize';
 
 let dispatch;
 let allsprites;
-const playHandler = () => {
-  start(true);
-};
-
-const stopHandler = () => {
-  stop();
-};
 const getPosition = () => ({ dispatch, allsprites });
 
 export default ({ blocks, images }) => {
@@ -25,6 +18,14 @@ export default ({ blocks, images }) => {
   const [sprites, spritesDispatch] = useReducer(spritesReducer, {});
   allsprites = sprites;
   dispatch = spritesDispatch;
+  const playHandler = () => {
+    start(true);
+  };
+
+  const stopHandler = () => {
+    stop();
+    spritesDispatch({ type: 'LOAD_PROJECT', images });
+  };
   useEffect(() => {
     spritesDispatch({ type: 'LOAD_PROJECT', images });
     Utils.setSprite(getPosition);
