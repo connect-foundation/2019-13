@@ -43,7 +43,6 @@ export const GET_PROJECTS = gql`
         email,
         picture,
       },
-      canvasImage,
     }
   }
 `;
@@ -55,8 +54,8 @@ export const DELETE_PROJECT = gql`
 `;
 
 export const CREATE_AND_SAVE = gql`
-  mutation createProjectAndBlocks($projectTitle: String!, $workspacesInput: [workspaceInput], $images: [Upload]!, $canvasImage: Upload!) {
-    createProjectAndBlocks(projectTitle: $projectTitle, workspacesInput: $workspacesInput, images: $images, canvasImage: $canvasImage)
+  mutation createProjectAndBlocks($projectTitle: String!, $workspacesInput: [workspaceInput], $images: [Upload]!) {
+    createProjectAndBlocks(projectTitle: $projectTitle, workspacesInput: $workspacesInput, images: $images)
   }
 `;
 

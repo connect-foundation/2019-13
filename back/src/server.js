@@ -24,6 +24,7 @@ passportConfig(passport);
 server.express.use((req, res, next) => {
   if (!req.headers.authorization || req.headers.authorization === 'Bearer undefined') return next();
   return passport.authenticate('jwt', { session: false }, (err, user) => {
+    console.log(user);
     if (!user) {
       next(new Error('Not Authorization'));
       return;
