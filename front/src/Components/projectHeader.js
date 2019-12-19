@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
-import PropTypes from 'prop-types';
 import { WorkspaceContext, SpritesContext } from '../Context';
 import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import Snackbar from './Snackbar';
@@ -11,9 +10,8 @@ import makeBlock from '../utils/makeBlock';
 import workspaceList from './Block/workspaceList';
 import Workspace from './Block/workspace';
 import CONSTANTS from './Block/constants';
-import dataURLtoFile from '../utils/dataURLtoFile';
 
-const ProjectHeader = ({ props, setReady }) => {
+export default ({ props, setReady }) => {
   const [projectId, setPorjectId] = useState();
   const [projectName, setProjectName] = useState('');
   const [isLiked, setIsLiked] = useState(false);
@@ -133,9 +131,6 @@ const ProjectHeader = ({ props, setReady }) => {
     if (!canSave) {
       return;
     }
-    const canvas = document.querySelector('.konvajs-content').querySelector('canvas');
-    const url = canvas.toDataURL();
-    const canvasImage = dataURLtoFile(url, `${getProjectName()}.png`);
     setCanSave(false);
     workspaceDispatch({ type: 'SCROLL_END' });
     const images = [];
@@ -158,13 +153,13 @@ const ProjectHeader = ({ props, setReady }) => {
       });
     } else {
       createAndSave({
-        variables: { projectTitle: getProjectName(), workspacesInput, images, canvasImage },
+        variables: { projectTitle: getProjectName(), workspacesInput, images },
       });
     }
   };
 
   return (
-    <ProjectHeaderContainer isLiked={isLiked}>
+    <ProjectHeader isLiked={isLiked}>
       <div className="project-info">
         <input className="project-title" value={projectName} onChange={projectNameHandler} />
         <button type="button" onClick={likeHandler}>
@@ -178,11 +173,11 @@ const ProjectHeader = ({ props, setReady }) => {
         <button type="button" onClick={saveHandler}> 저장하기 </button>
       </div>
       <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
-    </ProjectHeaderContainer>
+    </ProjectHeader>
   );
 };
 
-const ProjectHeaderContainer = styled.div`
+const ProjectHeader = styled.div`
   width: fit-content;
   height: 50px;
   position: relative;
@@ -216,11 +211,3 @@ const ProjectHeaderContainer = styled.div`
     }
   }
 `;
-
-
-ProjectHeader.propTypes = {
-  props: PropTypes.object.isRequired,
-  setReady: PropTypes.func.isRequired,
-};
-
-export default ProjectHeader;
