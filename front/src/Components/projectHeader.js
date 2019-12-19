@@ -88,12 +88,11 @@ export default ({ props, setReady }) => {
     });
 
   useEffect(() => {
-    if (props.match.params.name) {
-      setPorjectId(props.match.params.name);
-      loadProject({
-        variables: { projectId: props.match.params.name },
-      });
-    }
+    if (!props.match.params.name) return;
+    setPorjectId(props.match.params.name);
+    loadProject({
+      variables: { projectId: props.match.params.name },
+    });
   }, []);
 
   const likeHandler = () => {
