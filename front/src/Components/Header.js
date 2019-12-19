@@ -15,6 +15,9 @@ export default () => {
   const ModalHandler = () => {
     setOpen(!open);
   };
+  const rediretToProject = () => {
+    window.location.href = '/project';
+  };
   const dropMenuHandler = () => {
     setDropMenu(!dropMenu);
   };
@@ -26,15 +29,13 @@ export default () => {
             <img src="/logo.png" alt="logo" className="Header-icon logo" />
           </Link>
           <div className="header-link">
-            <Link to="/project">
+            <button type="button" onClick={rediretToProject}>
               <span> 프로젝트 만들기</span>
-            </Link>
-            {isLoggedIn ? (
+            </button>
+            {isLoggedIn && (
               <Link to="/mypage">
                 <span> 내 작품</span>
               </Link>
-            ) : (
-              undefined
             )}
           </div>
         </HeaderColumn>
@@ -132,6 +133,7 @@ const HeaderColumn = styled.div`
     background: none;
     border: none;
     color: white;
+    cursor: pointer;
     font-size: 18px;
   }
 `;

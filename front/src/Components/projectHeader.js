@@ -32,9 +32,8 @@ export default ({ props, setReady }) => {
       const pid = res.createProjectAndBlocks;
       setPorjectId(pid);
       if (pid !== 'false') {
-        props.history.push(`/project/${pid}`);
+        window.location.href = `/project/${pid}`;
       }
-
       setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
       setCanSave(true);
     },
@@ -89,7 +88,6 @@ export default ({ props, setReady }) => {
         }
       },
     });
-
   useEffect(() => {
     if (!props.match.params.name) return;
     setPorjectId(props.match.params.name);
