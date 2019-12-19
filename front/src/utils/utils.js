@@ -56,6 +56,7 @@ const Utils = {
     / Math.sqrt(width * width + height * height)) || 0;
     return result < 100 ? result : 100;
   },
+  reduceText: (str, length) => (str.length > length ? `${str.substring(0, length - 1)}...` : str),
 };
 
 
