@@ -13,8 +13,15 @@ export default () => {
     slidesToScroll: 1,
     autoplay: true,
   };
+
   const CarouselContainer = styled.div`
-    padding :40px;
+    .slick-prev {
+      left: 25px;
+      z-index:5;
+    }
+    .slick-next {
+      right: 25px ;
+    }
   `;
 
   return (
