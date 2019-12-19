@@ -91,7 +91,7 @@ const ProjectImage = styled.div`
   width:100%;
   height:80%;
   border-radius: 4px 4px 0px 0px;
-  background:${props => (props.project.image ? `url(${props.project.image})` : 'url(https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg)')};
+  background:${props => (props.project.canvasImage ? `url(${props.project.canvasImage})` : 'url(https://salonproacademy.com/wp-content/uploads/sites/391/2018/10/instagram-background-768x461.jpg)')};
 `;
 const InfoContainer = styled.div`
   & > div {
