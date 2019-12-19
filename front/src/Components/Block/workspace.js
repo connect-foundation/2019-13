@@ -130,6 +130,10 @@ const Workspace = class {
   getBlockId(block) {
     return block ? block.id : null;
   }
+
+  matchInputValues() {
+    Object.values(this.blockDB).forEach((block) => { if (block.style === 'condition' || block.style === 'variable') block.arithmeticOrCompare(false); });
+  }
 };
 
 export default Workspace;
