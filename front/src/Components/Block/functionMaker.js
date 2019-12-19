@@ -1,5 +1,6 @@
 import Move from '../DrawSection/function/move';
 import Rotate from '../DrawSection/function/rotate';
+import Collision from '../DrawSection/function/collision';
 
 const FunctionList = {
   topblock: (args) => {
@@ -87,10 +88,19 @@ const FunctionList = {
     return { func: { next: () => Rotate({ movement: value, spritekey: imgId }, 'anticlock') } };
   },
 
+  isCollision: (value, imgId) => () => Collision([value], imgId),
+
   control_if: (args) => {
     const value = args.input[0];
-    args.input[0] = 1;
-    return value ? FunctionList.control_for(args) : { func: { next: () => {} } };
+    const childArgs = { ...args, ...{ input: [1] } };
+    if (Number.isNaN(Number(value)) && value) {
+      const next = () => {
+        if (value()) return FunctionList.control_for(childArgs).func.next();
+      };
+      return { func: { next },
+        limit: 1 };
+    }
+    return value ? FunctionList.control_for(childArgs) : { func: { next: () => {} } };
   },
 };
 
