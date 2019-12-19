@@ -8,13 +8,13 @@ export default (workspace, { type, blockParams, id }) => {
     { block = workspace.addBlock(id);
       workspace.addTopblock(block);
       block.makeFromJSON(blockParams);
-      const nWorkspace = new Workspace(
-        workspace.blockDB,
-        workspace.topblocks,
-        workspace.setRender,
-        workspace.id,
-        workspace.imageId,
-      );
+      const nWorkspace = new Workspace({
+        blockDB: workspace.blockDB,
+        topblocks: workspace.topblocks,
+        setRender: workspace.setRender,
+        id: workspace.id,
+        imageId: workspace.imageId,
+      });
       workspaceList.workspaces.splice(
         workspaceList.getWorkspaceIdxById(workspace.id),
         1,
@@ -23,13 +23,13 @@ export default (workspace, { type, blockParams, id }) => {
       return nWorkspace; }
     case 'DELETE_BLOCK':
     { workspace.deleteBlock(id);
-      const nWorkspace = new Workspace(
-        workspace.blockDB,
-        workspace.topblocks,
-        workspace.setRender,
-        workspace.id,
-        workspace.imageId,
-      );
+      const nWorkspace = new Workspace({
+        blockDB: workspace.blockDB,
+        topblocks: workspace.topblocks,
+        setRender: workspace.setRender,
+        id: workspace.id,
+        imageId: workspace.imageId,
+      });
       workspaceList.workspaces.splice(
         workspaceList.getWorkspaceIdxById(workspace.id),
         1,
@@ -38,13 +38,13 @@ export default (workspace, { type, blockParams, id }) => {
       return nWorkspace; }
     case 'SCROLL_END':
     { workspace.deleteBlockInModelList();
-      const nWorkspace = new Workspace(
-        workspace.blockDB,
-        workspace.topblocks,
-        workspace.setRender,
-        workspace.id,
-        workspace.imageId,
-      );
+      const nWorkspace = new Workspace({
+        blockDB: workspace.blockDB,
+        topblocks: workspace.topblocks,
+        setRender: workspace.setRender,
+        id: workspace.id,
+        imageId: workspace.imageId,
+      });
       workspaceList.workspaces.splice(
         workspaceList.getWorkspaceIdxById(workspace.id),
         1,
@@ -56,26 +56,26 @@ export default (workspace, { type, blockParams, id }) => {
       workspace.deleteBlockInModelList();
       workspaceList.workspaces.forEach((ws) => {
         if (ws.imageId === id) {
-          changedWorkspace = new Workspace(
-            ws.blockDB,
-            ws.topblocks,
-            workspace.setRender,
-            ws.id,
-            ws.imageId,
-          );
+          changedWorkspace = new Workspace({
+            blockDB: ws.blockDB,
+            topblocks: ws.topblocks,
+            setRender: workspace.setRender,
+            id: ws.id,
+            imageId: ws.imageId,
+          });
         }
       });
       workspaceList.currentImageId = changedWorkspace.imageId;
       return changedWorkspace; }
     case 'SELECTED_WORKSPACE_DELETED':
       workspaceList.currentImageId = workspaceList.workspaces[id].imageId;
-      return new Workspace(
-        workspaceList.workspaces[id].blockDB,
-        workspaceList.workspaces[id].topblocks,
-        workspace.setRender,
-        workspaceList.workspaces[id].id,
-        workspaceList.workspaces[id].imageId,
-      );
+      return new Workspace({
+        blockDB: workspaceList.workspaces[id].blockDB,
+        topblocks: workspaceList.workspaces[id].topblocks,
+        setRender: workspace.setRender,
+        id: workspaceList.workspaces[id].id,
+        imageId: workspaceList.workspaces[id].imageId,
+      });
     default:
       throw new Error('NOT FOUND TYPE');
   }

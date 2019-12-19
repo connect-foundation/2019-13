@@ -95,7 +95,7 @@ export default (sprites, { type, coordinate, key, value, images, tempLocations }
       workspaceList.dropdownItems.sprite[key] = value.name;
       changeSprites[key] = value;
       workspaceList.images.push(key);
-      workspaceList.workspaces.push(new Workspace(null, null, null, null, key));
+      workspaceList.workspaces.push(new Workspace({ imageId: key }));
       return changeSprites;
     case 'DELETE_IMAGE':
     { let { length } = workspaceList.workspaces;

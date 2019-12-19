@@ -6,7 +6,7 @@ import Utils from '../../utils/utils';
 import CONSTANTS from './constants';
 
 const Workspace = class {
-  constructor(blockDB, topblocks, setRender, id, imageId) {
+  constructor({ blockDB, topblocks, setRender, id, imageId }) {
     this.id = id || Utils.uid();
     this.imageId = imageId || '';
     this.blockDB = blockDB || Object.create(null);
@@ -91,14 +91,9 @@ const Workspace = class {
     if (block.parentElement || block.previousElement || block.outputElement) {
       this.removeTopblock(block);
     }
-    this.topblocks.forEach((topblock) => {
-      if (topblock !== block) {
-        topblock.setAllBlockPosition(true);
-      } else {
-        topblock.setAllBlockPosition(false);
-      }
-    });
+    this.renderTopblocks();
     this.setRender(Math.random());
+    this.renderTopblocks();
   }
 
   getBlockById(blockId) {
@@ -133,6 +128,12 @@ const Workspace = class {
 
   matchInputValues() {
     Object.values(this.blockDB).forEach((block) => { if (block.style === 'condition' || block.style === 'variable') block.arithmeticOrCompare(false); });
+  }
+
+  renderTopblocks() {
+    this.topblocks.forEach((topblock) => {
+      topblock.setAllBlockPosition();
+    });
   }
 };
 

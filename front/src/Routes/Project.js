@@ -26,7 +26,7 @@ defaultSprite[defaultKey] = {
 };
 
 
-const nWorkspace = new Workspace(null, null, null, null, defaultKey);
+const nWorkspace = new Workspace({ imageId: defaultKey });
 workspaceList.workspaces.push(nWorkspace);
 workspaceList.images.push(defaultKey);
 // eslint-disable-next-line prefer-destructuring
@@ -89,7 +89,7 @@ const Project = (props) => {
             <div className="Contents__Column block-space" />
             <DrawSection />
           </Contents>
-          <KeyListener workspace={workspace} />
+          <KeyListener />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>
