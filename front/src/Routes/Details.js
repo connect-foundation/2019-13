@@ -11,6 +11,7 @@ import DetailCanvas from '../Components/detailCanvas';
 import workspaceList from '../Components/Block/workspaceList';
 import Workspace from '../Components/Block/workspace';
 import makeBlock from '../utils/makeBlock';
+import Footer from '../Components/Footer';
 
 const VIEW_DELAY = 3600000;
 const images = [];
@@ -102,53 +103,60 @@ export default ({ match, history }) => {
 
   return (
     <Wrapper>
-      <ProjectWrapper project={project} isLiked={isLiked}>
-        <div className="canvas">
-          <DetailCanvas blocks={project.blocks} images={images} />
-        </div>
-        {/* <div className="controller">controll</div> */}
-        <div className="projectInfo">
-          <div>
-            <div id="userImg" />
-            <div id="textInfo">
-              <h2>{project.title}</h2>
-              <h5>
-                {`by ${project.owner.email}`}
-              </h5>
-            </div>
+      <BodyWrapper>
+        <ProjectWrapper project={project} isLiked={isLiked}>
+          <div className="canvas">
+            <DetailCanvas blocks={project.blocks} images={images} />
           </div>
-          <div>
+          <div className="projectInfo">
             <div>
-              <Link to={`/project/${match.params.name}`}>
-                <button type="button">
-                  <FontAwesomeIcon icon={faSignInAlt} />
-                  <span>코드 보기</span>
-                </button>
-              </Link>
-              <div id="projectCount">
-                <button type="button" id="views">
-                  <FontAwesomeIcon icon={faEye} className="faEye-icon" />
-                  <span>{project.views}</span>
-                </button>
-                <button type="button" onClick={likeHandler}>
-                  <FontAwesomeIcon icon={faStar} className="star-icon" />
-                  <span>{likeCount}</span>
-                </button>
+              <div id="userImg" />
+              <div id="textInfo">
+                <h2>{project.title}</h2>
+                <h5>
+                  {`by ${project.owner.email}`}
+                </h5>
+              </div>
+            </div>
+            <div>
+              <div>
+                <Link to={`/project/${match.params.name}`}>
+                  <button type="button">
+                    <FontAwesomeIcon icon={faSignInAlt} />
+                    <span>코드 보기</span>
+                  </button>
+                </Link>
+                <div id="projectCount">
+                  <button type="button" id="views">
+                    <FontAwesomeIcon icon={faEye} className="faEye-icon" />
+                    <span>{project.views}</span>
+                  </button>
+                  <button type="button" onClick={likeHandler}>
+                    <FontAwesomeIcon icon={faStar} className="star-icon" />
+                    <span>{likeCount}</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div>{project.description}</div>
-      </ProjectWrapper>
-      <Comments project={project} user={user} />
+          <div>{project.description}</div>
+        </ProjectWrapper>
+        <Comments project={project} user={user} />
+      </BodyWrapper>
+      <Footer />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+    min-height: ${props => props.theme.footerPageMinHeight};
+`;
+
+const BodyWrapper = styled.div`
     padding-top: 30px;
     width: 850px;
     margin: auto;
+    
 `;
 
 const ProjectWrapper = styled.div`

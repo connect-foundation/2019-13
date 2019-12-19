@@ -5,6 +5,7 @@ import Card from '../Components/Card';
 import Spinkit from '../Components/Spinkit';
 import { getDocumentHeight, getScrollTop } from '../utils/endScroll';
 import { GET_PROJECTS } from '../Apollo/queries/Project';
+import Footer from '../Components/Footer';
 
 export default ({ history }) => {
   const [selected, setSelected] = useState(0);
@@ -55,19 +56,22 @@ export default ({ history }) => {
     setLoading(false);
   }
   return (
-
-    <Wrapper>
-      <SwitchContainer>
-        <LeftToggle id="0" selected={selected} onClick={handleToggle}>나의 프로젝트</LeftToggle>
-        <RightToggle id="1" selected={selected} onClick={handleToggle}>공유 프로젝트</RightToggle>
-      </SwitchContainer>
-      {renderProject(projects)}
-      <Spinkit isLoading={loading} />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <SwitchContainer>
+          <LeftToggle id="0" selected={selected} onClick={handleToggle}>나의 프로젝트</LeftToggle>
+          <RightToggle id="1" selected={selected} onClick={handleToggle}>공유 프로젝트</RightToggle>
+        </SwitchContainer>
+        {renderProject(projects)}
+        <Spinkit isLoading={loading} />
+      </Wrapper>
+      <Footer />
+    </>
   );
 };
 
 const Wrapper = styled.div`
+  min-height: calc(100vh - 72px - 150px);
 `;
 
 const CardContainer = styled.div`
