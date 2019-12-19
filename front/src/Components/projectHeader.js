@@ -29,10 +29,12 @@ export default ({ props, setReady }) => {
   const [createAndSave] = useMutation(CREATE_AND_SAVE, {
     onCompleted(res) {
       if (!res || !res.createProjectAndBlocks) return;
-      const projectId = res.createProjectAndBlocks;
-      if (projectId !== 'false') {
-        props.history.push(`/project/${projectId}`);
+      const pid = res.createProjectAndBlocks;
+      setPorjectId(pid);
+      if (pid !== 'false') {
+        props.history.push(`/project/${pid}`);
       }
+
       setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
       setCanSave(true);
     },
