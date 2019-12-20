@@ -171,14 +171,16 @@ const Block = class {
     const { target } = event;
     this.value = target.value;
     this.inputElement[index].value = target.value;
+    set(target.value);
     if (typeof items[target.value] === 'string' && foreignObject) {
       const { lastChild } = foreignObject;
       lastChild.innerHTML = items[target.value];
-      this.inputWidth[index] = lastChild.clientWidth + CONSTANTS.PIXEL * 4;
-      foreignObject.style.width = `${this.inputWidth[index]}px`;
+      for (let i = 0; i < items[target.value].length / 3; i += 1) {
+        this.inputWidth[index] = lastChild.clientWidth + CONSTANTS.PIXEL * 4;
+        foreignObject.style.width = `${this.inputWidth[index]}px`;
+      }
       this.setArgs();
     }
-    set(target.value);
     if (this.outputElement) {
       this.callOutputElement(true);
     }
