@@ -169,13 +169,16 @@ const Block = class {
     this.setArgs();
   };
 
-  changeDropdownWidth = ({ set, index, items }) => (event) => {
+  changeDropdownWidth = ({ set, index, items, foreignObject }) => (event) => {
     const { target } = event;
     this.value = target.value;
     this.inputElement[index].value = target.value;
-    if (typeof items[target.value] === 'string') {
-      this.inputWidth[index] = items[target.value].length * 20;
-      this.setArgs(true);
+    if (typeof items[target.value] === 'string' && foreignObject) {
+      const { lastChild } = foreignObject;
+      lastChild.innerHTML = items[target.value];
+      this.inputWidth[index] = lastChild.clientWidth + CONSTANTS.PIXEL * 4;
+      foreignObject.style.width = `${this.inputWidth[index]}px`;
+      this.setArgs();
     }
     set(target.value);
     if (this.outputElement) {
