@@ -15,6 +15,7 @@ const SpriteDropdown = ({ block, index }) => {
         // eslint-disable-next-line react/jsx-no-bind
         onChange={block.changeDropdownWidth({ set: setValue, index, items: workspaceList.dropdownItems.sprite, foreignObject: foreignObjectRef.current }).bind(block)}
         MenuProps={{ PaperProps: { style: { maxHeight: 300 } } }}
+        style={{ color: 'white' }}
       >
         {Object.entries(workspaceList.dropdownItems.sprite).map((item) => {
           if (workspaceList.currentImageId !== item[0]) {
