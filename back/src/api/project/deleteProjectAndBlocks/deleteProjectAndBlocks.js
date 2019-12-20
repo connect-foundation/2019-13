@@ -9,10 +9,10 @@ export default {
       const user = utils.findUser(context.req);
       if (!user) return false;
       try {
-        const isProject = await prisma.$exists.project({
+        const project = await prisma.project({
           id: projectId,
         });
-        if (!isProject) return true;
+        if (!project) return true;
         const owner = await prisma
           .project({
             id: projectId,
@@ -33,6 +33,8 @@ export default {
         images.forEach(async (image) => {
           await deleteFile(image.realName);
         });
+        console.log(project.realCanvasImage);
+        deleteFile(project.realCanvasImage);
         await prisma.deleteProject({
           id: projectId,
         });

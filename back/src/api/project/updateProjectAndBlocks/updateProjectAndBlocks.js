@@ -9,7 +9,7 @@ export default {
     updateProjectAndBlocks: async (
       root,
       {
-        projectId, projectTitle, workspacesInput, images,
+        projectId, projectTitle, workspacesInput, images, canvasImage,
       },
       context,
     ) => {
@@ -26,14 +26,22 @@ export default {
           })
           .owner();
         if (owner.id !== user.id) return false;
+
+        // const { filename, createReadStream } = await canvasImage;
+        // const canvasImageName = `project-${new Date().getTime()}${filename}`;
+        // const canvasImagePath = await upload(createReadStream, canvasImageName);
+
         await prisma.updateProject({
           where: {
             id: project.id,
           },
           data: {
             title: projectTitle,
+            // canvasImage: canvasImagePath.Location,
+            // realCanvasImage: canvasImageName,
           },
         });
+        // deleteFile(project.realCanvasImage);
         const notFoundWorkspace = [];
         const prevWorkspaces = await prisma
           .project({

@@ -7,6 +7,7 @@ type project {
   description: String!
   private: Boolean!
   owner: user!
+  canvasImage: String!
   authes: [project_auth]!
   likes: [like]!
   isLiked: Boolean!
