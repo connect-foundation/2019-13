@@ -29,6 +29,7 @@ export default {
   cardBorderColor: '#dadada',
   alertColor: '#e4383b',
   shadowColor: '#d8b598',
-  footerColor: '#f2f2f2',
+  footerBgColor: '#f2f2f2',
+  footerColor: '#575e75',
   footerPageMinHeight: 'calc(100vh - 72px - 150px)',
 };
