@@ -30,6 +30,7 @@
     "nodemon": "^1.19.4"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/server.js",
+    "start": "set NODE_ENV=production nodemon --exec babel-node src/server.js"
   }
 }
