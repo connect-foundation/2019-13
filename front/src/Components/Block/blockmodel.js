@@ -50,8 +50,13 @@ const BlockModel = class {
 
   setArgsPosition(node, positionX) {
     if (node.tagName !== 'foreignObject') {
-      node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
+      if (this.args.includes('dropdown')) {
+        node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX + 6 : positionX},
         ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
+      } else {
+        node.setAttribute('transform', `translate(${this.style === 'condition' || this.style === 'variable' ? positionX - 4 : positionX},
+        ${this.style === 'condition' || this.style === 'variable' ? 16 : 23})`);
+      }
     } else if (node.tagName === 'foreignObject') {
       if (this.args.includes('dropdown')) {
         node.setAttribute('x', `${this.style === 'condition' || this.style === 'variable' ? positionX + 3 : positionX + 5}`);

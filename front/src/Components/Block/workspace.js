@@ -91,9 +91,7 @@ const Workspace = class {
     if (block.parentElement || block.previousElement || block.outputElement) {
       this.removeTopblock(block);
     }
-    this.renderTopblocks();
-    this.setRender(Math.random());
-    this.renderTopblocks();
+    this.renderTopblocks(2);
   }
 
   getBlockById(blockId) {
@@ -130,10 +128,13 @@ const Workspace = class {
     Object.values(this.blockDB).forEach((block) => { if (block.style === 'condition' || block.style === 'variable') block.arithmeticOrCompare(false); });
   }
 
-  renderTopblocks() {
-    this.topblocks.forEach((topblock) => {
-      topblock.setAllBlockPosition();
-    });
+  renderTopblocks(count = 1) {
+    for (let i = 0; i < count; i += 1) {
+      this.topblocks.forEach((topblock) => {
+        topblock.setAllBlockPosition();
+      });
+      this.setRender(Math.random());
+    }
   }
 };
 
