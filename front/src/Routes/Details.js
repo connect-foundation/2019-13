@@ -12,6 +12,7 @@ import workspaceList from '../Components/Block/workspaceList';
 import Workspace from '../Components/Block/workspace';
 import makeBlock from '../utils/makeBlock';
 import Footer from '../Components/Footer';
+import Loading from '../Components/Loading';
 
 const VIEW_DELAY = 3600000;
 let images = [];
@@ -99,7 +100,7 @@ export default ({ match, history }) => {
     }
   };
 
-  if (!ready) return <span>loading...</span>;
+  if (!ready) return <Loading />;
 
   return (
     <Wrapper>
