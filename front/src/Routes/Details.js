@@ -14,7 +14,7 @@ import makeBlock from '../utils/makeBlock';
 import Footer from '../Components/Footer';
 
 const VIEW_DELAY = 3600000;
-const images = [];
+let images = [];
 
 export default ({ match, history }) => {
   const [user, setUser] = useState();
@@ -40,7 +40,7 @@ export default ({ match, history }) => {
         setProject(res.findProjectById);
         setIsLiked(res.findProjectById.isLiked);
         setLikeCount(res.findProjectById.likeCount);
-
+        images = [];
         const render = workspaceList.workspaces[0].setRender;
         workspaceList.workspaces = [];
         workspaceList.images = [];

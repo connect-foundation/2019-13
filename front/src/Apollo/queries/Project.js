@@ -62,7 +62,7 @@ export const CREATE_AND_SAVE = gql`
 `;
 
 export const UPDATE_BLOCK = gql`
-  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $workspacesInput: [workspaceInput],  $images: [Upload]!, $canvasImage: Upload!) {
+  mutation updateProjectAndBlocks($projectId: String!, $projectTitle:String!, $workspacesInput: [workspaceInput],  $images: [Upload]!, $canvasImage: Upload) {
     updateProjectAndBlocks(projectId: $projectId, projectTitle: $projectTitle, workspacesInput: $workspacesInput, images: $images, canvasImage: $canvasImage)
   }
 `;
