@@ -34,15 +34,17 @@ export default () => {
 };
 
 const RecommendContainer = styled.div`
-  padding: 40px;
+  max-width: 1500px;
+  margin: auto;
+  margin-top: 100px;
   h2 {
     font-size: 20px;
+    margin-left: 40px;
   }
 `;
 
 const CardContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-wrap: wrap;
-  padding: 40px 0px;
 `;
