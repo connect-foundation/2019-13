@@ -133,9 +133,6 @@ const ProjectHeader = ({ props, setReady }) => {
     if (!canSave) {
       return;
     }
-    const canvas = document.querySelector('.konvajs-content').querySelector('canvas');
-    const url = canvas.toDataURL();
-    const canvasImage = dataURLtoFile(url, `${getProjectName()}.png`);
     setCanSave(false);
     workspaceDispatch({ type: 'SCROLL_END' });
     const images = [];
@@ -154,10 +151,12 @@ const ProjectHeader = ({ props, setReady }) => {
           projectTitle: getProjectName(),
           workspacesInput,
           images,
-          canvasImage,
         },
       });
     } else {
+      const canvas = document.querySelector('.konvajs-content').querySelector('canvas');
+      const url = canvas.toDataURL();
+      const canvasImage = dataURLtoFile(url, `${getProjectName()}.png`);
       createAndSave({
         variables: { projectTitle: getProjectName(), workspacesInput, images, canvasImage },
       });
