@@ -47,7 +47,6 @@ const DetailCanvas = ({ images }) => {
           onClick={stopHandler}
           className="stop-button"
         />
-        <span>아직 미완성(테스트 중)입니다.</span>
       </Controller>
     </SpritesContext.Provider>
   );

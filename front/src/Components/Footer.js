@@ -27,9 +27,12 @@ const Footer = styled.footer`
   bottom: 0px;
   width:100%;
   text-align:center;
-  color: #575e75;
-  border-top: ${props => props.theme.mainBorder}
-  background-color: ${props => props.theme.footerColor}
+  color: ${props => props.theme.footerColor};
+  a {
+    color: ${props => props.theme.footerColor};
+  }
+  border-top: ${props => props.theme.mainBorder};
+  background-color: ${props => props.theme.footerBgColor};
   padding: 20px;
   h5 {
     font-size: 14px;
