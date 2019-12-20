@@ -52,6 +52,7 @@ export default (Blocks, workspace) => {
           let value = v;
           if (!Number.isNaN(Number(value))) value = Number(value);
           block.inputElement[i] = { type: 'input', value };
+          block.value = block.inputElement[i].value;
         }
       });
     }

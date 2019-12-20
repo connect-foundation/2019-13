@@ -27,9 +27,9 @@ export default {
           .owner();
         if (owner.id !== user.id) return false;
 
-        const { filename, createReadStream } = await canvasImage;
-        const canvasImageName = `project-${new Date().getTime()}${filename}`;
-        const canvasImagePath = await upload(createReadStream, canvasImageName);
+        // const { filename, createReadStream } = await canvasImage;
+        // const canvasImageName = `project-${new Date().getTime()}${filename}`;
+        // const canvasImagePath = await upload(createReadStream, canvasImageName);
 
         await prisma.updateProject({
           where: {
@@ -37,11 +37,11 @@ export default {
           },
           data: {
             title: projectTitle,
-            canvasImage: canvasImagePath.Location,
-            realCanvasImage: canvasImageName,
+            // canvasImage: canvasImagePath.Location,
+            // realCanvasImage: canvasImageName,
           },
         });
-        deleteFile(project.realCanvasImage);
+        // deleteFile(project.realCanvasImage);
         const notFoundWorkspace = [];
         const prevWorkspaces = await prisma
           .project({

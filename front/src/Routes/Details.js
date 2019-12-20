@@ -11,10 +11,12 @@ import DetailCanvas from '../Components/DatailCanvas';
 import workspaceList from '../Components/Block/workspaceList';
 import Workspace from '../Components/Block/workspace';
 import makeBlock from '../utils/makeBlock';
+import CONSTANTS from '../Components/Block/constants';
 import Footer from '../Components/Footer';
+import Loading from '../Components/Loading';
 
 const VIEW_DELAY = 3600000;
-const images = [];
+let images = [];
 
 export default ({ match, history }) => {
   const [user, setUser] = useState();
@@ -40,11 +42,11 @@ export default ({ match, history }) => {
         setProject(res.findProjectById);
         setIsLiked(res.findProjectById.isLiked);
         setLikeCount(res.findProjectById.likeCount);
-
+        images = [];
         const render = workspaceList.workspaces[0].setRender;
         workspaceList.workspaces = [];
         workspaceList.images = [];
-        workspaceList.dropdownItems.sprite = { 0: '벽' };
+        workspaceList.dropdownItems.sprite = CONSTANTS.DROPDOWN_SPRITE_INIT_OBJECT;
         projectData.workspaces.forEach((ws) => {
           const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
           makeBlock(ws.blocks, newWorkSpace);
@@ -99,7 +101,7 @@ export default ({ match, history }) => {
     }
   };
 
-  if (!ready) return <span>loading...</span>;
+  if (!ready) return <Loading />;
 
   return (
     <Wrapper>
