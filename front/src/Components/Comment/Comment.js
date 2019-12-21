@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Utils from '../../utils/utils';
 import { UPDATE_COMMENT, REMOVE_COMMENT } from '../../Apollo/queries/Comment';
 
-export default ({ comment, user, idx, localUpdate }) => {
+const Comment = ({ comment, user, idx, localUpdate }) => {
   const textRefference = useRef();
   const [edit, setEdit] = useState(false);
   const [updateComment] = useMutation(UPDATE_COMMENT, {
@@ -119,3 +120,11 @@ const Wrapper = styled.div`
       justify-content: space-between;
     }
 `;
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  idx: PropTypes.number.isRequired,
+  localUpdate: PropTypes.func.isRequired,
+};
+
+export default Comment;

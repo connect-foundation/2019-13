@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import Init from '../Components/Block/Init';
 
 const connectBlock = (connected, position, connect, i) => {

@@ -114,7 +114,9 @@ const ProjectHeader = ({ props, setReady }) => {
           workspaceList.images = [];
           workspaceList.dropdownItems.sprite = { wall: '벽' };
           projectData.workspaces.forEach((ws) => {
-            const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
+            const newWorkSpace = new Workspace(
+              { setRender: render, id: ws.id, imageId: ws.images[0].id },
+            );
             makeBlock(ws.blocks, newWorkSpace);
             workspaceList.workspaces.push(newWorkSpace);
             workspaceList.images.push(ws.images[0].id);
@@ -266,6 +268,8 @@ const ProjectHeaderContainer = styled.div`
 
 ProjectHeader.propTypes = {
   props: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   setReady: PropTypes.func.isRequired,
 };
 

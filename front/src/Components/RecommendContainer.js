@@ -4,8 +4,6 @@ import { useQuery } from '@apollo/react-hooks';
 import Card from './Card';
 import { GET_PROJECTS_BY_VIEWS } from '../Apollo/queries/Project';
 import checkError from '../checkError';
-import Snackbar from './Snackbar';
-// import checkError from '../'
 
 export default () => {
   const { loading, error, data } = useQuery(GET_PROJECTS_BY_VIEWS);
@@ -13,6 +11,7 @@ export default () => {
   if (error) {
     const errorMessage = checkError(error.message);
     if (errorMessage) {
+      // eslint-disable-next-line no-alert
       window.alert(errorMessage);
       window.location.href = '/';
     }
