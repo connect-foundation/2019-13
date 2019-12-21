@@ -1,8 +1,8 @@
 import React from 'react';
-import Path from './Path';
-import Utils from '../../utils/utils';
-import Connection from './connection';
-import CONSTANTS from './constants';
+import Path from '../path';
+import Utils from '../../../utils/utils';
+import Connection from '../connection/connection';
+import CONSTANTS from '../constants';
 
 const create = React.createElement;
 const Block = class {

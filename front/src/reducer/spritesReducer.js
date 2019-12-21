@@ -1,6 +1,6 @@
-import Workspace from '../Components/Block/workspace';
+import Workspace from '../core/blocks/workspace/workspace';
 import Utils from '../utils/utils';
-import workspaceList from '../Components/Block/workspaceList';
+import workspaceList from '../core/blocks/workspace/workspaceList';
 import { getCanvasSize } from '../utils/canvasSize';
 /* eslint-disable import/prefer-default-export */
 export default (sprites, { type, coordinate, key, value, images, tempLocations }) => {

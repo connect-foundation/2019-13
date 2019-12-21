@@ -1,9 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import Block from './block';
-import Dragging from './dragging';
-import ConnectionDB from './connection_db';
-import Utils from '../../utils/utils';
-import CONSTANTS from './constants';
+import Block from '../block/block';
+import Dragging from '../connection/dragging';
+import ConnectionDB from '../connection/connectionDb';
+import Utils from '../../../utils/utils';
+import CONSTANTS from '../constants';
 
 const Workspace = class {
   constructor({ blockDB, topblocks, setRender, id, imageId }) {

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { start, getIsPlay } from './playBlocks';
-import workspaceList from '../Components/Block/workspaceList';
+import workspaceList from '../core/blocks/workspace/workspaceList';
 
 
 const KeyListener = () => {

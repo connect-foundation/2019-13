@@ -1,4 +1,3 @@
-
 const BlockModelList = class {
   constructor(blockDB = new Map()) {
     this.blockDB = blockDB;

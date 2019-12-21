@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import CONSTANTS from './constants';
-import workspaceList from './workspaceList';
+import CONSTANTS from '../../core/blocks/constants';
+import workspaceList from '../../core/blocks/workspace/workspaceList';
 import color from '../../Styles/Theme';
 
 const InsertMarker = () => {

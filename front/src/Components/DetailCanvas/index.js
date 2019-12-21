@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Canvas from '../Canvas';
 import Utils from '../../utils/utils';
 import { start, stop } from '../../utils/playBlocks';
-import { SpritesContext } from '../../Context';
+import { SpritesContext } from '../../context';
 import { spritesReducer } from '../../reducer';
 import { setCanvasSize } from '../../utils/canvasSize';
 

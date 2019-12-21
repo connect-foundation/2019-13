@@ -1,6 +1,6 @@
-import ConnectionDB from './connection_db';
-import workspaceList from './workspaceList';
-import CONSTANTS from './constants';
+import ConnectionDB from './connectionDb';
+import workspaceList from '../workspace/workspaceList';
+import CONSTANTS from '../constants';
 
 const Dragging = class {
   constructor() {

@@ -4,7 +4,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import Card from '../Components/Card';
 import Spinkit from '../Components/Spinkit';
 import { getDocumentHeight, getScrollTop } from '../utils/endScroll';
-import { GET_PROJECTS } from '../Apollo/queries/Project';
+import { GET_PROJECTS } from '../apollo/queries/Project';
 import Footer from '../Components/Footer';
 
 export default ({ history }) => {

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
-import { CREATE_COMMENT } from '../../Apollo/queries/Comment';
-import checkError from '../../checkError';
-import useSnackbar from '../../custom_hooks/useSnackbar';
+import { CREATE_COMMENT } from '../../apollo/queries/Comment';
+import checkError from '../../errorCheck';
+import useSnackbar from '../../customHooks/useSnackbar';
 import Snackbar from '../Snackbar';
+
 
 const CommentWriter = ({ projectId, updateComments }) => {
   const [snackbar, setSnackbar] = useSnackbar();

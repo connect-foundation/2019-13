@@ -1,4 +1,4 @@
-import init from '../Init';
+import init from '../init';
 import makeTargetPath from './makeTargetPath';
 
 export default ({ workspaceDispatch, allIdx, styleIdx }) => {

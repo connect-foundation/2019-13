@@ -9,7 +9,7 @@ import {
   SpritesContext,
   WorkspaceContext,
   CurrentSpriteContext,
-} from '../../Context';
+} from '../../context';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
 import { start, stop, getIsPlay } from '../../utils/playBlocks';

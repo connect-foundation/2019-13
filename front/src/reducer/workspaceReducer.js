@@ -1,5 +1,5 @@
-import Workspace from '../Components/Block/workspace';
-import workspaceList from '../Components/Block/workspaceList';
+import Workspace from '../core/blocks/workspace/workspace';
+import workspaceList from '../core/blocks/workspace/workspaceList';
 
 export default (workspace, { type, blockParams, id }) => {
   let block = null;

@@ -5,15 +5,15 @@ import styled from 'styled-components';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
-import { WorkspaceContext, SpritesContext, LoggedInContext } from '../Context';
-import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
+import { WorkspaceContext, SpritesContext, LoggedInContext } from '../context';
+import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../apollo/queries/Project';
 import Snackbar from './Snackbar';
 import makeBlock from '../utils/makeBlock';
-import workspaceList from './Block/workspaceList';
-import Workspace from './Block/workspace';
+import workspaceList from '../core/blocks/workspace/workspaceList';
+import Workspace from '../core/blocks/workspace/workspace';
 import dataURLtoFile from '../utils/dataURLtoFile';
-import checkError from '../checkError';
-import useSnackbar from '../custom_hooks/useSnackbar';
+import checkError from '../errorCheck';
+import useSnackbar from '../customHooks/useSnackbar';
 
 const ProjectHeader = ({ props, setReady }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
@@ -188,6 +188,7 @@ const ProjectHeader = ({ props, setReady }) => {
       const data = ws.extractCoreData();
       const image = sprites[data.imageId];
       image.workspaceId = ws.id;
+      image.size = Number(image.size);
       images.push({ ...image, id: data.imageId });
       delete data.imageId;
       prev.push(data);

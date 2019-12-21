@@ -1,5 +1,5 @@
-import Utils from '../../../utils/utils';
-import { getTempLocation, setTempLocation } from '../../../utils/tempLocationStore';
+import Utils from '../../utils/utils';
+import { getTempLocation, setTempLocation } from '../../utils/tempLocationStore';
 /**
  * @param {String} spritekey spritekey
  * @param {Number} movement 회전반경(0~360)

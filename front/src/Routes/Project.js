@@ -1,14 +1,14 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Blockspace from '../Components/Block/index';
-import Workspace from '../Components/Block/workspace';
-import ProjectHeader from '../Components/projectHeader';
-import { WorkspaceContext, SpritesContext } from '../Context/index';
+import Blockspace from '../Components/Svg';
+import Workspace from '../core/blocks/workspace/workspace';
+import ProjectHeader from '../Components/ProjectHeader';
+import { WorkspaceContext, SpritesContext } from '../context';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
 import KeyListener from '../utils/keyListener';
-import workspaceList from '../Components/Block/workspaceList';
+import workspaceList from '../core/blocks/workspace/workspaceList';
 
 const defaultSprite = {};
 const defaultKey = Utils.uid();

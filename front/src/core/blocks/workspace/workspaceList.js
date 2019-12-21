@@ -1,5 +1,5 @@
-import key from '../../utils/key';
-import CONSTANTS from './constants';
+import key from '../../../utils/key';
+import CONSTANTS from '../constants';
 
 const workspaceList = {
   workspaces: [],

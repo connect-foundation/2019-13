@@ -1,10 +1,10 @@
 /* eslint-disable no-continue */
-import Utils from '../../../utils/utils';
-import Obb from '../../../utils/obb';
-import isOBBOverlap from '../../../utils/obb/isOBBOverlap';
-import Vector2 from '../../../utils/vector2';
-import { getTempLocation, getTempLocations } from '../../../utils/tempLocationStore';
-import { getCanvasSize } from '../../../utils/canvasSize';
+import Utils from '../../utils/utils';
+import Obb from '../../utils/obb';
+import isOBBOverlap from '../../utils/obb/isOBBOverlap';
+import Vector2 from '../../utils/vector2';
+import { getTempLocation } from '../../utils/tempLocationStore';
+import { getCanvasSize } from '../../utils/canvasSize';
 
 
 const getCheckCollision = {
@@ -19,7 +19,6 @@ const getCheckCollision = {
     return false;
   },
   sprite: ({ sprite, position }) => {
-    
     const o1 = new Obb(
       new Vector2(sprite.x, sprite.y),
       new Vector2(

@@ -9,7 +9,7 @@
  *
  * */
 
-import CONSTANTS from './constants';
+import CONSTANTS from '../constants';
 
 const Connection = function (type, source, positiontype) {
   this.type = type;

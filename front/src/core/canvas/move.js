@@ -1,5 +1,5 @@
-import Utils from '../../../utils/utils';
-import { getTempLocation, setTempLocation } from '../../../utils/tempLocationStore';
+import Utils from '../../utils/utils';
+import { getTempLocation, setTempLocation } from '../../utils/tempLocationStore';
 /**
  * @param {Object} movement '{x, y} 좌표' or '{moving}(type undefined시)'
  * @param {String} type 'x', 'y','xy','locationX','locationY', default=> 현재 바라보는 방향에서 movement

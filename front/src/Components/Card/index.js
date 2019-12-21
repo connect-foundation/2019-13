@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Proptype from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
-import { DELETE_PROJECT, TOGGLE_LIKE } from '../../Apollo/queries/Project';
+import { DELETE_PROJECT, TOGGLE_LIKE } from '../../apollo/queries/Project';
 import Utils from '../../utils/utils';
 
 const Card = ({ project, removeProjects, history, me }) => {

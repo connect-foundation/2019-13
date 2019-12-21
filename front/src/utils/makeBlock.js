@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import Init from '../Components/Block/Init';
+import Init from '../core/blocks/init';
 
 const connectBlock = (connected, position, connect, i) => {
   const reverse = {

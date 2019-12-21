@@ -2,7 +2,7 @@ import React from 'react';
 import { Image } from 'react-konva';
 import Konva from 'konva';
 import PropType from 'prop-types';
-import useImage from '../../custom_hooks/useImage';
+import useImage from '../../customHooks/useImage';
 import Theme from '../../Styles/Theme';
 import { getCanvasSize } from '../../utils/canvasSize';
 

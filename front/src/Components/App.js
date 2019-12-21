@@ -5,7 +5,7 @@ import GlobalStyles from '../Styles/GlobalStyles';
 import Theme from '../Styles/Theme';
 import Routes from './Routes';
 import Header from './Header';
-import { LoggedInContext } from '../Context';
+import { LoggedInContext } from '../context';
 
 const Wrapper = styled.div`
     margin-top: 72px;
