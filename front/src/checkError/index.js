@@ -20,6 +20,7 @@ const ErrorType = {
  * @param {String} networkError
  */
 export default (networkError) => {
+  if (!networkError) return undefined;
   const findingCode = networkError.message.split(' ');
   const code = findingCode[findingCode.length - 1];
   const errorMessage = (ErrorType[networkError.name] || ErrorType.default)(code);

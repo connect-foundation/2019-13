@@ -10,10 +10,26 @@ export default () => {
   if (loading) return <></>;
   if (error) {
     const errorMessage = checkError(error.networkError);
-    if (errorMessage) {
+    if (error.networkError.name === 'ServerError') {
       // eslint-disable-next-line no-alert
       window.alert(errorMessage);
       window.location.href = '/';
+      return <></>;
+    }
+    if (errorMessage) {
+      return (
+        <ErrorContainer>
+          <p>{errorMessage}</p>
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = '/';
+            }}
+          >
+            새로고침
+          </button>
+        </ErrorContainer>
+      );
     }
   }
   return (
@@ -22,9 +38,10 @@ export default () => {
         <RecommendContainer>
           <h2>이런것도 추천한다구</h2>
           <CardContainer>
-            {data.projects && data.projects.map(project => (
-              <Card project={project} key={project.id} me={false} />
-            ))}
+            {data.projects
+              && data.projects.map(project => (
+                <Card project={project} key={project.id} me={false} />
+              ))}
           </CardContainer>
         </RecommendContainer>
       )}
@@ -46,4 +63,26 @@ const CardContainer = styled.div`
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+`;
+
+const ErrorContainer = styled.div`
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-size: 2rem;
+  }
+  button {
+    cursor: pointer;
+    margin-top: 30px;
+    font-size: 15px;
+    padding: 10px 18px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    color: white;
+    background-color: ${props => props.theme.alertColor};
+  }
 `;
