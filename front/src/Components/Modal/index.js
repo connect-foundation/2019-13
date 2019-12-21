@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal as MaterialModal } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import PropType from 'prop-types';
 import styled from 'styled-components';
 import Login from '../Auth';
@@ -17,8 +18,9 @@ const Modal = ({ open, setOpen }) => {
     >
       <ModalWrapper onClick={closeHandler}>
         <ModalContainer onClick={(e) => { e.stopPropagation(); }}>
+          <CloseIcon  onClick={closeHandler} />
           <ModalTitle>
-            <Title>소셜 미디어 계정으로 로그인</Title>
+            <Title>소셜 미디어 로그인</Title>
           </ModalTitle>
           <ModalContent>
             <Login />
@@ -31,7 +33,7 @@ const Modal = ({ open, setOpen }) => {
 
 
 const Title = styled.p`
-  font-size: 25px;
+  font-size: 24px;
 `;
 
 const ModalWrapper = styled.div`
@@ -41,9 +43,19 @@ const ModalWrapper = styled.div`
   height: 100%;
 `;
 const ModalContainer = styled.div`
-  width: 400px;
-  height: 300px;
+  width: 540px;
+  height: 310px;
+  padding: 15px;
+  border-radius: 5px;
   background-color: white;
+  & > svg {
+    color: #9e9e9e;
+    &:hover {
+      cursor: pointer;
+      border-radius: 50%;
+      background: lightgrey;
+    }
+  }
 `;
 
 const ModalTitle = styled.div`
@@ -51,8 +63,7 @@ const ModalTitle = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-
-  height: 30%;
+  height: 20%;
 `;
 
 const ModalContent = styled.div`

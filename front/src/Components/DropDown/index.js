@@ -58,7 +58,7 @@ const DropDownContainer = styled.div`
 `;
 
 const DropDownMenuButton = styled.div`
-  font-size: 20px;
+  font-size: 18px;
   padding: 5px;
   margin: 5px;
   cursor: pointer;

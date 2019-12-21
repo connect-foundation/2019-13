@@ -1,3 +1,4 @@
+
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
@@ -12,6 +13,7 @@ import workspaceList from '../core/blocks/workspace/workspaceList';
 import Workspace from '../core/blocks/workspace/workspace';
 import dataURLtoFile from '../utils/dataURLtoFile';
 import checkError from '../errorCheck';
+import useSnackbar from '../customHooks/useSnackbar';
 
 const ProjectHeader = ({ props, setReady }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
@@ -22,11 +24,7 @@ const ProjectHeader = ({ props, setReady }) => {
   const [canSave, setCanSave] = useState(true);
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const { workspaceDispatch } = useContext(WorkspaceContext);
-  const [snackbar, setSnackbar] = React.useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
+  const [snackbar, setSnackbar] = useSnackbar();
 
 
   const [createAndSave] = useMutation(CREATE_AND_SAVE, {
@@ -48,10 +46,10 @@ const ProjectHeader = ({ props, setReady }) => {
       setCanSave(true);
     },
     onError(error) {
-      const message = checkError(error.message);
+      const errorMessage = checkError(error.networkError);
       setSnackbar({
         ...snackbar,
-        message,
+        message: errorMessage,
         open: true,
         color: 'alertColor',
       });
@@ -74,10 +72,10 @@ const ProjectHeader = ({ props, setReady }) => {
       setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
     },
     onError(error) {
-      const message = checkError(error.message);
+      const errorMessage = checkError(error.networkError);
       setSnackbar({
         ...snackbar,
-        message,
+        message: errorMessage,
         open: true,
         color: 'alertColor',
       });
@@ -130,11 +128,13 @@ const ProjectHeader = ({ props, setReady }) => {
           setReady(true);
         }
       },
-      onError() {
+      onError(error) {
+        const errorMessage = checkError(error.networkError);
         setSnackbar({
           ...snackbar,
           open: true,
-          message: '에러가 발생했습니다.',
+          color: 'alertColor',
+          message: errorMessage,
         });
       },
     });

@@ -6,6 +6,7 @@ import sendRequest from '../../utils/sendRequest';
 import { LoggedInContext, ModalContext } from '../../context';
 import { setLocalStorageItem } from '../../utils/storage';
 import Snackbar from '../Snackbar';
+import useSnackbar from '../../custom_hooks/useSnackbar';
 
 const AUTH_ERROR = {
   NOT_LOGIN: '로그인이 되지 않았습니다. 다시 로그인 해주세요',
@@ -15,12 +16,7 @@ const AUTH_ERROR = {
 export default () => {
   const { setLoggedIn } = useContext(LoggedInContext);
   const { setOpen } = useContext(ModalContext);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    color: 'alertColor',
-  });
+  const [snackbar, setSnackbar] = useSnackbar();
   const responseGoogle = async (response) => {
     const tokenBlob = new Blob(
       [JSON.stringify({ access_token: response.Zi.access_token }, null, 2)],
@@ -47,6 +43,7 @@ export default () => {
         ...snackbar,
         open: true,
         message: AUTH_ERROR.NETWORT_ERROR,
+        color: 'alertColor',
       });
     }
   };
@@ -64,7 +61,7 @@ export default () => {
         },
       });
       if (!data.result) {
-        setSnackbar({ ...snackbar, open: true, message: AUTH_ERROR.NOT_LOGIN });
+        setSnackbar({ ...snackbar, open: true, message: AUTH_ERROR.NOT_LOGIN, color: 'alertColor' });
         return;
       }
       setLocalStorageItem([
@@ -85,7 +82,7 @@ export default () => {
       <GoogleLogin
         style={{ border: '1px solid black' }}
         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-        buttonText="구글 계정으로 로그인하기"
+        buttonText="구글 로그인"
         onSuccess={responseGoogle}
         cookiePolicy="single_host_origin"
       />
@@ -94,7 +91,7 @@ export default () => {
         fields="name,email,picture"
         callback={responseFacebook}
         icon="fa-facebook"
-        textButton="페이스북 계정으로 로그인하기"
+        textButton="페이스북 로그인"
       />
       <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
     </AuthWrapper>
@@ -103,20 +100,24 @@ export default () => {
 const AuthWrapper = styled.div`
   display : flex;
   flex-direction: column;
+  padding-top: 30px;
+  border-top: 1px solid #d9d9d9;
   button {
-    width : 100%;
-    height : 100%;
+    width : 400px;
+    height : 50px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    border-radius: 3px !important;
     margin-bottom : 15px;
     .fa.fa-facebook {
-      padding-right : 10px;
+      padding : 5px;
     }
   }
   button:nth-child(1){
-    border: 1px solid black !important;
-    div {
-      margin-left : 5px;
-      padding : 6px 10px 0px 10px !important;
-     
+    border: 1.5px solid rgb(118, 118, 118) !important;
+    & > div {
+      margin: 0px !important;
     }
     span {
         color: black;
