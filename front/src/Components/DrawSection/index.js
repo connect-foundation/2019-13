@@ -14,6 +14,7 @@ import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
 import { start, stop, getIsPlay } from '../../utils/playBlocks';
 import { setCanvasSize } from '../../utils/canvasSize';
+import useSnackbar from '../../custom_hooks/useSnackbar';
 
 let key;
 let position;
@@ -35,12 +36,7 @@ export default () => {
   setCanvasSize('DEFAULT');
   const isPlay = getIsPlay();
   const { workspaceDispatch } = useContext(WorkspaceContext);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    message: '이미지를 업로드 해주세요',
-  });
+  const [snackbar, setSnackbar] = useSnackbar();
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const [currentSprite, setCurrentSprite] = useState({
     key: Object.keys(sprites)[0],
@@ -56,6 +52,8 @@ export default () => {
       setSnackbar({
         ...snackbar,
         open: true,
+        message: '이미지를 업로드 해주세요',
+        color: 'alertColor',
       });
       return;
     }
@@ -89,6 +87,8 @@ export default () => {
               setSnackbar({
                 ...snackbar,
                 open: false,
+                message: '이미지를 업로드 해주세요',
+                color: 'alertColor',
               });
             }}
             className="stop-button"
