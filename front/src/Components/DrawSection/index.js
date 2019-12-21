@@ -14,7 +14,7 @@ import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
 import { start, stop, getIsPlay } from '../../utils/playBlocks';
 import { setCanvasSize } from '../../utils/canvasSize';
-import useSnackbar from '../../custom_hooks/useSnackbar';
+import useSnackbar from '../../customHooks/useSnackbar';
 
 let key;
 let position;
