@@ -19,7 +19,7 @@
 ## 나를 소개하지!
 안녕! 나는 블록코딩 하는 오리 더덕이야👋<br>
 나는 너희들에게 **프로그래밍**이 재밌다는걸 알려주고 싶어<br><br>
-<img src="docs/assets/w3-demo.gif">
+<img src="docs/assets/theduck.gif">
 <br><br>이렇게 블록을 붙여서  실행시키면! &nbsp;**별똥더덕**도 만들 수 있다구 🔭
 <br><br>
 <img src="docs/assets/fireduck.gif">
