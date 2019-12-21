@@ -1,9 +1,9 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropType from 'prop-types';
-import copy from '../Block/Logic/Copy';
-import { WorkspaceContext } from '../../Context';
-import KeyDropdown from './keyDropdown';
-import SpriteDropdown from './spriteDropdown';
+import copy from '../../core/blocks/logic/copy';
+import { WorkspaceContext } from '../../context';
+import KeyDropdown from './KeyDropdown';
+import SpriteDropdown from './SpriteDropdown';
 
 const GroupModel = ({ block, scrollY }) => {
   const [position] = useState({ x: block.x, y: block.y });

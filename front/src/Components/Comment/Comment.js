@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Utils from '../../utils/utils';
-import { UPDATE_COMMENT, REMOVE_COMMENT } from '../../Apollo/queries/Comment';
+import { UPDATE_COMMENT, REMOVE_COMMENT } from '../../apollo/queries/Comment';
 
 const Comment = ({ comment, user, idx, localUpdate }) => {
   const textRefference = useRef();

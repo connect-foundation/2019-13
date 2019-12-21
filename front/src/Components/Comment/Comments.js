@@ -3,7 +3,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Comment from './Comment';
-import { LOAD_COMMENT } from '../../Apollo/queries/Comment';
+import { LOAD_COMMENT } from '../../apollo/queries/Comment';
 import CommentWriter from './CommentWriter';
 
 const Comments = ({ project, user }) => {

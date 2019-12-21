@@ -1,7 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { getPosition } from '../index';
-import CANVASCONSTANTS from '../../Canvas/constants';
-import Utils from '../../../utils/utils';
+import { getPosition } from '../../Components/DrawSection';
+import Utils from '../../utils/utils';
 import { getCanvasSize } from '../../../utils/canvasSize';
 /**
  * 문제점!!! => 모서리부분

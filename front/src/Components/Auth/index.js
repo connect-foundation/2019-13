@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import FaceBookLogin from 'react-facebook-login';
 import styled from 'styled-components';
-import sendRequest from '../../utils/SendRequest';
-import { LoggedInContext, ModalContext } from '../../Context';
+import sendRequest from '../../utils/sendRequest';
+import { LoggedInContext, ModalContext } from '../../context';
 import { setLocalStorageItem } from '../../utils/storage';
 import Snackbar from '../Snackbar';
 

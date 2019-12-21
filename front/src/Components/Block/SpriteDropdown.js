@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react';
 import PropType from 'prop-types';
 import { Select, MenuItem } from '@material-ui/core';
 import styled from 'styled-components';
-import workspaceList from '../Block/workspaceList';
-import CONSTANTS from '../Block/constants';
+import workspaceList from '../../core/blocks/workspace/workspaceList';
+import CONSTANTS from '../../core/blocks/constants';
 
 const SpriteDropdown = ({ block, index }) => {
   const [value, setValue] = useState(block.value || CONSTANTS.DROPDOWN_SPRITE_INIT_VALUE);

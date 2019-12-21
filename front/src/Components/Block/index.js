@@ -1,184 +1,86 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import PropType from 'prop-types';
-import styled from 'styled-components';
-import { WorkspaceContext } from '../../Context';
-import Group from '../Group';
-import GroupBlock from '../GroupModel';
-import BlockModelList from './blockmodel_list';
-import CONSTANTS from './constants';
-import BlockModel from './blockmodel';
-import init from './Init';
-import Theme from '../../Styles/Theme';
-import InsertMarker from './insertMarker';
+import drag from '../../core/blocks/logic/drag';
+import { WorkspaceContext } from '../../context';
+import CONSTANTS from '../../core/blocks/constants';
+import Input from './Input';
+import KeyDropdown from './KeyDropdown';
+import SpriteDropdown from './SpriteDropdown';
 
-const blockModelList = new BlockModelList();
-const yArray = [];
-let previousClickedButton = 0;
-
-const Blocks = ({ clickedButton }) => {
-  const [isInit, setIsInit] = useState(false);
-  const { workspace, workspaceDispatch } = useContext(WorkspaceContext);
-  const [, setRender] = useState(0);
-  const [isMove, setMove] = useState(false);
-  const [scrollY, setScrollY] = useState(CONSTANTS.SCROLL_MINIMUM);
-  const [initY, setInitY] = useState(CONSTANTS.SCROLL_MINIMUM);
-  if (yArray.length > 0 && previousClickedButton !== clickedButton) {
-    if (scrollY !== yArray[parseInt(clickedButton, 10)]) {
-      previousClickedButton = clickedButton;
-      setScrollY(yArray[parseInt(clickedButton, 10)]);
-      workspaceDispatch({ type: 'SCROLL_END' });
+const Block = ({ block }) => {
+  const [position, setPosition] = useState({ x: block.x, y: block.y });
+  if (block.previousElement && position.y !== block.previousElement.height - CONSTANTS.PIXEL) {
+    setPosition({ x: 0, y: block.previousElement.height - CONSTANTS.PIXEL });
+  }
+  if (block.parentElement && position.y !== CONSTANTS.BLOCK_HEAD_HEIGHT) {
+    setPosition({ x: CONSTANTS.PREVIOUS_NEXT_POS_X, y: CONSTANTS.BLOCK_HEAD_HEIGHT });
+  }
+  if (block.outputElement) {
+    if ((block.outputElement.style === 'condition' || block.outputElement.style === 'variable') && position.y !== 0) {
+      block.outputElement.inputElement.forEach((input, idx) => {
+        if (block.outputElement.inputX[idx] && (input.id === block.id)) {
+          setPosition({ x: block.outputElement.inputX[idx], y: 0 });
+        }
+      });
+    } else if ((block.outputElement.style === 'single' || block.outputElement.style === 'double') && position.y !== CONSTANTS.PIXEL + 1) {
+      block.outputElement.inputElement.forEach((input, idx) => {
+        if (block.outputElement.inputX[idx] && (input.id === block.id)) {
+          setPosition({ x: block.outputElement.inputX[idx], y: CONSTANTS.PIXEL + 1 });
+        }
+      });
     }
   }
-  const dragStartHandler = (scrollEvent) => {
-    setMove(true);
-    setInitY(scrollEvent.clientY - scrollEvent.target.getBoundingClientRect().y
-    + scrollEvent.target.ownerSVGElement.getBoundingClientRect().y);
-  };
-  const dragMoveHandler = (scrollEvent) => {
-    if (!isMove) return;
-    let diff = (scrollEvent.clientY - initY);
-    if (diff < CONSTANTS.SCROLL_MINIMUM)diff = CONSTANTS.SCROLL_MINIMUM;
-    else if (diff > CONSTANTS.SCROLL_MAXIMUM)diff = CONSTANTS.SCROLL_MAXIMUM;
-    workspaceDispatch({ type: 'SCROLL_END' });
-    setScrollY(diff);
-  };
-  const dragEndHandler = () => {
-    if (!isMove) return;
-    setMove(false);
-  };
-
-  const wheelSVG = (event) => {
-    if (event.clientX > CONSTANTS.DELETE_AREA_X + CONSTANTS.BUTTON_AREA_WIDTH
-      || event.clientX < CONSTANTS.BUTTON_AREA_WIDTH) return;
-    let newY = scrollY + event.deltaY;
-    if (newY < CONSTANTS.SCROLL_MINIMUM)newY = CONSTANTS.SCROLL_MINIMUM;
-    else if (newY > CONSTANTS.SCROLL_MAXIMUM)newY = CONSTANTS.SCROLL_MAXIMUM;
-    workspaceDispatch({ type: 'SCROLL_END' });
-    setScrollY(newY);
-  };
-
-  if (!isInit) {
-    setIsInit(true);
-    workspace.setRender = setRender;
-    let idx = 0;
-    let { y } = CONSTANTS.DEFAULT_POSITION;
-    init.forEach((blocks, allIdx) => {
-      yArray.push(y - 3);
-      blocks.forEach((json, styleIdx) => {
-        const blockModel = new BlockModel(idx).makeFromJSON({
-          ...json,
-          x: CONSTANTS.DEFAULT_POSITION.x,
-          y,
-          allIdx,
-          styleIdx,
-        });
-        idx += 1;
-        switch (json.style) {
-          case 'double':
-            y += 100;
-            break;
-          case 'variable':
-          case 'condition':
-            y += 35;
-            break;
-          default:
-            y += 50;
-        }
-        blockModelList.addBlock(blockModel);
-      });
-    });
-  }
+  const { workspaceDispatch } = useContext(WorkspaceContext);
+  const [, setRender] = useState();
+  const gRef = useRef();
+  let inputIdx = -1;
+  useEffect(() => {
+    // eslint-disable-next-line
+    block.render = setRender;
+    block.setNode(gRef.current);
+  }, [block]);
   return (
-    <Svg onWheel={wheelSVG} transform={`translate(${CONSTANTS.BUTTON_AREA_WIDTH},0)`}>
-      {isMove ? null
-        : (
-          <rect
-            width="300"
-            height="800"
-            fill="rgba(0,0,0,0)"
-            x="0"
-            y="0"
-            rx="4"
-            ry="4"
-            onMouseUp={dragEndHandler}
-            onMouseMove={dragMoveHandler}
-            onMouseLeave={dragEndHandler}
-          />
-        )
+    <g
+      id={block.id}
+      key={block.id}
+      ref={gRef}
+      onMouseDown={
+          drag({ set: setPosition, block, workspaceDispatch })
       }
-      {[...blockModelList.getBlockDB().values()].map(block => (
-        <GroupBlock block={block} key={block.id} scrollY={scrollY} />
-      ))}
-      {workspace.topblocks.map(block => <Group block={block} key={block.id} scroll={isMove} />)}
-      {!isMove ? null
-        : (
-          <rect
-            width="300"
-            height="800"
-            fill="rgba(0,0,0,0)"
-            x="0"
-            y="0"
-            rx="4"
-            ry="4"
-            onMouseUp={dragEndHandler}
-            onMouseMove={dragMoveHandler}
-            onMouseLeave={dragEndHandler}
-          />
-        )}
-      <rect
-        width="20"
-        height="100"
-        fill={isMove ? Theme.duckOrangeColor : Theme.unactivedColor}
-        x="275"
-        y={scrollY}
-        rx="4"
-        ry="4"
-        onMouseDown={dragStartHandler}
-        onMouseUp={dragEndHandler}
-        onMouseMove={dragMoveHandler}
-      />
-      <InsertMarker />
-    </Svg>
+      transform={`translate(${position.x},${position.y})`}
+    >
+      {block.path}
+      {block.args.reduce((acc, cur) => {
+        if (cur !== 'input' && cur !== 'block' && cur !== 'dropdown') {
+          acc.push(cur);
+          return acc;
+        }
+        inputIdx += 1;
+        if (cur === 'dropdown') {
+          if (block.style === 'condition') {
+            acc.push(<SpriteDropdown block={block} index={inputIdx} key={inputIdx} />);
+          } else { acc.push(<KeyDropdown block={block} index={inputIdx} key={inputIdx} />); }
+          return acc;
+        }
+        if (cur === 'block') {
+          const inputBlock = block.workspace.getBlockById(block.inputElement[inputIdx].id);
+          acc.push(<Block block={inputBlock} key={block.inputElement[inputIdx].id} />);
+          return acc;
+        }
+        acc.push(<Input block={block} index={inputIdx} key={inputIdx} />);
+        return acc;
+      }, [])}
+      {block.firstChildElement
+      && <Block block={block.firstChildElement} key={block.firstChildElement.id} />}
+      {block.secondChildElement
+      && <Block block={block.secondChildElement} key={block.secondChildElement.id} />}
+      {block.nextElement && <Block block={block.nextElement} key={block.nextElement.id} />}
+    </g>
   );
 };
 
-Blocks.propTypes = {
-  clickedButton: PropType.number.isRequired,
+Block.propTypes = {
+  block: PropType.object.isRequired,
 };
 
-const Svg = styled.svg`
-  position: absolute;
-  min-width: 800px;
-  width: calc(300px + 48vw);
-  height: 86vh;
-  g {
-    cursor: grab;
-    &:active {
-      cursor: grabbing;
-    }
-  }
-  text {
-    font-size: 12px;
-    fill: white;
-    pointer-events: none;
-    user-select: none;
-  }
-  foreignObject {
-    width: 30px;
-    height: 30px;
-    input {
-      width: 30px;
-      height: 20px;
-      border-radius: 18px;
-      text-align: center;
-      border: none;
-      padding: 0;
-      font-size: 8px;
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-`;
-
-export default Blocks;
+export default Block;

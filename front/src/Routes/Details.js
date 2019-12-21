@@ -4,14 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faSignInAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
-import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../Apollo/queries/Project';
+import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../apollo/queries/Project';
 import Comments from '../Components/Comment/Comments';
 import { setLocalStorageItem } from '../utils/storage';
 import DetailCanvas from '../Components/DetailCanvas';
-import workspaceList from '../Components/Block/workspaceList';
-import Workspace from '../Components/Block/workspace';
+import workspaceList from '../core/blocks/workspace/workspaceList';
+import Workspace from '../core/blocks/workspace/workspace';
 import makeBlock from '../utils/makeBlock';
-import CONSTANTS from '../Components/Block/constants';
 import Footer from '../Components/Footer';
 import Loading from '../Components/Loading';
 
@@ -48,6 +47,7 @@ export default ({ match, history }) => {
         workspaceList.images = [];
         workspaceList.dropdownItems.sprite = { wall: '벽' };
         projectData.workspaces.forEach((ws) => {
+          console.log(ws);
           const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
           makeBlock(ws.blocks, newWorkSpace);
           workspaceList.workspaces.push(newWorkSpace);

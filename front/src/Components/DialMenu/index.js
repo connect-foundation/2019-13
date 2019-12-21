@@ -6,7 +6,7 @@ import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
-import { SpritesContext } from '../../Context';
+import { SpritesContext } from '../../context';
 import Utils from '../../utils/utils';
 import { getIsPlay } from '../../utils/playBlocks';
 import Snackbar from '../Snackbar';

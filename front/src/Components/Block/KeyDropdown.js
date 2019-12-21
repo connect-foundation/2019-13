@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropType from 'prop-types';
 import { Select, MenuItem } from '@material-ui/core';
-import workspaceList from '../Block/workspaceList';
-import CONSTANTS from '../Block/constants';
+import workspaceList from '../../core/blocks/workspace/workspaceList';
+import CONSTANTS from '../../core/blocks/constants';
 
 const KeyDropdown = ({ block, index }) => {
   const [value, setValue] = useState(block.value || CONSTANTS.DROPDOWN_KEY_INIT_VALUE);

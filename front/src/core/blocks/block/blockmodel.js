@@ -1,7 +1,7 @@
 import React from 'react';
-import Path from './Path';
-import Utils from '../../utils/utils';
-import CONSTANTS from './constants';
+import Path from '../path';
+import Utils from '../../../utils/utils';
+import CONSTANTS from '../constants';
 
 const create = React.createElement;
 

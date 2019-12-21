@@ -1,6 +1,6 @@
-import Move from '../DrawSection/function/move';
-import Rotate from '../DrawSection/function/rotate';
-import Collision from '../DrawSection/function/collision';
+import Move from '../../canvas/move';
+import Rotate from '../../canvas/rotate';
+import Collision from '../../canvas/collision';
 
 const FunctionList = {
   topblock: (args) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, MenuItem } from '@material-ui/core';
 
-const Dropdown = () => {
+const KeyDropdown = () => {
   const item = '↑';
   return (
     <foreignObject style={{ width: 50 }}>
@@ -12,5 +12,4 @@ const Dropdown = () => {
   );
 };
 
-
-export default Dropdown;
+export default KeyDropdown;

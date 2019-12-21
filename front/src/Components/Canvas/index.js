@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Stage, Layer } from 'react-konva';
 import PropTypes from 'prop-types';
-import { SpritesContext } from '../../Context';
+import { SpritesContext } from '../../context';
 import URLImage from '../URLImage';
 import { getCanvasSize } from '../../utils/canvasSize';
 

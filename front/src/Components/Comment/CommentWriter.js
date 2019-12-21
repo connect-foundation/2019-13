@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
-import { CREAT_COMMENT } from '../../Apollo/queries/Comment';
+import { CREAT_COMMENT } from '../../apollo/queries/Comment';
 
 const CommentWriter = ({ projectId, updateComments }) => {
   const [text, setText] = useState('');

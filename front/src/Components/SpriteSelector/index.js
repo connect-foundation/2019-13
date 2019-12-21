@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import DialMenu from '../DialMenu';
 import SpriteSelectorItem from '../SpriteSelectorItem';
-import { SpritesContext } from '../../Context';
+import { SpritesContext } from '../../context';
 
 export default () => {
   const { sprites } = useContext(SpritesContext);

@@ -1,5 +1,5 @@
-import Generator from '../Components/Block/generator';
-import WorkspaceList from '../Components/Block/workspaceList';
+import Generator from '../core/blocks/function/generator';
+import WorkspaceList from '../core/blocks/workspace/workspaceList';
 import Utils from './utils';
 import { setTempLocations, getTempLocations } from './tempLocationStore';
 

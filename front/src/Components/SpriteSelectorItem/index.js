@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import { CurrentSpriteContext, SpritesContext, WorkspaceContext } from '../../Context';
+import { CurrentSpriteContext, SpritesContext, WorkspaceContext } from '../../context';
 
 const SpriteSelectorItem = ({ sprite, spritekey, idx, length }) => {
   const { setCurrentSprite } = useContext(CurrentSpriteContext);
