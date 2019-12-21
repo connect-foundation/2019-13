@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { LoggedInContext } from '../../Context';
-import { removeLocalStorageItem } from '../../utils/storage';
 
 const DropDown = ({ type = null }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
