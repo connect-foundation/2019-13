@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Stage, Layer, Group } from 'react-konva';
+import { Stage, Layer } from 'react-konva';
 import PropTypes from 'prop-types';
 import { SpritesContext } from '../../Context';
 import URLImage from '../URLImage';

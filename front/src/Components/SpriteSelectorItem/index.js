@@ -55,7 +55,6 @@ const Title = styled.div`
 
 const ImageWrapper = styled.div`
   display : inline-block;
-  /* vertical-align : center; */
   text-align:center;
   max-height : 70%;
 `;

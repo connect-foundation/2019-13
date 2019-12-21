@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
-import { WorkspaceContext, SpritesContext } from '../Context';
+import { WorkspaceContext, SpritesContext, LoggedInContext } from '../Context';
 import { CREATE_AND_SAVE, LOAD_PROJECT, UPDATE_BLOCK, TOGGLE_LIKE, TOGGLE_AUTH } from '../Apollo/queries/Project';
 import Snackbar from './Snackbar';
 import makeBlock from '../utils/makeBlock';
@@ -12,8 +12,10 @@ import workspaceList from './Block/workspaceList';
 import Workspace from './Block/workspace';
 import CONSTANTS from './Block/constants';
 import dataURLtoFile from '../utils/dataURLtoFile';
+import checkError from '../checkError';
 
 const ProjectHeader = ({ props, setReady }) => {
+  const { setLoggedIn } = useContext(LoggedInContext);
   const [projectId, setPorjectId] = useState();
   const [projectName, setProjectName] = useState('');
   const [isLiked, setIsLiked] = useState(false);
@@ -30,7 +32,14 @@ const ProjectHeader = ({ props, setReady }) => {
 
   const [createAndSave] = useMutation(CREATE_AND_SAVE, {
     onCompleted(res) {
-      if (!res || !res.createProjectAndBlocks) return;
+      if (!res || !res.createProjectAndBlocks) {
+        setSnackbar({
+          ...snackbar,
+          color: 'alertColor',
+          message: '다시 시도해주세요',
+        });
+        return;
+      }
       const pid = res.createProjectAndBlocks;
       setPorjectId(pid);
       if (pid !== 'false') {
@@ -39,12 +48,43 @@ const ProjectHeader = ({ props, setReady }) => {
       setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
       setCanSave(true);
     },
+    onError(error) {
+      const message = checkError(error.message);
+      setSnackbar({
+        ...snackbar,
+        message,
+        open: true,
+        color: 'alertColor',
+      });
+      setTimeout(() => {
+        setLoggedIn(false);
+      }, 2000);
+    },
   });
   const [updateProject] = useMutation(UPDATE_BLOCK, {
     onCompleted(res) {
-      if (!res || !res.updateProjectAndBlocks) return;
+      if (!res || !res.updateProjectAndBlocks) {
+        setSnackbar({
+          ...snackbar,
+          color: 'alertColor',
+          message: '다시 시도해주세요',
+        });
+        return;
+      }
       setCanSave(true);
       setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
+    },
+    onError(error) {
+      const message = checkError(error.message);
+      setSnackbar({
+        ...snackbar,
+        message,
+        open: true,
+        color: 'alertColor',
+      });
+      setTimeout(() => {
+        setLoggedIn(false);
+      }, 2000);
     },
   });
   const [toggleLike] = useMutation(TOGGLE_LIKE, {
@@ -88,6 +128,13 @@ const ProjectHeader = ({ props, setReady }) => {
           workspaceDispatch({ type: 'CHANGE_WORKSPACE', id: workspaceList.currentImageId });
           setReady(true);
         }
+      },
+      onError() {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          message: '에러가 발생했습니다.',
+        });
       },
     });
   useEffect(() => {
