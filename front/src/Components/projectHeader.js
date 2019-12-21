@@ -10,7 +10,6 @@ import Snackbar from './Snackbar';
 import makeBlock from '../utils/makeBlock';
 import workspaceList from './Block/workspaceList';
 import Workspace from './Block/workspace';
-import CONSTANTS from './Block/constants';
 import dataURLtoFile from '../utils/dataURLtoFile';
 
 const ProjectHeader = ({ props, setReady }) => {
