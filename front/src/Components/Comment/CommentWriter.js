@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
+import PropTypes from 'prop-types';
 import { CREAT_COMMENT } from '../../Apollo/queries/Comment';
 
-export default ({ projectId, updateComments }) => {
+const CommentWriter = ({ projectId, updateComments }) => {
   const [text, setText] = useState('');
   const [createComment] = useMutation(CREAT_COMMENT, {
     onCompleted(res) {
@@ -27,3 +28,9 @@ export default ({ projectId, updateComments }) => {
     </>
   );
 };
+CommentWriter.propTypes = {
+  projectId: PropTypes.string.isRequired,
+  updateComments: PropTypes.func.isRequired,
+};
+
+export default CommentWriter;

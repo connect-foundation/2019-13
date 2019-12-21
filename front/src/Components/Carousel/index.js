@@ -27,8 +27,8 @@ export default () => {
   return (
     <CarouselContainer>
       <Slider {...settings}>
-        <img src="banner1.png" />
-        <img src="banner2.png" />
+        <img src="banner1.png" alt="banner" />
+        <img src="banner2.png" alt="banner" />
       </Slider>
     </CarouselContainer>
   );

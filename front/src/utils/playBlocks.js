@@ -19,7 +19,6 @@ export const start = (isStartMode) => {
   isPlay = true;
   const { dispatch, allsprites } = Utils.getSprite();
   setTempLocations(allsprites);
-  
   const startCodes = isStartMode
     ? workspacelist.reduce((pre, ws) => [...pre, ...generator.workspaceToCode(ws.getStartBlocks(ws),
       false, ws.imageId)], [])

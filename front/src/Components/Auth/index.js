@@ -19,7 +19,7 @@ export default () => {
     open: false,
     vertical: 'top',
     horizontal: 'center',
-    color: 'red',
+    color: 'alertColor',
   });
   const responseGoogle = async (response) => {
     const tokenBlob = new Blob(

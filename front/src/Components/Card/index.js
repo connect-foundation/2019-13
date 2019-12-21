@@ -10,13 +10,13 @@ const Card = ({ project, removeProjects, history, me }) => {
   const [isLiked, setIsLiked] = useState(project.isLiked);
   const [likeCount, setLikeCount] = useState(project.likeCount);
   const [deleteProject] = useMutation(DELETE_PROJECT, {
-    onCompleted(deleteProject) {
-      removeProjects(project);
+    onCompleted(res) {
+      if (res) removeProjects(project);
     },
   });
   const [toggleLike] = useMutation(TOGGLE_LIKE, {
-    onCompleted(toggleLike) {
-      if (toggleLike.toggleLike) {
+    onCompleted(res) {
+      if (res.toggleLike) {
         setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
         setIsLiked(!isLiked);
       }
@@ -196,5 +196,8 @@ const ProjectDescription = styled.div`
 
 Card.propTypes = {
   project: Proptype.object.isRequired,
+  removeProjects: Proptype.func.isRequired,
+  history: Proptype.object.isRequired,
+  me: Proptype.bool.isRequired,
 };
 export default Card;
