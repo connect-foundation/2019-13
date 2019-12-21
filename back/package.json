@@ -31,6 +31,6 @@
   },
   "scripts": {
     "dev": "nodemon --exec babel-node src/server.js",
-    "start": "set NODE_ENV=production nodemon --exec babel-node src/server.js"
+    "start": "NODE_ENV=production nodemon --exec babel-node src/server.js"
   }
 }
