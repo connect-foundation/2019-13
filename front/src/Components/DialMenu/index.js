@@ -10,7 +10,7 @@ import { SpritesContext } from '../../context';
 import Utils from '../../utils/utils';
 import { getIsPlay } from '../../utils/playBlocks';
 import Snackbar from '../Snackbar';
-import useSnackbar from '../../custom_hooks/useSnackbar';
+import useSnackbar from '../../customHooks/useSnackbar';
 
 const imageRegExp = /image\/(bmp|jpg|jpeg|tiff|png|svg\+xml)$/i;
 

@@ -6,7 +6,7 @@ import sendRequest from '../../utils/sendRequest';
 import { LoggedInContext, ModalContext } from '../../context';
 import { setLocalStorageItem } from '../../utils/storage';
 import Snackbar from '../Snackbar';
-import useSnackbar from '../../custom_hooks/useSnackbar';
+import useSnackbar from '../../customHooks/useSnackbar';
 
 const AUTH_ERROR = {
   NOT_LOGIN: '로그인이 되지 않았습니다. 다시 로그인 해주세요',
