@@ -28,10 +28,10 @@ export default (Blocks, workspace) => {
   Blocks.forEach((blockData) => {
     const block = workspace.addBlock(blockData.id);
     const dataJSON = blockTypes[blockData.type];
-    dataJSON.x = blockData.positionX;
-    dataJSON.y = blockData.positionY;
-    block.x = blockData.positionX;
-    block.y = blockData.positionY;
+    dataJSON.x = blockData.x;
+    dataJSON.y = blockData.y;
+    block.x = blockData.x;
+    block.y = blockData.y;
     block.makeFromJSON(dataJSON);
   });
   Blocks.forEach((blockData) => {

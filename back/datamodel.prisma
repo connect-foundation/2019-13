@@ -36,8 +36,8 @@ type Workspace {
 type Block {
   id: ID! @id
   type: String!
-  positionX: Float
-  positionY: Float
+  x: Float
+  y: Float
   nextElementId: String 
   firstChildElementId: String
   secondChildElementId: String
@@ -49,8 +49,8 @@ type Image {
   name: String!
   url: String!
   realName: String!
-  positionX: Float!
-  positionY: Float!
+  x: Float!
+  y: Float!
   size: Int!
   direction: Int!
   workspace: Workspace! @relation(link : TABLE, name:"ImageByWorkspace")

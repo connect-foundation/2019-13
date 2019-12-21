@@ -106,8 +106,8 @@ const Workspace = class {
     const blocks = Object.values(this.blockDB).map(b => ({
       id: b.id,
       type: b.type,
-      positionX: b.x,
-      positionY: b.y,
+      x: b.x,
+      y: b.y,
       nextElementId: this.getBlockId(b.nextElement),
       firstChildElementId: this.getBlockId(b.firstChildElement),
       secondChildElementId: this.getBlockId(b.secondChildElement),

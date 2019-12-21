@@ -188,7 +188,7 @@ const ProjectHeader = ({ props, setReady }) => {
       const data = ws.extractCoreData();
       const image = sprites[data.imageId];
       image.workspaceId = ws.id;
-      images.push({ ...image, positionX: image.x, positionY: image.y, id: data.imageId });
+      images.push({ ...image, id: data.imageId });
       delete data.imageId;
       prev.push(data);
       return prev;

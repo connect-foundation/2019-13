@@ -27,8 +27,8 @@ type project_auth {
 type block {
   id: ID!
   type: String!
-  positionX: Float
-  positionY: Float
+  x: Float
+  y: Float
   nextElementId: String
   firstChildElementId: String
   secondChildElementId: String
@@ -63,8 +63,8 @@ type Image {
   id: ID!
   name: String!
   url: String!
-  positionX: Float!
-  positionY: Float!
+  x: Float!
+  y: Float!
   size: Int!
   direction: Int!
   realName: String!

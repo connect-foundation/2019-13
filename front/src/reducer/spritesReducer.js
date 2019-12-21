@@ -118,7 +118,7 @@ export default (sprites, { type, coordinate, key, value, images, tempLocations }
       workspaceList.dropdownItems.sprite = { wall: '벽' };
       const loadedSprites = images.reduce((prev, curr) => {
         // eslint-disable-next-line no-param-reassign
-        prev[curr.id] = { ...curr, x: curr.positionX, y: curr.positionY };
+        prev[curr.id] = { ...curr, x: curr.x, y: curr.y };
         workspaceList.dropdownItems.sprite[curr.id] = curr.name;
         return prev;
       }, {});
