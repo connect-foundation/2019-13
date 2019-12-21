@@ -85,8 +85,8 @@ export const LOAD_PROJECT = gql`
         blocks {
           id,
           type,
-          positionX,
-          positionY,
+          x,
+          y,
           nextElementId,
           firstChildElementId,
           secondChildElementId,
@@ -96,8 +96,10 @@ export const LOAD_PROJECT = gql`
           id,
           name,
           url,
-          positionX,
-          positionY,
+          x,
+          y,
+          width,
+          height,
           size,
           direction,
           realName

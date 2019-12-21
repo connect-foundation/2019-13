@@ -49,8 +49,8 @@ export default {
             await prisma.createBlock({
               id: blockData.id,
               type: blockData.type,
-              positionX: blockData.positionX,
-              positionY: blockData.positionY,
+              x: blockData.x,
+              y: blockData.y,
               nextElementId: blockData.nextElementId,
               firstChildElementId: blockData.firstChildElementId,
               secondChildElementId: blockData.secondChildElementId,
@@ -82,8 +82,10 @@ export default {
             url,
             name: image.name,
             realName,
-            positionX: image.x,
-            positionY: image.y,
+            x: image.x,
+            y: image.y,
+            width: image.width,
+            height: image.height,
             size: image.size,
             direction: image.direction,
             workspace: {

@@ -130,8 +130,8 @@ export default {
             create: {
               id: i.id,
               type: i.type,
-              positionX: i.positionX,
-              positionY: i.positionY,
+              x: i.x,
+              y: i.y,
               nextElementId: i.nextElementId,
               firstChildElementId: i.firstChildElementId,
               secondChildElementId: i.secondChildElementId,
@@ -146,8 +146,8 @@ export default {
             },
             update: {
               type: i.type,
-              positionX: i.positionX,
-              positionY: i.positionY,
+              x: i.x,
+              y: i.y,
               nextElementId: i.nextElementId,
               firstChildElementId: i.firstChildElementId,
               secondChildElementId: i.secondChildElementId,
@@ -183,10 +183,12 @@ export default {
         for await (const image of images) {
           const {
             id,
-            positionX,
-            positionY,
+            x,
+            y,
             size,
             direction,
+            width,
+            height,
             name,
             file,
           } = image;
@@ -202,8 +204,8 @@ export default {
               id,
             },
             update: {
-              positionX,
-              positionY,
+              x,
+              y,
               size,
               direction,
               name,
@@ -215,8 +217,10 @@ export default {
             },
             create: {
               id,
-              positionX,
-              positionY,
+              x,
+              y,
+              width,
+              height,
               size,
               direction,
               name,
