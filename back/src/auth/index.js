@@ -9,7 +9,7 @@ router.post(
   (req, res) => {
     if (!req.user) return res.json({ result: false });
     const token = jwt.sign(req.user, process.env.JWT_SECRET, {
-      expiresIn: 60 * 30,
+      expiresIn: 60 * 60,
     });
     return res.json({
       result: true,
@@ -23,7 +23,7 @@ router.post(
   (req, res) => {
     if (!req.user) return res.json({ result: false });
     const token = jwt.sign(req.user, process.env.JWT_SECRET, {
-      expiresIn: 60 * 30,
+      expiresIn: 60 * 60,
     });
     return res.json({
       result: true,
