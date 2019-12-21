@@ -33,7 +33,6 @@ export default {
         images.forEach(async (image) => {
           await deleteFile(image.realName);
         });
-        console.log(project.realCanvasImage);
         deleteFile(project.realCanvasImage);
         await prisma.deleteProject({
           id: projectId,

@@ -19,7 +19,7 @@ const getCheckCollision = {
     return false;
   },
   sprite: ({ sprite, position }) => {
-    console.log(sprite);
+    
     const o1 = new Obb(
       new Vector2(sprite.x, sprite.y),
       new Vector2(
