@@ -147,7 +147,7 @@ const Block = class {
 
   changeInputWidth = (set, index) => (event) => {
     const { target } = event;
-    this.inputElement[index].value = Number(target.value.replace(/[^0-9-]/g, ''));
+    this.inputElement[index].value = target.value.includes('-') ? -Number(target.value.replace(/[^0-9]/g, '')) : Number(target.value.replace(/[^0-9]/g, ''));
     if (Number.isNaN(this.inputElement[index].value)) this.inputElement[index].value = 0;
     if (this.inputElement[index].value > Number.MAX_SAFE_INTEGER) {
       this.inputElement[index].value = Number.MAX_SAFE_INTEGER;
