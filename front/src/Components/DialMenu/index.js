@@ -10,6 +10,7 @@ import { SpritesContext } from '../../Context';
 import Utils from '../../utils/utils';
 import { getIsPlay } from '../../utils/playBlocks';
 import Snackbar from '../Snackbar';
+import useSnackbar from '../../custom_hooks/useSnackbar';
 
 const imageRegExp = /image\/(bmp|jpg|jpeg|tiff|png|svg\+xml)$/i;
 
@@ -48,11 +49,7 @@ export default () => {
   const [direction] = useState('up');
   const [open, setOpen] = useState(false);
   const { spritesDispatch } = useContext(SpritesContext);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
+  const [snackbar, setSnackbar] = useSnackbar();
 
   const handleClose = () => {
     setOpen(false);

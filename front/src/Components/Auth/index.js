@@ -6,6 +6,7 @@ import sendRequest from '../../utils/SendRequest';
 import { LoggedInContext, ModalContext } from '../../Context';
 import { setLocalStorageItem } from '../../utils/storage';
 import Snackbar from '../Snackbar';
+import useSnackbar from '../../custom_hooks/useSnackbar';
 
 const AUTH_ERROR = {
   NOT_LOGIN: '로그인이 되지 않았습니다. 다시 로그인 해주세요',
@@ -15,12 +16,7 @@ const AUTH_ERROR = {
 export default () => {
   const { setLoggedIn } = useContext(LoggedInContext);
   const { setOpen } = useContext(ModalContext);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    color: 'alertColor',
-  });
+  const [snackbar, setSnackbar] = useSnackbar();
   const responseGoogle = async (response) => {
     const tokenBlob = new Blob(
       [JSON.stringify({ access_token: response.Zi.access_token }, null, 2)],
@@ -47,6 +43,7 @@ export default () => {
         ...snackbar,
         open: true,
         message: AUTH_ERROR.NETWORT_ERROR,
+        color: 'alertColor',
       });
     }
   };
@@ -64,7 +61,7 @@ export default () => {
         },
       });
       if (!data.result) {
-        setSnackbar({ ...snackbar, open: true, message: AUTH_ERROR.NOT_LOGIN });
+        setSnackbar({ ...snackbar, open: true, message: AUTH_ERROR.NOT_LOGIN, color: 'alertColor' });
         return;
       }
       setLocalStorageItem([

@@ -13,6 +13,7 @@ import workspaceList from './Block/workspaceList';
 import Workspace from './Block/workspace';
 import dataURLtoFile from '../utils/dataURLtoFile';
 import checkError from '../checkError';
+import useSnackbar from '../custom_hooks/useSnackbar';
 
 const ProjectHeader = ({ props, setReady }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
@@ -23,11 +24,7 @@ const ProjectHeader = ({ props, setReady }) => {
   const [canSave, setCanSave] = useState(true);
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const { workspaceDispatch } = useContext(WorkspaceContext);
-  const [snackbar, setSnackbar] = React.useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
+  const [snackbar, setSnackbar] = useSnackbar();
 
 
   const [createAndSave] = useMutation(CREATE_AND_SAVE, {
