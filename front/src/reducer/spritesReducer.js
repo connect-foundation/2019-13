@@ -114,12 +114,15 @@ export default (sprites, { type, coordinate, key, value, images, tempLocations }
       delete workspaceList.dropdownItems.sprite[key];
       delete changeSprites[key];
       return changeSprites; }
-    case 'LOAD_PROJECT':
-      return images.reduce((prev, curr) => {
+    case 'LOAD_PROJECT': {
+      workspaceList.dropdownItems.sprite = { wall: '벽' };
+      const loadedSprites = images.reduce((prev, curr) => {
         // eslint-disable-next-line no-param-reassign
         prev[curr.id] = { ...curr, x: curr.positionX, y: curr.positionY };
+        workspaceList.dropdownItems.sprite[curr.id] = curr.name;
         return prev;
       }, {});
+      return loadedSprites; }
     default:
       throw new Error('NOT FOUND TYPE');
   }

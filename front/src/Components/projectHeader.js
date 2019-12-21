@@ -10,7 +10,6 @@ import Snackbar from './Snackbar';
 import makeBlock from '../utils/makeBlock';
 import workspaceList from './Block/workspaceList';
 import Workspace from './Block/workspace';
-import CONSTANTS from './Block/constants';
 import dataURLtoFile from '../utils/dataURLtoFile';
 
 const ProjectHeader = ({ props, setReady }) => {
@@ -73,7 +72,7 @@ const ProjectHeader = ({ props, setReady }) => {
           const render = workspaceList.workspaces[0].setRender;
           workspaceList.workspaces = [];
           workspaceList.images = [];
-          workspaceList.dropdownItems.sprite = CONSTANTS.DROPDOWN_SPRITE_INIT_OBJECT;
+          workspaceList.dropdownItems.sprite = { wall: '벽' };
           projectData.workspaces.forEach((ws) => {
             const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
             makeBlock(ws.blocks, newWorkSpace);
