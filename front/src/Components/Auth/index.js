@@ -85,7 +85,7 @@ export default () => {
       <GoogleLogin
         style={{ border: '1px solid black' }}
         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-        buttonText="구글 계정으로 로그인하기"
+        buttonText="구글 로그인"
         onSuccess={responseGoogle}
         cookiePolicy="single_host_origin"
       />
@@ -94,7 +94,7 @@ export default () => {
         fields="name,email,picture"
         callback={responseFacebook}
         icon="fa-facebook"
-        textButton="페이스북 계정으로 로그인하기"
+        textButton="페이스북 로그인"
       />
       <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
     </AuthWrapper>
@@ -103,20 +103,24 @@ export default () => {
 const AuthWrapper = styled.div`
   display : flex;
   flex-direction: column;
+  padding-top: 30px;
+  border-top: 1px solid #d9d9d9;
   button {
-    width : 100%;
-    height : 100%;
+    width : 400px;
+    height : 50px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    border-radius: 3px !important;
     margin-bottom : 15px;
     .fa.fa-facebook {
-      padding-right : 10px;
+      padding : 5px;
     }
   }
   button:nth-child(1){
-    border: 1px solid black !important;
-    div {
-      margin-left : 5px;
-      padding : 6px 10px 0px 10px !important;
-     
+    border: 1.5px solid rgb(118, 118, 118) !important;
+    & > div {
+      margin: 0px !important;
     }
     span {
         color: black;
