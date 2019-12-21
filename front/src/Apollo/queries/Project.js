@@ -98,6 +98,8 @@ export const LOAD_PROJECT = gql`
           url,
           x,
           y,
+          width,
+          height,
           size,
           direction,
           realName

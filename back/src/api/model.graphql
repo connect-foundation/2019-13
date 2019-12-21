@@ -65,6 +65,8 @@ type Image {
   url: String!
   x: Float!
   y: Float!
+  width: Float!
+  height: Float!
   size: Int!
   direction: Int!
   realName: String!

@@ -51,6 +51,8 @@ type Image {
   realName: String!
   x: Float!
   y: Float!
+  width: Float!
+  height: Float!
   size: Int!
   direction: Int!
   workspace: Workspace! @relation(link : TABLE, name:"ImageByWorkspace")

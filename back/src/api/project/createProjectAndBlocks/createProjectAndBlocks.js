@@ -84,6 +84,8 @@ export default {
             realName,
             x: image.x,
             y: image.y,
+            width: image.width,
+            height: image.height,
             size: image.size,
             direction: image.direction,
             workspace: {

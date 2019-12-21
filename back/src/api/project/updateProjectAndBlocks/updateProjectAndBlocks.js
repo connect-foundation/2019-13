@@ -187,6 +187,8 @@ export default {
             y,
             size,
             direction,
+            width,
+            height,
             name,
             file,
           } = image;
@@ -217,6 +219,8 @@ export default {
               id,
               x,
               y,
+              width,
+              height,
               size,
               direction,
               name,
