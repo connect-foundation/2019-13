@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const CREAT_COMMENT = gql`
+export const CREATE_COMMENT = gql`
   mutation createComment($projectId: String!, $text: String!) {
     createComment(projectId: $projectId, text: $text) {
         id,

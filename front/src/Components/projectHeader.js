@@ -1,3 +1,4 @@
+
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
@@ -45,10 +46,10 @@ const ProjectHeader = ({ props, setReady }) => {
       setCanSave(true);
     },
     onError(error) {
-      const message = checkError(error.message);
+      const errorMessage = checkError(error.networkError);
       setSnackbar({
         ...snackbar,
-        message,
+        message: errorMessage,
         open: true,
         color: 'alertColor',
       });
@@ -71,10 +72,10 @@ const ProjectHeader = ({ props, setReady }) => {
       setSnackbar({ ...snackbar, message: '저장 완료', open: true, color: 'motionColor' });
     },
     onError(error) {
-      const message = checkError(error.message);
+      const errorMessage = checkError(error.networkError);
       setSnackbar({
         ...snackbar,
-        message,
+        message: errorMessage,
         open: true,
         color: 'alertColor',
       });
@@ -127,11 +128,13 @@ const ProjectHeader = ({ props, setReady }) => {
           setReady(true);
         }
       },
-      onError() {
+      onError(error) {
+        const errorMessage = checkError(error.networkError);
         setSnackbar({
           ...snackbar,
           open: true,
-          message: '에러가 발생했습니다.',
+          color: 'alertColor',
+          message: errorMessage,
         });
       },
     });
