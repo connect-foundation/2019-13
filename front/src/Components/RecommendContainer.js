@@ -9,7 +9,7 @@ export default () => {
   const { loading, error, data } = useQuery(GET_PROJECTS_BY_VIEWS);
   if (loading) return <></>;
   if (error) {
-    const errorMessage = checkError(error.message);
+    const errorMessage = checkError(error.networkError);
     if (errorMessage) {
       // eslint-disable-next-line no-alert
       window.alert(errorMessage);

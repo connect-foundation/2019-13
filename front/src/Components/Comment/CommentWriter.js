@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
-import { CREAT_COMMENT } from '../../Apollo/queries/Comment';
+import { CREATE_COMMENT } from '../../Apollo/queries/Comment';
 
 const CommentWriter = ({ projectId, updateComments }) => {
   const [text, setText] = useState('');
-  const [createComment] = useMutation(CREAT_COMMENT, {
+  const [createComment] = useMutation(CREATE_COMMENT, {
     onCompleted(res) {
       if (!res || !res.createComment) return;
       setText('');
