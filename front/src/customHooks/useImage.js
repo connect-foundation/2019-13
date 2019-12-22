@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default ({ url, x, y, size = 100, direction = 0 }) => {
+export default ({ url, size = 100 }) => {
   const [image, setImage] = useState(undefined);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default ({ url, x, y, size = 100, direction = 0 }) => {
       setImage(img);
     };
     img.addEventListener('load', onLoad);
-  }, [url, x, y, size, direction]);
+  }, [url, size]);
 
   return [image, setImage];
 };
