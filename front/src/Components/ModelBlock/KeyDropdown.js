@@ -5,7 +5,7 @@ const KeyDropdown = () => {
   const item = '↑';
   return (
     <foreignObject style={{ width: 50 }}>
-      <Select value={0}>
+      <Select value={0} style={{ color: 'white' }}>
         <MenuItem value={0} key={item}>{item}</MenuItem>
       </Select>
     </foreignObject>

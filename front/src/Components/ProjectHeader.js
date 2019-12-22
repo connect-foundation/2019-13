@@ -252,7 +252,7 @@ const ProjectHeaderContainer = styled.div`
       cursor: pointer;
     }
     .star-icon {
-      color: ${props => (props.isLiked === true ? props.theme.eventsColor : 'grey')};
+      color: ${props => (props.isLiked === true ? props.theme.likeColor : 'grey')};
     }
   }
   .project-title {
