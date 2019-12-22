@@ -30,30 +30,39 @@
 ## Getting started
 ### 1. Front-end
   1. Move to `front` directory
-```javascript
+```shell
   cd front
 ```
 2. Install all packages
-```javascript
+```shell
   yarn
 ```
-3. Run scripts
-```javascript
-  yarn start
+3. Build scripts
+```shell
+  yarn build
+```
+4. Run scripts
+```shell
+   yarn production  # you must install serve (yarn global add serve)
 ```
 ### 2. Back-end
 1. Move to `back` directory
-```javascript
+```shell
   cd back
 ```
 
 1. Install all packages
-```javascript
-  npm install
+```shell
+  yarn
 ```
+2. generate prisma model
+```shell
+  prisma generate # you must have prisma.yml
+```
+
 2.  Run scripts
-```javascript
-  npm run dev
+```shell
+  yarn start 
 ```
 
 ## Team 
