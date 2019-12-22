@@ -9,6 +9,7 @@ import { start, stop } from '../../utils/playBlocks';
 import { SpritesContext } from '../../context';
 import { spritesReducer } from '../../reducer';
 import { setCanvasSize } from '../../utils/canvasSize';
+import KeyListener from '../../utils/keyListener';
 
 let dispatch;
 let allsprites;
@@ -48,6 +49,7 @@ const DetailCanvas = ({ images }) => {
           className="stop-button"
         />
       </Controller>
+      <KeyListener />
     </SpritesContext.Provider>
   );
 };
