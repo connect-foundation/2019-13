@@ -1,8 +1,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-restricted-syntax */
-import { prisma } from '../../../../prisma-client';
-import utils from '../../../utils/utils';
-import upload from '../../../objectstorage/upload';
+import { prisma } from '../../../../../prisma-client';
+import utils from '../../../../utils/utils';
+import upload from '../../../../objectstorage/upload';
 
 
 export default {

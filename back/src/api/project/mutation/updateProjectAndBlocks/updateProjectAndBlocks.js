@@ -1,7 +1,7 @@
-import utils from '../../../utils/utils';
-import { prisma } from '../../../../prisma-client';
-import deleteFile from '../../../objectstorage/delete';
-import upload from '../../../objectstorage/upload';
+import utils from '../../../../utils/utils';
+import { prisma } from '../../../../../prisma-client';
+import deleteFile from '../../../../objectstorage/delete';
+import upload from '../../../../objectstorage/upload';
 /* eslint-disable no-restricted-syntax */
 
 export default {
