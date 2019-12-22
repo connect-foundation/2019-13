@@ -5,7 +5,8 @@ export default (dataurl, filename) => {
   let n = bstr.length;
   const u8arr = new Uint8Array(n);
 
-  while (n--) {
+  while (n) {
+    n -= 1;
     u8arr[n] = bstr.charCodeAt(n);
   }
 

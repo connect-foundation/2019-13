@@ -13,7 +13,12 @@ const SpriteDropdown = ({ block, index }) => {
       <Select
         value={value}
         // eslint-disable-next-line react/jsx-no-bind
-        onChange={block.changeDropdownWidth({ set: setValue, index, items: workspaceList.dropdownItems.sprite, foreignObject: foreignObjectRef.current }).bind(block)}
+        onChange={block.changeDropdownWidth(
+          { set: setValue,
+            index,
+            items: workspaceList.dropdownItems.sprite,
+            foreignObject: foreignObjectRef.current },
+        ).bind(block)}
         MenuProps={{ PaperProps: { style: { maxHeight: 300 } } }}
         style={{ color: 'white' }}
       >

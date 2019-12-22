@@ -18,7 +18,7 @@ const Modal = ({ open, setOpen }) => {
     >
       <ModalWrapper onClick={closeHandler}>
         <ModalContainer onClick={(e) => { e.stopPropagation(); }}>
-          <CloseIcon  onClick={closeHandler} />
+          <CloseIcon onClick={closeHandler} />
           <ModalTitle>
             <Title>소셜 미디어 로그인</Title>
           </ModalTitle>

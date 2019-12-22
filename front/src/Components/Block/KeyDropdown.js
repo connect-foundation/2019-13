@@ -11,7 +11,9 @@ const KeyDropdown = ({ block, index }) => {
       <Select
         value={value}
         // eslint-disable-next-line react/jsx-no-bind
-        onChange={block.changeDropdownWidth({ set: setValue, index, items: workspaceList.dropdownItems.key }).bind(block)}
+        onChange={block.changeDropdownWidth(
+          { set: setValue, index, items: workspaceList.dropdownItems.key },
+        ).bind(block)}
         MenuProps={{ PaperProps: { style: { maxHeight: 300 } } }}
       >
         {Object.entries(workspaceList.dropdownItems.key).map(item => (
