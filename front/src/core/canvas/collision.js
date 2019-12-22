@@ -53,7 +53,8 @@ export default (collisionSprites, spritekey) => {
   for (let i = 0; i < collisionSprites.length; i += 1) {
     if (collisionSprites[i] === spritekey) continue;
     const sprite = allsprites[collisionSprites[i]];
-    const result = (getCheckCollision[collisionSprites[i]] || getCheckCollision.sprite)({ sprite, position });
+    const result = (getCheckCollision[collisionSprites[i]]
+      || getCheckCollision.sprite)({ sprite, position });
     if (result) return true;
   }
   return false;
