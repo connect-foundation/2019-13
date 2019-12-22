@@ -4,16 +4,15 @@ import Obb from '../../utils/obb';
 import isOBBOverlap from '../../utils/obb/isOBBOverlap';
 import Vector2 from '../../utils/vector2';
 import { getTempLocation } from '../../utils/tempLocationStore';
-import { getCanvasSize } from '../../utils/canvasSize';
+import { DEFAULT_CANVAS } from '../../utils/canvasSize';
 
 
 const getCheckCollision = {
   wall: ({ position }) => {
-    const canvasSize = getCanvasSize();
-    if (position.x <= -canvasSize.WIDTH / 2 || position.x >= canvasSize.WIDTH / 2) {
+    if (position.x <= -DEFAULT_CANVAS.WIDTH / 2 || position.x >= DEFAULT_CANVAS.WIDTH / 2) {
       return true;
     }
-    if (position.y <= -canvasSize.HEIGHT / 2 || position.y >= canvasSize.HEIGHT / 2) {
+    if (position.y <= -DEFAULT_CANVAS.HEIGHT / 2 || position.y >= DEFAULT_CANVAS.HEIGHT / 2) {
       return true;
     }
     return false;
