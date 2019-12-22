@@ -19,4 +19,5 @@ const getCanvasSize = () => canvasSize;
 export {
   setCanvasSize,
   getCanvasSize,
+  DEFUALT_CANVAS,
 };
