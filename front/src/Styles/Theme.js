@@ -6,8 +6,8 @@ export default {
   mainBorder: '1px solid #d8d8d8',
   motionColor: '#5c98fe',
   motionStrokeColor: '#4289eb',
-  eventsColor: '#f2d402',
-  eventsStrokeColor: '#e2b11c',
+  eventsColor: '#ad3efb',
+  eventsStrokeColor: '#8b19db',
   controlColor: '#ecaa1b',
   controlStrokeColor: '#ec9e18',
   sensingColor: '#67bfe6',
@@ -32,4 +32,5 @@ export default {
   footerBgColor: '#f2f2f2',
   footerColor: '#575e75',
   footerPageMinHeight: 'calc(100vh - 72px - 150px)',
+  likeColor: '#f2d402',
 };
