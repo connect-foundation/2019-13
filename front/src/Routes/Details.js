@@ -13,6 +13,7 @@ import Workspace from '../core/blocks/workspace/workspace';
 import makeBlock from '../utils/makeBlock';
 import Footer from '../Components/Footer';
 import Loading from '../Components/Loading';
+import { stop } from '../utils/playBlocks';
 
 const VIEW_DELAY = 3600000;
 let images = [];
@@ -47,7 +48,6 @@ export default ({ match, history }) => {
         workspaceList.images = [];
         workspaceList.dropdownItems.sprite = { wall: '벽' };
         projectData.workspaces.forEach((ws) => {
-          console.log(ws);
           const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
           makeBlock(ws.blocks, newWorkSpace);
           workspaceList.workspaces.push(newWorkSpace);
@@ -123,7 +123,7 @@ export default ({ match, history }) => {
             <div>
               <div>
                 <Link to={`/project/${match.params.name}`}>
-                  <button type="button">
+                  <button type="button" onClick={stop}>
                     <FontAwesomeIcon icon={faSignInAlt} />
                     <span>코드 보기</span>
                   </button>
