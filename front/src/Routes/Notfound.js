@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-export default ({ history }) => {
+const Notfound = ({ history }) => {
   const backhandler = () => {
     history.push('/');
   };
@@ -49,3 +50,10 @@ const Wrapper = styled.div`
     background-color: ${props => props.theme.alertColor}
   }
 `;
+
+export default Notfound;
+
+
+Notfound.propTypes = {
+  history: PropTypes.object.isRequired,
+};
