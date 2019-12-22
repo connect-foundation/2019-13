@@ -18,7 +18,7 @@ type Project {
   canvasImage: String!
   realCanvasImage: String!
   authes: [ProjectAuth]! @relation(name: "AuthesByProject")
-  likes: [Like]! @relation(name : "LikesByProject")
+  likes: [Like]! @relation(name : "LikesByProject" onDelete: CASCADE)
   comments: [Comment]! @relation(name : "CommentByProject" onDelete: CASCADE)
   workspaces: [Workspace]! @relation(name : "WorkspacesByProject" onDelete: CASCADE)
 }
