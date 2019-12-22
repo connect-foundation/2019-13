@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLazyQuery } from '@apollo/react-hooks';
+import PropTypes from 'prop-types';
 import Card from '../Components/Card';
 import Spinkit from '../Components/Spinkit';
 import { getDocumentHeight, getScrollTop } from '../utils/endScroll';
 import { GET_PROJECTS } from '../apollo/queries/Project';
 import Footer from '../Components/Footer';
 
-export default ({ history }) => {
+const Mypage = ({ history }) => {
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -41,7 +42,13 @@ export default ({ history }) => {
   const renderProject = projectArray => (
     <CardContainer>
       {projectArray.map(project => (
-        <Card project={project} key={project.id} removeProjects={removeProjects} history={history} me />
+        <Card
+          project={project}
+          key={project.id}
+          removeProjects={removeProjects}
+          history={history}
+          me
+        />
       ))}
     </CardContainer>
   );
@@ -106,3 +113,9 @@ border-radius: 0px 8px 8px 0px;
 color:${props => props.theme.whiteColor};
 background-color:${props => (props.selected ? props.theme.duckOrangeColor : props.theme.unactivedColor)};
 `;
+
+export default Mypage;
+
+Mypage.propTypes = {
+  history: PropTypes.object.isRequired,
+};

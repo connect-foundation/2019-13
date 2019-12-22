@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faSignInAlt, faEye } from '@fortawesome/free-solid-svg-icons';
 import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { LOAD_PROJECT, TOGGLE_LIKE, ME, ADD_VIEW } from '../apollo/queries/Project';
 import Comments from '../Components/Comment/Comments';
 import { setLocalStorageItem } from '../utils/storage';
@@ -18,7 +19,7 @@ import { stop } from '../utils/playBlocks';
 const VIEW_DELAY = 3600000;
 let images = [];
 
-export default ({ match, history }) => {
+const Detail = ({ match, history }) => {
   const [user, setUser] = useState();
   const [project, setProject] = useState();
   const [isLiked, setIsLiked] = useState();
@@ -48,7 +49,9 @@ export default ({ match, history }) => {
         workspaceList.images = [];
         workspaceList.dropdownItems.sprite = { wall: '벽' };
         projectData.workspaces.forEach((ws) => {
-          const newWorkSpace = new Workspace({ setRender: render, id: ws.id, imageId: ws.images[0].id });
+          const newWorkSpace = new Workspace({
+            setRender: render, id: ws.id, imageId: ws.images[0].id,
+          });
           makeBlock(ws.blocks, newWorkSpace);
           workspaceList.workspaces.push(newWorkSpace);
           workspaceList.images.push(ws.images[0].id);
@@ -64,7 +67,7 @@ export default ({ match, history }) => {
   const [toggleLike] = useMutation(TOGGLE_LIKE, {
     onCompleted(res) {
       if (res.toggleLike) {
-        isLiked ? setLikeCount(likeCount - 1) : setLikeCount(likeCount + 1);
+        setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
         setIsLiked(!isLiked);
       }
     },
@@ -234,3 +237,10 @@ const ProjectWrapper = styled.div`
       }
     }
 `;
+
+export default Detail;
+
+Detail.propTypes = {
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+};

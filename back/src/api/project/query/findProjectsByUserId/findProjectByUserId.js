@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
-import { prisma } from '../../../../prisma-client';
-import utils from '../../../utils/utils';
+import { prisma } from '../../../../../prisma-client';
+import utils from '../../../../utils/utils';
 
 
 export default {
