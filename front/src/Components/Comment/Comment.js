@@ -1,27 +1,27 @@
 import React, { useState, useRef } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Utils from '../../utils/utils';
-import { UPDATE_COMMENT, REMOVE_COMMENT } from '../../Apollo/queries/Comment';
+import { UPDATE_COMMENT, REMOVE_COMMENT } from '../../apollo/queries/Comment';
 
-export default ({ comment, user, idx, localUpdate }) => {
+const Comment = ({ comment, user, idx, localUpdate }) => {
   const textRefference = useRef();
   const [edit, setEdit] = useState(false);
   const [updateComment] = useMutation(UPDATE_COMMENT, {
     onCompleted(res) {
-      if (res.updateComment) {
-        localUpdate(idx, { ...comment,
-          text: textRefference.current.value,
-        });
-        setEdit(false);
-      }
+      if (!res || !res.updateComment) return;
+
+      localUpdate(idx, { ...comment,
+        text: textRefference.current.value,
+      });
+      setEdit(false);
     },
   });
   const [removeComment] = useMutation(REMOVE_COMMENT, {
     onCompleted(res) {
-      if (res.removeComment) {
-        localUpdate(idx);
-      }
+      if (!res || !res.removeComment) return;
+      localUpdate(idx);
     },
   });
 
@@ -61,13 +61,12 @@ export default ({ comment, user, idx, localUpdate }) => {
                 {comment.text}
               </h3>
               {(user && user.email === comment.user.email)
-                ? (
+                && (
                   <div className="button_box">
                     <button type="button" onClick={() => setEdit(true)}> 수정 </button>
                     <button type="button" onClick={removeHandler}> 삭제 </button>
                   </div>
                 )
-                : undefined
               }
             </>
           )}
@@ -95,6 +94,9 @@ const Wrapper = styled.div`
       }
       margin-left: 20px;
       width: 90%;
+      h3 {
+        white-space:pre-wrap;
+      }
       h4 {
         font-size: 12px;
         color: gray;
@@ -118,3 +120,11 @@ const Wrapper = styled.div`
       justify-content: space-between;
     }
 `;
+Comment.propTypes = {
+  comment: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  idx: PropTypes.number.isRequired,
+  localUpdate: PropTypes.func.isRequired,
+};
+
+export default Comment;

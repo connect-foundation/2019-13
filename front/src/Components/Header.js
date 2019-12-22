@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { ClickAwayListener } from '@material-ui/core';
 import Modal from './Modal';
-import { ModalContext, LoggedInContext } from '../Context';
+import { ModalContext, LoggedInContext } from '../context';
 import DropDown from './DropDown';
 
 export default () => {
@@ -14,6 +14,9 @@ export default () => {
   const [open, setOpen] = useState(false);
   const ModalHandler = () => {
     setOpen(!open);
+  };
+  const rediretToProject = () => {
+    window.location.href = '/project';
   };
   const dropMenuHandler = () => {
     setDropMenu(!dropMenu);
@@ -26,15 +29,13 @@ export default () => {
             <img src="/logo.png" alt="logo" className="Header-icon logo" />
           </Link>
           <div className="header-link">
-            <Link to="/project">
+            <button type="button" onClick={rediretToProject}>
               <span> 프로젝트 만들기</span>
-            </Link>
-            {isLoggedIn ? (
+            </button>
+            {isLoggedIn && (
               <Link to="/mypage">
                 <span> 내 작품</span>
               </Link>
-            ) : (
-              undefined
             )}
           </div>
         </HeaderColumn>
@@ -46,12 +47,14 @@ export default () => {
               }}
             >
               <div role="button" tabIndex="0" className="user_avatar" onClick={dropMenuHandler} onKeyPress={() => {}}>
-                <img
-                  className="user_avatar-img"
-                  src={localStorage.getItem('userImage')}
-                  alt="user_avatar"
-                />
-                <FontAwesomeIcon icon={faCaretDown} />
+                <div className="login_box">
+                  <img
+                    className="user_avatar-img"
+                    src={localStorage.getItem('userImage')}
+                    alt="user_avatar"
+                  />
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </div>
                 {dropMenu && <DropDown type="Header" />}
               </div>
             </ClickAwayListener>
@@ -83,6 +86,9 @@ const Header = styled.header`
 
 const HeaderColumn = styled.div`
   display: flex;
+  *:focus {
+    outline: none;
+  }
   align-items: center;
   .logo {
     border-radius: 50%;
@@ -114,10 +120,20 @@ const HeaderColumn = styled.div`
     object-fit: cover;
     border-radius: 10px;
   }
+  .login_box {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    svg {
+      color:white;
+      margin-left: 10px;
+    }
+  }
   button {
     background: none;
     border: none;
     color: white;
+    cursor: pointer;
     font-size: 18px;
   }
 `;

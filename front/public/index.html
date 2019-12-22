@@ -7,8 +7,10 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="The Duck - block programming world"
     />
+    <script src="%PUBLIC_URL%/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="%PUBLIC_URL%/index.css">
     <link rel="apple-touch-icon" href="logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -29,6 +31,12 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <div id="error" class="none">
+      <img id="error__img" src="%PUBLIC_URL%/errorlogo.png" width="224" height="224" />
+      <div>죄송합니다. 해당 사이트는 크롬 브라우저에서 정상 작동합니다.</div>
+      <br/>
+      <div>크롬브라우저에서 접근해주세요</div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

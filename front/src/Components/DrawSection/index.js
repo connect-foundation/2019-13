@@ -5,64 +5,55 @@ import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Canvas from '../Canvas';
 import SpriteSelector from '../SpriteSelector';
-import { SpritesContext, WorkspaceContext, CurrentSpriteContext } from '../../Context';
-import Generator from '../Block/generator';
+import {
+  SpritesContext,
+  WorkspaceContext,
+  CurrentSpriteContext,
+} from '../../context';
 import Snackbar from '../Snackbar';
 import Utils from '../../utils/utils';
+import { start, stop, getIsPlay } from '../../utils/playBlocks';
+import { setCanvasSize } from '../../utils/canvasSize';
+import useSnackbar from '../../customHooks/useSnackbar';
 
 let key;
 let position;
 let dispatch;
-let interval;
-let isPlay = false;
-const getPosition = () => ({ key, position, dispatch });
-const playHandler = (workspace) => {
-  if (!isPlay) {
-    const generator = new Generator();
-    const codes = generator.workspaceToCode(workspace.getStartBlocks());
-    isPlay = true;
-    interval = setInterval(() => {
-      let isEnd = true;
-      codes.forEach((code) => {
-        const res = code.func.next();
-        if (res && !res.done) {
-          isEnd = false;
-        }
-      });
-      if (isEnd) {
-        clearInterval(interval);
-        isPlay = false;
-      }
-    }, 1000 / 30);
-  }
+
+let allsprites;
+const getPosition = () => ({ key, position, dispatch, allsprites });
+
+const playHandler = () => {
+  start(true);
 };
 
 const stopHandler = () => {
-  if (interval) {
-    clearInterval(interval);
-    isPlay = false;
-  }
+  stop();
 };
 
+
 export default () => {
-  const [snackbar, setSnackbar] = React.useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-    message: '이미지를 업로드 해주세요',
-  });
+  setCanvasSize('DEFAULT');
+  const isPlay = getIsPlay();
+  const { workspaceDispatch } = useContext(WorkspaceContext);
+  const [snackbar, setSnackbar] = useSnackbar();
   const { sprites, spritesDispatch } = useContext(SpritesContext);
   const [currentSprite, setCurrentSprite] = useState({
     key: Object.keys(sprites)[0],
     position: Object.values(sprites)[0],
   });
-  const { workspace } = useContext(WorkspaceContext);
+  allsprites = sprites;
   dispatch = spritesDispatch;
   ({ key, position } = currentSprite);
+
   const checkPositionHandler = ({ type, coordinate }, event) => {
+    if (isPlay) return;
     if (!currentSprite.position) {
       setSnackbar({
-        ...snackbar, open: true,
+        ...snackbar,
+        open: true,
+        message: '이미지를 업로드 해주세요',
+        color: 'alertColor',
       });
       return;
     }
@@ -74,7 +65,7 @@ export default () => {
     });
   };
   useEffect(() => {
-    Utils.setPostion(getPosition);
+    Utils.setSprite(getPosition);
     setCurrentSprite({
       key: key && sprites[key] ? key : Object.keys(sprites)[0],
       position: key && sprites[key] ? sprites[key] : Object.values(sprites)[0],
@@ -84,18 +75,40 @@ export default () => {
     <CurrentSpriteContext.Provider value={{ currentSprite, setCurrentSprite }}>
       <DrawSectionWrapper className="Contents__Column">
         <div className="draw-section__row controller">
-          <FontAwesomeIcon icon={faPlay} onClick={() => playHandler(workspace)} className="play-button" />
-          <FontAwesomeIcon icon={faStop} onClick={stopHandler} className="stop-button" />
+          <FontAwesomeIcon
+            icon={faPlay}
+            onClick={() => playHandler()}
+            className="play-button"
+          />
+          <FontAwesomeIcon
+            icon={faStop}
+            onClick={(e) => {
+              stopHandler(e);
+              setSnackbar({
+                ...snackbar,
+                open: false,
+                message: '이미지를 업로드 해주세요',
+                color: 'alertColor',
+              });
+            }}
+            className="stop-button"
+          />
         </div>
         <div className="draw-section__row">
-          <Canvas />
+          <Canvas
+            draggable={!getIsPlay()}
+            workspaceDispatch={workspaceDispatch}
+            setCurrentSprite={setCurrentSprite}
+          />
         </div>
         <div className="draw-section__row">
           <div className="setting">
             <div className="setting__name">
               <div> 이름 </div>
               <input
-                value={currentSprite.position ? currentSprite.position.name : '입력'}
+                value={
+                  currentSprite.position ? currentSprite.position.name : '입력'
+                }
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_NAME',
                 })}
@@ -129,7 +142,9 @@ export default () => {
               />
               <div> 방향 </div>
               <input
-                value={currentSprite.position ? currentSprite.position.direction : 0}
+                value={
+                  currentSprite.position ? currentSprite.position.direction : 0
+                }
                 onChange={checkPositionHandler.bind(null, {
                   type: 'CHANGE_DIRECTION',
                 })}

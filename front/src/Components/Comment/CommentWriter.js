@@ -1,23 +1,36 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { CREAT_COMMENT } from '../../Apollo/queries/Comment';
+import PropTypes from 'prop-types';
+import { CREATE_COMMENT } from '../../apollo/queries/Comment';
+import checkError from '../../errorCheck';
+import useSnackbar from '../../customHooks/useSnackbar';
+import Snackbar from '../Snackbar';
 
-export default ({ projectId, updateComments }) => {
-  const [text, setText] = useState();
-  const [createComment] = useMutation(CREAT_COMMENT, {
+
+const CommentWriter = ({ projectId, updateComments }) => {
+  const [snackbar, setSnackbar] = useSnackbar();
+  const [text, setText] = useState('');
+  const [createComment] = useMutation(CREATE_COMMENT, {
     onCompleted(res) {
-      if (res.createComment) {
-        setText('');
-        updateComments();
-      }
+      if (!res || !res.createComment) return;
+      setText('');
+      updateComments();
+    },
+    onError(error) {
+      const errorMessage = checkError(error.networkError);
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        message: errorMessage,
+        color: 'alertColor',
+      });
     },
   });
   const addCommentHandler = () => {
-    if (text.length > 0) {
-      createComment({
-        variables: { projectId, text },
-      });
-    }
+    if (text.length < 1) return;
+    createComment({
+      variables: { projectId, text },
+    });
   };
   return (
     <>
@@ -26,6 +39,13 @@ export default ({ projectId, updateComments }) => {
         <textarea value={text} onChange={(e) => { setText(e.target.value); }} maxLength="255" />
       </div>
       <button type="button" onClick={addCommentHandler}> 등록 </button>
+      <Snackbar snackbar={snackbar} setSnackbar={setSnackbar} />
     </>
   );
 };
+CommentWriter.propTypes = {
+  projectId: PropTypes.string.isRequired,
+  updateComments: PropTypes.func.isRequired,
+};
+
+export default CommentWriter;

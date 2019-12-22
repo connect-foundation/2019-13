@@ -1,29 +1,41 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Blockspace from '../Components/Block/index';
-import Workspace from '../Components/Block/workspace';
-import ProjectHeader from '../Components/projectHeader';
-import { WorkspaceContext, SpritesContext } from '../Context/index';
+import Blockspace from '../Components/Svg';
+import Workspace from '../core/blocks/workspace/workspace';
+import ProjectHeader from '../Components/ProjectHeader';
+import { WorkspaceContext, SpritesContext } from '../context';
 import { workspaceReducer, spritesReducer } from '../reducer';
 import Utils from '../utils/utils';
 import DrawSection from '../Components/DrawSection';
+import KeyListener from '../utils/keyListener';
+import workspaceList from '../core/blocks/workspace/workspaceList';
 
 const defaultSprite = {};
-defaultSprite[Utils.uid()] = {
+const defaultKey = Utils.uid();
+defaultSprite[defaultKey] = {
   name: 'logo.png',
   url: '/logo.png',
   size: 100,
   direction: 90,
   x: 0,
   y: 0,
+  width: 245,
+  height: 246,
   reversal: false,
   realName: '/logo.png',
 };
 
+
+const nWorkspace = new Workspace({ imageId: defaultKey });
+workspaceList.workspaces.push(nWorkspace);
+workspaceList.images.push(defaultKey);
+// eslint-disable-next-line prefer-destructuring
+workspaceList.currentImageId = workspaceList.images[0];
+workspaceList.dropdownItems.sprite[defaultKey] = 'logo.png';
+
 const Project = (props) => {
   const [workspace, workspaceDispatch] = useReducer(
-    workspaceReducer,
-    new Workspace(),
+    workspaceReducer, workspaceList.workspaces[0],
   );
   const [isReady, setReady] = useState(false);
   const [sprites, spritesDispatch] = useReducer(
@@ -31,6 +43,11 @@ const Project = (props) => {
     defaultSprite,
   );
   const [clickedButton, setClickedButton] = useState(0);
+  useEffect(() => {
+    if (isReady) {
+      workspace.renderTopblocks();
+    }
+  });
   return (
     <WorkspaceContext.Provider value={{ workspace, workspaceDispatch }}>
       <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
@@ -55,7 +72,7 @@ const Project = (props) => {
                 <div />
                 <span> 연산 </span>
               </TypesButton>
-              <TypesButton className="block-types__button" btype="sensing" onClick={() => { }}>
+              <TypesButton className="block-types__button" btype="sensing" onClick={() => { setClickedButton(4 + Math.random()); }}>
                 <div />
                 <span> 감지 </span>
               </TypesButton>
@@ -72,6 +89,7 @@ const Project = (props) => {
             <div className="Contents__Column block-space" />
             <DrawSection />
           </Contents>
+          <KeyListener />
         </Wrapper>
       </SpritesContext.Provider>
     </WorkspaceContext.Provider>

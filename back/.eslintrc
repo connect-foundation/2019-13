@@ -19,7 +19,9 @@
     },
     "rules": {
         "linebreak-style" : 0,
+        "no-console":0,
+        "no-restricted-syntax":"off",
         "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
-    }, 
+    }
     
 }

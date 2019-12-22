@@ -14,51 +14,48 @@ type Project {
   description: String!
   views: Int!
   private: Boolean!
-  owner: User! @relation(link : TABLE, name: "ProjectByUser")
-  blocks: [Block]! @relation(name: "BlocksByProject")
+  owner: User! @relation(name: "ProjectByUser")
+  canvasImage: String!
+  realCanvasImage: String!
   authes: [ProjectAuth]! @relation(name: "AuthesByProject")
-  likes: [Like]! @relation(name : "LikesByProject")
-  comments: [Comment]! @relation(name : "CommentByProject")
-  images: [Image]! @relation(name : "ImagesByProject")
+  likes: [Like]! @relation(name : "LikesByProject" onDelete: CASCADE)
+  comments: [Comment]! @relation(name : "CommentByProject" onDelete: CASCADE)
+  workspaces: [Workspace]! @relation(name : "WorkspacesByProject" onDelete: CASCADE)
 }
 type ProjectAuth {
   id: ID! @id
-  project: Project! @relation(link : TABLE, name:"AuthesByProject")
-  user: User! @relation(link : TABLE, name: "AuthesByUser")
+  project: Project! @relation(name:"AuthesByProject")
+  user: User! @relation(name: "AuthesByUser")
+}
+type Workspace {
+  id: ID! @id
+  project: Project! @relation(name:"WorkspacesByProject")
+  images: [Image]! @relation(name:"ImageByWorkspace" onDelete: CASCADE)
+  blocks: [Block]! @relation(name:"BlocksByWorkspace" onDelete: CASCADE)
 }
 type Block {
   id: ID! @id
   type: String!
-  positionX: Float
-  positionY: Float
+  x: Float
+  y: Float
   nextElementId: String 
   firstChildElementId: String
   secondChildElementId: String
   inputElementId: [String]! @scalarList(strategy: RELATION)
-  project: Project! @relation(link : TABLE, name:"BlocksByProject")
-  inputValues: [InputValue]! @relation(link : TABLE, name:"ArgumentsByBlock")
-}
-type InputValue {
-  id: ID! @id
-  value: Float!
-  block: Block! @relation(link : TABLE, name:"ArgumentByBlock")
-  order: Int!
-}
-type Like {
-  id: ID! @id
-  project: Project! @relation(link : TABLE, name:"LikesByProject")
-  user: User! @relation(link : TABLE, name:"LikesByUser")
+  workspace: Workspace! @relation(name:"BlocksByWorkspace")
 }
 type Image {
   id: ID! @id
   name: String!
-  project: Project! @relation(link : TABLE, name:"ImagesByProject")
   url: String!
   realName: String!
-  positionX: Float!
-  positionY: Float!
+  x: Float!
+  y: Float!
+  width: Float!
+  height: Float!
   size: Int!
   direction: Int!
+  workspace: Workspace! @relation(link : TABLE, name:"ImageByWorkspace")
 }
 type Comment {
   id: ID! @id
@@ -67,4 +64,9 @@ type Comment {
   user: User! @relation(link : TABLE, name:"CommentByUser")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+type Like {
+  id: ID! @id
+  project: Project! @relation(link : TABLE, name:"LikesByProject")
+  user: User! @relation(link : TABLE, name:"LikesByUser")
 }

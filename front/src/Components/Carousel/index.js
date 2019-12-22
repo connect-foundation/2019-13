@@ -13,15 +13,22 @@ export default () => {
     slidesToScroll: 1,
     autoplay: true,
   };
+
   const CarouselContainer = styled.div`
-    padding :40px;
+    .slick-prev {
+      left: 25px;
+      z-index:5;
+    }
+    .slick-next {
+      right: 25px ;
+    }
   `;
 
   return (
     <CarouselContainer>
       <Slider {...settings}>
-        <img src="banner1.png" />
-        <img src="banner2.png" />
+        <img src="banner1.png" alt="banner" />
+        <img src="banner2.png" alt="banner" />
       </Slider>
     </CarouselContainer>
   );

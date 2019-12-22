@@ -1,0 +1,88 @@
+scalar DateTime
+scalar Upload
+
+type project {
+  id: ID!
+  title: String!
+  description: String!
+  private: Boolean!
+  owner: user!
+  canvasImage: String!
+  authes: [project_auth]!
+  likes: [like]!
+  isLiked: Boolean!
+  likeCount: Int!
+  comments: [Comment]!
+  commentCount: Int!
+  views: Int!
+  workspaces: [workspace]!
+}
+
+type project_auth {
+  id: ID!
+  project: project!
+  user: user!
+}
+
+type block {
+  id: ID!
+  type: String!
+  x: Float
+  y: Float
+  nextElementId: String
+  firstChildElementId: String
+  secondChildElementId: String
+  inputElementId: [String]
+}
+
+type input_value {
+  id: ID!
+  value: Float!
+  block: block!
+  order: Int!
+}
+
+type like {
+  id: ID!
+  project: project!
+  user: user!
+}
+
+type user {
+  id: ID!
+  name: String!
+  picture: String!
+  email: String!
+  projects: [project]!
+  comments: [Comment]!
+  authes: [project_auth]!
+  likes: [like]!
+}
+
+type Image {
+  id: ID!
+  name: String!
+  url: String!
+  x: Float!
+  y: Float!
+  width: Float!
+  height: Float!
+  size: Int!
+  direction: Int!
+  realName: String!
+}
+type Comment {
+
+  id: ID!
+  text: String!
+  project: project!
+  user: user!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+type workspace {
+  id: ID!
+  images: [Image]!
+  blocks: [block]!
+}
+

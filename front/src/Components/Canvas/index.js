@@ -1,26 +1,40 @@
 import React, { useContext } from 'react';
 import { Stage, Layer } from 'react-konva';
-import { SpritesContext, CurrentSpriteContext } from '../../Context';
+import PropTypes from 'prop-types';
+import { SpritesContext } from '../../context';
 import URLImage from '../URLImage';
-import CONSTANTS from './constants';
+import { getCanvasSize } from '../../utils/canvasSize';
 
-
-export default ({ WIDTH, HEIGHT }) => {
+const canvasSize = getCanvasSize();
+const Canvas = ({
+  draggable,
+  workspaceDispatch,
+  setCurrentSprite,
+}) => {
   const { sprites, spritesDispatch } = useContext(SpritesContext);
-  const { setCurrentSprite } = useContext(CurrentSpriteContext);
   return (
-    <Stage width={WIDTH || CONSTANTS.CANVAS.WIDTH} height={HEIGHT || CONSTANTS.CANVAS.HEIGHT}>
+    <Stage width={canvasSize.WIDTH} height={canvasSize.HEIGHT}>
       <Layer>
         {Object.entries(sprites).map(sprite => (
           <URLImage
+            draggable={draggable}
             key={sprite[0]}
             sprite={sprite[1]}
             spritekey={sprite[0]}
             spritesDispatch={spritesDispatch}
             setCurrentSprite={setCurrentSprite}
+            workspaceDispatch={workspaceDispatch}
           />
         ))}
       </Layer>
     </Stage>
   );
 };
+
+Canvas.propTypes = {
+  draggable: PropTypes.bool.isRequired,
+  workspaceDispatch: PropTypes.func.isRequired,
+  setCurrentSprite: PropTypes.func.isRequired,
+};
+
+export default Canvas;

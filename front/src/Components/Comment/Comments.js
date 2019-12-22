@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Comment from './Comment';
-import { LOAD_COMMENT } from '../../Apollo/queries/Comment';
+import { LOAD_COMMENT } from '../../apollo/queries/Comment';
 import CommentWriter from './CommentWriter';
 
-export default ({ project, user }) => {
+const Comments = ({ project, user }) => {
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState();
   const [readComment] = useLazyQuery(LOAD_COMMENT, {
     onCompleted(res) {
+      if (!res || !res.findProjectById) return;
       setCommentCount(res.findProjectById.commentCount);
       setComments(res.findProjectById.comments);
     },
@@ -17,7 +19,7 @@ export default ({ project, user }) => {
 
   useEffect(() => {
     readComment({ variables: { projectId: project.id } });
-  }, []);
+  }, [project.id, readComment]);
 
   const localUpdate = (idx, data) => {
     if (data) comments.splice(idx, 1, data);
@@ -29,21 +31,29 @@ export default ({ project, user }) => {
   };
   if (!comments) return <></>;
 
-  const updateComments = (text) => {
+  const updateComments = () => {
     readComment({ variables: { projectId: project.id } });
   };
 
   return (
     <CommentWrapper user={user}>
       <div>{`댓글 ${commentCount} 개`}</div>
-      {(user) ? (<CommentWriter projectId={project.id} updateComments={updateComments} />) : (<></>) }
-      {comments.map((comment, i) => (<Comment comment={comment} user={user} key={comment.id} idx={i} localUpdate={localUpdate} />))}
+      {(user) && (<CommentWriter projectId={project.id} updateComments={updateComments} />) }
+      {comments.map((comment, i) => (
+        <Comment
+          comment={comment}
+          user={user}
+          key={comment.id}
+          idx={i}
+          localUpdate={localUpdate}
+        />
+      ))}
     </CommentWrapper>
   );
 };
 
 const CommentWrapper = styled.div`
-  margin-top: 50px;
+  margin: 50px 0px;
   word-wrap: break-word;
   #commentWriter {
     display: flex;
@@ -78,3 +88,9 @@ const CommentWrapper = styled.div`
     background-size: cover;
   }
 `;
+Comments.propTypes = {
+  project: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+};
+
+export default Comments;

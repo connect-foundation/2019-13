@@ -14,6 +14,8 @@
     "apollo-boost": "^0.4.4",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
+    "apollo-link-context": "^1.0.19",
+    "apollo-link-http": "^1.5.16",
     "apollo-upload-client": "^12.1.0",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
@@ -52,7 +54,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "production": "serve -l 3000 -s ./build"
   },
   "browserslist": {
     "production": [

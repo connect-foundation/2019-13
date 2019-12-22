@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { LoggedInContext } from '../../Context';
-import { removeLocalStorageItem } from '../../utils/storage';
+import { LoggedInContext } from '../../context';
 
 const DropDown = ({ type = null }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
@@ -11,12 +10,15 @@ const DropDown = ({ type = null }) => {
     setLoggedIn(false);
     window.location.href = '/';
   };
+  const myPageHandler = () => {
+    window.location.href = '/mypage';
+  };
 
   const dropDownData = {
     Header: [
       {
-        content: '나의 정보',
-        onClick: null,
+        content: '마이페이지',
+        onClick: myPageHandler,
       },
       {
         content: '로그아웃',
@@ -56,7 +58,7 @@ const DropDownContainer = styled.div`
 `;
 
 const DropDownMenuButton = styled.div`
-  font-size: 20px;
+  font-size: 18px;
   padding: 5px;
   margin: 5px;
   cursor: pointer;

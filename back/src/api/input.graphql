@@ -1,0 +1,15 @@
+input workspaceInput {
+  id: ID!
+  blocks: [createBlockInput]!
+}
+
+input createBlockInput {
+  id: ID!
+  type: String!
+  x: Float
+  y: Float
+  nextElementId: String
+  firstChildElementId: String
+  secondChildElementId: String
+  inputElementId: [String]
+}
