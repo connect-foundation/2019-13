@@ -32,5 +32,7 @@ export default {
   footerBgColor: '#f2f2f2',
   footerColor: '#575e75',
   footerPageMinHeight: 'calc(100vh - 72px - 150px)',
+  closeBtnColor: '#9e9e9e',
+  googleBorderColor: '#767676',
   likeColor: '#f2d402',
 };

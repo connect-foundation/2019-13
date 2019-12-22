@@ -83,10 +83,7 @@ const SpriteContainer = styled.div`
   justify-content: space-between;
   & > .svg-inline--fa.fa-times.fa-w-11 { 
     position: absolute;
-   
-   
   }
-
 `;
 
 SpriteSelectorItem.propTypes = {

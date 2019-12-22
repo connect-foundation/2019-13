@@ -49,7 +49,7 @@ const ModalContainer = styled.div`
   border-radius: 5px;
   background-color: white;
   & > svg {
-    color: #9e9e9e;
+    color: ${props => props.theme.closeBtnColor};
     &:hover {
       cursor: pointer;
       border-radius: 50%;
