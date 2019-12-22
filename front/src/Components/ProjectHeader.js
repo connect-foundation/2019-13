@@ -17,7 +17,7 @@ import useSnackbar from '../customHooks/useSnackbar';
 
 const ProjectHeader = ({ props, setReady }) => {
   const { setLoggedIn } = useContext(LoggedInContext);
-  const [projectId, setPorjectId] = useState();
+  const [projectId, setProjectId] = useState();
   const [projectName, setProjectName] = useState('');
   const [isLiked, setIsLiked] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
@@ -38,7 +38,7 @@ const ProjectHeader = ({ props, setReady }) => {
         return;
       }
       const pid = res.createProjectAndBlocks;
-      setPorjectId(pid);
+      setProjectId(pid);
       if (pid !== 'false') {
         window.location.href = `/project/${pid}`;
       }
@@ -140,11 +140,12 @@ const ProjectHeader = ({ props, setReady }) => {
     });
   useEffect(() => {
     if (!props.match.params.name) return;
-    setPorjectId(props.match.params.name);
+    setProjectId(props.match.params.name);
     loadProject({
       variables: { projectId: props.match.params.name },
     });
-  }, []);
+  // eslint-disable-next-line react/destructuring-assignment
+  }, [setProjectId, loadProject, props.match.params.name]);
 
   const likeHandler = () => {
     if (projectId) {

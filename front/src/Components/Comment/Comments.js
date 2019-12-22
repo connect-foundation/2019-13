@@ -19,7 +19,7 @@ const Comments = ({ project, user }) => {
 
   useEffect(() => {
     readComment({ variables: { projectId: project.id } });
-  }, []);
+  }, [project.id, readComment]);
 
   const localUpdate = (idx, data) => {
     if (data) comments.splice(idx, 1, data);

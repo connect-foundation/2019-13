@@ -30,7 +30,7 @@ const DetailCanvas = ({ images }) => {
   useEffect(() => {
     spritesDispatch({ type: 'LOAD_PROJECT', images });
     Utils.setSprite(getPosition);
-  }, []);
+  }, [images]);
   return (
     <SpritesContext.Provider value={{ sprites, spritesDispatch }}>
       <DrawSectionWrapper className="Contents__Column">
