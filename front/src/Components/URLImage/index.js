@@ -20,8 +20,8 @@ const URLImage = ({
   if (!draggable) {
     return (
       <Image
-        x={canvasSize.WIDTH / 2 + Number(sprite.x)}
-        y={canvasSize.HEIGHT / 2 + Number(sprite.y)}
+        x={canvasSize.WIDTH / 2 + Number((sprite.x) * canvasSize.SCALE)}
+        y={canvasSize.HEIGHT / 2 + Number((sprite.y) * canvasSize.SCALE)}
         image={image}
         scaleX={canvasSize.SCALE}
         scaleY={sprite.reversal ? -canvasSize.SCALE : canvasSize.SCALE}
