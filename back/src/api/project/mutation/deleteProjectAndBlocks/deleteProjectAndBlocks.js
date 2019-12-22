@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import { prisma } from '../../../../prisma-client';
-import utils from '../../../utils/utils';
-import deleteFile from '../../../objectstorage/delete';
+import { prisma } from '../../../../../prisma-client';
+import utils from '../../../../utils/utils';
+import deleteFile from '../../../../objectstorage/delete';
 
 export default {
   Mutation: {
