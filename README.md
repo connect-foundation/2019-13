@@ -76,10 +76,11 @@
     <td align="center"><a href="https://github.com/NBJ1995"><img src="https://avatars1.githubusercontent.com/u/37498859?s=400&v=4" width="75px;" alt="Jinkwan Yoo"/><br /><sub><b>Jinkwan Yoo</b></sub></a><br /><a href="https://github.com/connect-foundation/2019-13/commits/dev?author=NBJ1995" title="Code">💻</a></td>
   </tr>
   </table>
+
 ## docs
 
-[Wiki](https://github.com/connect-foundation/2019-13/wiki)
-[Notion](https://www.notion.so/kkw01234/13-The-Duck-a15213f7766f406ca9f43d59f381edb8)
+- [Wiki](https://github.com/connect-foundation/2019-13/wiki)
+- [Notion](https://www.notion.so/kkw01234/13-The-Duck-a15213f7766f406ca9f43d59f381edb8)
 
 ## 📝 License
 
