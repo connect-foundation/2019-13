@@ -57,7 +57,7 @@ const Mypage = ({ history }) => {
 
   useEffect(() => {
     getProjects();
-  }, []);
+  }, [getProjects]);
   if (loading) {
     addProject();
     setLoading(false);

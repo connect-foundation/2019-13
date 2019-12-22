@@ -93,7 +93,7 @@ const Detail = ({ match, history }) => {
         ]);
       }
     }
-  }, []);
+  }, [addView, loadProject, match.params.name, me]);
 
 
   const likeHandler = () => {
