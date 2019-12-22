@@ -93,7 +93,7 @@ const Detail = ({ match, history }) => {
         ]);
       }
     }
-  }, []);
+  }, [addView, loadProject, match.params.name, me]);
 
 
   const likeHandler = () => {
@@ -228,7 +228,7 @@ const ProjectWrapper = styled.div`
           background: none;
         }
         .star-icon{
-          color: ${props => (props.isLiked === true ? props.theme.eventsColor : 'grey')};
+          color: ${props => (props.isLiked === true ? props.theme.likeColor : 'grey')};
         }
         display: flex;
         #views{

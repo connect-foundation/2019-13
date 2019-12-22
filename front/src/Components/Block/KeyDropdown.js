@@ -15,6 +15,7 @@ const KeyDropdown = ({ block, index }) => {
           { set: setValue, index, items: workspaceList.dropdownItems.key },
         ).bind(block)}
         MenuProps={{ PaperProps: { style: { maxHeight: 300 } } }}
+        style={{ color: 'white' }}
       >
         {Object.entries(workspaceList.dropdownItems.key).map(item => (
           <MenuItem
