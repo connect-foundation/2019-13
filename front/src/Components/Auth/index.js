@@ -115,7 +115,7 @@ const AuthWrapper = styled.div`
     }
   }
   button:nth-child(1){
-    border: 1.5px solid rgb(118, 118, 118) !important;
+    border: 1.5px solid ${props => props.theme.googleBorderColor} !important;
     & > div {
       margin: 0px !important;
     }
