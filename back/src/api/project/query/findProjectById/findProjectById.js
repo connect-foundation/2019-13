@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { prisma } from '../../../../../prisma-client';
 import utils from '../../../../utils/utils';
 
@@ -18,6 +17,7 @@ export default {
         return project;
       } catch (e) {
         console.error(e);
+        return null;
       }
     },
   },

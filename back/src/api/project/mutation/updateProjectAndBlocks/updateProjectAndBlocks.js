@@ -2,13 +2,13 @@ import utils from '../../../../utils/utils';
 import { prisma } from '../../../../../prisma-client';
 import deleteFile from '../../../../objectstorage/delete';
 import upload from '../../../../objectstorage/upload';
-/* eslint-disable no-restricted-syntax */
 
 export default {
   Mutation: {
     updateProjectAndBlocks: async (
       root,
       {
+        // eslint-disable-next-line no-unused-vars
         projectId, projectTitle, workspacesInput, images, canvasImage,
       },
       context,

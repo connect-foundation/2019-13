@@ -1,5 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-restricted-syntax */
 import { prisma } from '../../../../../prisma-client';
 import utils from '../../../../utils/utils';
 import upload from '../../../../objectstorage/upload';
@@ -69,9 +67,11 @@ export default {
           let url;
           let realName;
           if (image.file) {
-            const { filename, createReadStream } = await image.file;
-            realName = new Date().getTime() + project.id + filename;
-            const storageResult = await upload(createReadStream, realName);
+            const {
+              filename: imageFileName, createReadStream: imageCreateReadStream,
+            } = await image.file;
+            realName = new Date().getTime() + project.id + imageFileName;
+            const storageResult = await upload(imageCreateReadStream, realName);
             url = storageResult.Location;
           } else {
             url = image.url;
@@ -98,6 +98,7 @@ export default {
         return project.id;
       } catch (e) {
         console.error(e);
+        return null;
       }
     },
   },

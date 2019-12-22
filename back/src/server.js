@@ -35,6 +35,7 @@ server.express.use((req, res, next) => {
 server.express.use('/auth', authRouter);
 server.start({ port: PORT, debug: false }, () => console.log(`Server is running on port ${PORT}!`));
 
+// eslint-disable-next-line no-unused-vars
 server.express.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(401).json({
