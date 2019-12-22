@@ -14,6 +14,7 @@ import Workspace from '../core/blocks/workspace/workspace';
 import makeBlock from '../utils/makeBlock';
 import Footer from '../Components/Footer';
 import Loading from '../Components/Loading';
+import { stop } from '../utils/playBlocks';
 
 const VIEW_DELAY = 3600000;
 let images = [];
@@ -125,7 +126,7 @@ const Detail = ({ match, history }) => {
             <div>
               <div>
                 <Link to={`/project/${match.params.name}`}>
-                  <button type="button">
+                  <button type="button" onClick={stop}>
                     <FontAwesomeIcon icon={faSignInAlt} />
                     <span>코드 보기</span>
                   </button>
