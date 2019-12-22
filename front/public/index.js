@@ -2,7 +2,8 @@ function checkBrowser() {
   const userAgent = navigator.userAgent.toLowerCase();
   const isChrome = userAgent.indexOf('chrome');
   const isEdge = userAgent.indexOf('edge');
-  if (isChrome > -1 && isEdge < 0) return;
+  const isIpad = userAgent.indexOf('ipad');
+  if ((isChrome > -1 && isEdge < 0) || isIpad) > -1) return;
   document.getElementById('root').classList.add('none');
   document.getElementById('error').classList.remove('none');
 }
