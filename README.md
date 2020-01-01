@@ -26,7 +26,7 @@
 <br><br>
 
 ### 얼른 더덕이랑 블록코딩하자구!
-### 주소는 http://theduck.cf 야!!
+### 주소는 https://theduck.kr 야!!
 ## Getting started
 ### 1. Front-end
   1. Move to `front` directory
